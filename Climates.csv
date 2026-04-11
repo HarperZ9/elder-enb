@@ -1,0 +1,20 @@
+FormID,LocalID,EditorID,SourcePlugin,SunriseBegin,SunriseEnd,SunsetBegin,SunsetEnd,Volatility,MoonPhaseLength,Weather1_FormID,Weather1_EditorID,Weather1_Chance,Weather2_FormID,Weather2_EditorID,Weather2_Chance,Weather3_FormID,Weather3_EditorID,Weather3_Chance,Weather4_FormID,Weather4_EditorID,Weather4_Chance,Weather5_FormID,Weather5_EditorID,Weather5_Chance,Weather6_FormID,Weather6_EditorID,Weather6_Chance,Weather7_FormID,Weather7_EditorID,Weather7_Chance,Weather8_FormID,Weather8_EditorID,Weather8_Chance,TotalWeathers
+0000015F,0x00015F,DefaultClimate,Skyrim.esm,,,,,0,195,,,,,,,,,,,,,,,,,,,,,,,,0
+00000812,0x000812,SkyrimClimate,Skyrim.esm,,,,,50,195,,,,,,,,,,,,,,,,,,,,,,,,0
+000239FB,0x0239FB,BlackreachClimate,Skyrim.esm,,,,,0,3,,,,,,,,,,,,,,,,,,,,,,,,0
+00090A91,0x090A91,SovngardeClimate,Skyrim.esm,,,,,0,3,,,,,,,,,,,,,,,,,,,,,,,,0
+000E7C4E,0x0E7C4E,BloatedMansClimate,Skyrim.esm,,,,,0,3,,,,,,,,,,,,,,,,,,,,,,,,0
+00000F91,0x000F91,KarthspireClimate,Skyrim.esm,,,,,50,195,,,,,,,,,,,,,,,,,,,,,,,,0
+02001409,0x001409,SoulCairnClimate,Dawnguard.esm,,,,,0,3,,,,,,,,,,,,,,,,,,,,,,,,0
+0201C48E,0x01C48E,DLC2ApocryphaClimate,Dragonborn.esm,,,,,0,3,,,,,,,,,,,,,,,,,,,,,,,,0
+02034CFC,0x034CFC,DLC2ApocryphaClimateNew,Dragonborn.esm,,,,,0,3,,,,,,,,,,,,,,,,,,,,,,,,0
+00000812,0x000812,SkyrimClimate,Vivid WeathersSE.esp,,,,,101,195,,,,,,,,,,,,,,,,,,,,,,,,0
+00090A91,0x090A91,SovngardeClimate,Vivid WeathersSE.esp,,,,,0,3,,,,,,,,,,,,,,,,,,,,,,,,0
+0000015F,0x00015F,DefaultClimate,Vivid WeathersSE.esp,,,,,101,195,,,,,,,,,,,,,,,,,,,,,,,,0
+00000F91,0x000F91,KarthspireClimate,Vivid WeathersSE.esp,,,,,50,195,,,,,,,,,,,,,,,,,,,,,,,,0
+00000812,0x000812,SkyrimClimate,Obsidian Weathers.esp,,,,,127,195,,,,,,,,,,,,,,,,,,,,,,,,0
+0000015F,0x00015F,DefaultClimate,Obsidian Weathers.esp,,,,,0,195,,,,,,,,,,,,,,,,,,,,,,,,0
+00000812,0x000812,SkyrimClimate,Cathedral Weathers.esp,,,,,50,195,,,,,,,,,,,,,,,,,,,,,,,,0
+0000015F,0x00015F,DefaultClimate,Cathedral Weathers.esp,,,,,0,195,,,,,,,,,,,,,,,,,,,,,,,,0
+0000015F,0x00015F,DefaultClimate,Azurite Weathers III.esp,,,,,0,195,,,,,,,,,,,,,,,,,,,,,,,,0
+00000812,0x000812,SkyrimClimate,Azurite Weathers III.esp,,,,,50,195,,,,,,,,,,,,,,,,,,,,,,,,0

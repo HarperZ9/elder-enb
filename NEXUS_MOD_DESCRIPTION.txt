@@ -1,0 +1,484 @@
+[center][size=6][b][color=#D4AF37]Elder ENB - Universal[/color][/b][/size]
+
+[size=3][i]Presented with love, by [color=#6DB3F2]papacr0w[/color][/i][/size][/center]
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Requirements[/color][/b][/size][/center]
+
+[list]
+[*][url=http://enbdev.com/]ENB Binary[/url] (Wrapper Version)
+[*][url=LINK]Silent Horizons 2 - Shader Core[/url]
+[*][url=LINK]ENB Extender & Helper[/url] (+ prerequisites)
+[*][url=LINK]KreatE[/url] (+ prerequisites)
+[*][url=LINK]KiLoader[/url] (+ prerequisites)
+[/list]
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Installation[/color][/b][/size][/center]
+
+[size=4][b][color=#6DB3F2]Step 1: ENB Binary Setup[/color][/b][/size]
+
+[b][color=#D4AF37]Critical:[/color][/b] You must use the [b]Wrapper version[/b] of ENB, not the Injector version.
+
+[list=1]
+[*]Download the latest ENB Binary from [url=http://enbdev.com/]enbdev.com[/url]
+[*]Open the downloaded archive and navigate to the [b]WrapperVersion[/b] folder
+[*]Extract [b][color=#6DB3F2]ONLY d3d11.dll[/color][/b] to your Skyrim game directory (where SkyrimSE.exe is located)
+[*]Do [b]NOT[/b] extract any other files from the ENB archive - these are provided by Elder ENB
+[/list]
+
+[size=4][b][color=#6DB3F2]Step 2: Before You Begin[/color][/b][/size]
+
+Delete all remaining files from previous ENB configurations and clear your ENB shader cache (typically located in your [b]Overwrite[/b] folder or Skyrim directory). Install all requirements and their prerequisites.
+
+[size=4][b][color=#6DB3F2]Step 3: Standard Installation[/color][/b][/size]
+
+[list=1]
+[*]Download and extract [b]Elder ENB - Universal (FINAL).zip[/b]
+[*]Copy [b]enbseries.ini[/b] and [b]enblocal.ini[/b] to your game directory
+[*]Copy the contents of the [b]enbseries[/b] folder into your pre-existing enbseries folder
+[*]Install [b]Required Files (FINAL).zip[/b] using Mod Organizer 2
+[*]Launch the game and press [b]Shift + Enter[/b] to verify ENB is enabled
+[*]Press [b]END[/b] to confirm your KreatE menu opens correctly
+[/list]
+
+[size=4][b][color=#6DB3F2]Wabbajack Installation[/color][/b][/size]
+
+For Wabbajack lists using Root Builder:
+[list=1]
+[*]Install both zip files through Mod Organizer 2
+[*]Create a [b]Root[/b] folder inside the mod directory
+[*]Move enbseries folder, enbseries.ini, and enblocal.ini into Root
+[*]Move Silent Horizons - Shader Core contents into Root as well
+[*]Clear your ENB Shader Cache
+[/list]
+
+[color=#D4AF37][b]Note:[/b][/color] Support is provided for Mod Organizer 2 installations only.
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Features[/color][/b][/size][/center]
+
+[list]
+[*][b][color=#6DB3F2]Universal Weather Compatibility[/color][/b]
+Carefully tuned configuration designed to function seamlessly with any weather mod.
+
+[*][b][color=#6DB3F2]Refined Image Pipeline[/color][/b]
+Tonemapping, exposure, adaptation, and lighting calibrated for unparalleled image clarity.
+
+[*][b][color=#6DB3F2]Intelligent Sharpening[/color][/b]
+Non-invasive sharpening that reintroduces detail without artifacts.
+
+[*][b][color=#6DB3F2]Extensive Mod Support[/color][/b]
+Lighting configurations for Vigilant, Unslaad, Glenmoril, DAc0da, Wyrmstooth, Beyond Reach, Midnight Sun, Darkend, Project AHO, Carved Brink, The Iceheart Sisters, and Death Consumes All. Templates for ELFX and RLO.
+
+[*][b][color=#6DB3F2]151 Preset Overlays[/color][/b]
+Comprehensive customization system for mixing and matching visual styles.
+[/list]
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Preset Overlay System[/color][/b][/size]
+
+[i]151 configurations to create your perfect visual experience[/i][/center]
+
+Preset Overlays modify shader parameters on top of the base ENB configuration. Think of them as "layers" that adjust various aspects of the visual experience. Within the ENB menu, the right-hand pane contains all overlay presets.
+
+[b][color=#D4AF37]Usage Rules:[/color][/b]
+[list]
+[*]Enable [b]ONE[/b] overlay per category (QUALITY, STYLE, DOF, BLOOM, etc.)
+[*][b]PREFERENCES, LIGHTING, and LOOK[/b] categories may have up to [b]2[/b] enabled
+[*]Use the [b]Amount slider[/b] to blend effects from 0-100%
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]Category Overview[/color][/b][/size][/center]
+
+[code]
+QUALITY (1-2)         Performance and visual fidelity
+PREFERENCES (3-4)     Personal preference toggles
+LIGHTING (5-9)        Lighting mod adaptation
+STYLE (10-44)         Color philosophies and aesthetics
+DOF (45-59)           Depth of field styles
+BLOOM (60-74)         Light bloom effects
+CINEMATIC (75-79)     Letterboxing and borders
+SSAO (80-81)          Ambient occlusion strength
+LOOK (82-119)         Film emulation LUTs
+GRAIN (120-125)       Film grain textures
+LENS (126-131)        Lens distortion effects
+VIGNETTE (132-137)    Edge darkening effects
+BLUR (138-143)        Artistic blur effects
+ENV (144-151)         Environment lighting ratios
+[/code]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]QUALITY (1-2)[/color][/b][/size]
+[i]Performance and Visual Fidelity[/i][/center]
+
+[list]
+[*][b]Performance Mode[/b] - Reduced shader complexity for mid-range hardware
+[*][b]Ultra+ [4080+][/b] - Maximum visual quality for high-end GPUs
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]PREFERENCES (3-4)[/color][/b][/size]
+[i]Personal Toggles - May enable up to 2[/i][/center]
+
+[list]
+[*][b]NoSharp[/b] - Disables sharpening for softer image or TAA upscaling
+[*][b]Disable DOF[/b] - Completely disables depth of field
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]LIGHTING (5-9)[/color][/b][/size]
+[i]Lighting Mod Adaptation - May enable up to 2[/i][/center]
+
+[list]
+[*][b]MLO2 Lighting Profile[/b] - Optimized for Mists of Lighting Overhaul 2
+[*][b]Brighter Nights[/b] - Increased nighttime visibility
+[*][b]Brighter Interiors[/b] - Lifted shadow detail indoors
+[*][b]Darker Interiors[/b] - Deeper shadows for dramatic interiors
+[*][b]Darker Nights[/b] - Reduced nighttime exposure for immersion
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]STYLE (10-44)[/color][/b][/size]
+[i]KreatE Color Philosophies - 35 Unique Looks[/i][/center]
+
+[size=3][b][color=#6DB3F2]Classic Styles (10-17)[/color][/b][/size]
+
+[b]10.28.16 (SE)[/b]
+Clean, neutral look inspired by vanilla Skyrim SE. The date marks Special Edition's release - balanced exposure with subtle contrast adjustments. Perfect for ENB quality without dramatic color shifts.
+
+[b]11.11.11 (LE)[/b]
+Classic warm tones inspired by Legendary Edition. Golden, amber-tinged memories of 2011 with warm color temperature and enhanced earth tones.
+
+[b]Autumn's Arrival[/b]
+Golden hour warmth with amber highlights. Pushes warm orange into highlights while maintaining cool shadow detail. Stunning autumn forests and sunsets.
+
+[b]Ethqnm Edition[/b]
+Vibrant, cinematic with punchy colors and strong contrast. Bold, unapologetic color for a larger-than-life fantasy aesthetic.
+
+[b]Jotunheimar[/b]
+Cold, icy atmosphere with blue-shifted tones. Named for the land of frost giants - harsh Nordic winter aesthetic ideal for cold playthroughs.
+
+[b]Rudy Inspired[/b]
+Natural, documentary style with realistic colors. Minimal color grading, balanced contrast, true-to-life saturation. Photographically honest.
+
+[b]Somber Tones[/b]
+Muted, ethereal atmosphere with soft contrast. Painterly, melancholic quality with lifted blacks and compressed highlights.
+
+[b]Wretched[/b]
+Bleak, desaturated horror atmosphere. Heavy desaturation, crushed shadows, oppressive vignetting. Perfect for survival horror.
+
+[size=3][b][color=#6DB3F2]General Aesthetics (18-28)[/color][/b][/size]
+
+[list]
+[*][b]Vibrant Fantasy[/b] - Lush, saturated colors for high-fantasy
+[*][b]Noir[/b] - High contrast with dramatic shadows
+[*][b]Blockbuster[/b] - Modern teal and orange Hollywood grading
+[*][b]High Key[/b] - Bright, optimistic, airy with lifted shadows
+[*][b]Mystic Night[/b] - Purple and violet fantasy night
+[*][b]Dramatic Contrast[/b] - Bold blacks and whites, punchy midtones
+[*][b]Pastel Dream[/b] - Soft pastels with romantic quality
+[*][b]Golden Hour Extreme[/b] - Pushed warm sunset with orange tints
+[*][b]Natural Documentary[/b] - Realistic, balanced, neutral
+[*][b]Faded Film[/b] - Lifted blacks, muted colors, aged vintage
+[*][b]Moody Blue Hour[/b] - Cool twilight atmosphere
+[/list]
+
+[size=3][b][color=#6DB3F2]Monochrome (29-30)[/color][/b][/size]
+
+[list]
+[*][b]Monochrome Classic[/b] - Clean black and white with full tonal range
+[*][b]Monochrome Dramatic[/b] - High contrast black and white
+[/list]
+
+[size=3][b][color=#6DB3F2]Film Director Inspired (31-40)[/color][/b][/size]
+
+[b]Robert Eggers:[/b]
+[list]
+[*][b]Nordic Saga[/b] - Cold, desaturated Viking aesthetic (The Northman)
+[*][b]Maritime Noir[/b] - Claustrophobic black and white (The Lighthouse)
+[*][b]Gothic Shadows[/b] - Romantic horror, candlelit darkness (Nosferatu)
+[/list]
+
+[b]Andrei Tarkovsky:[/b]
+[list]
+[*][b]The Zone[/b] - Ethereal green-cyan otherworldly (Stalker)
+[*][b]Poetic Sepia[/b] - Warm sepia, contemplative, painterly
+[/list]
+
+[b]Alejandro Gonzalez Inarritu:[/b]
+[list]
+[*][b]Frontier Winter[/b] - Cold natural light, survivalist (The Revenant)
+[/list]
+
+[b]Akira Kurosawa:[/b]
+[list]
+[*][b]Samurai Epic[/b] - Bold contrast with dramatic skies
+[*][b]Wanderer[/b] - Dusty, weathered ronin aesthetic
+[*][b]Storm & Chaos[/b] - Intense battle atmosphere, rain-swept
+[*][b]Contemplative[/b] - Quiet, meditative, intimate
+[/list]
+
+[size=3][b][color=#6DB3F2]Other Iconic Looks (41-44)[/color][/b][/size]
+
+[list]
+[*][b]Neon Dreams[/b] - Cyberpunk with punchy neon in darkness
+[*][b]Desert Mirage[/b] - Hot, sun-bleached, arid heat
+[*][b]Emerald Forest[/b] - Lush green jungle, humid and misty
+[*][b]Arctic Silence[/b] - Stark white, minimal, frozen
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]DOF (45-59)[/color][/b][/size]
+[i]Depth of Field - 15 Photography Styles[/i][/center]
+
+[list]
+[*][b]Soft Portrait[/b] - Gentle blur with smooth bokeh for character shots
+[*][b]Cinematic Anamorphic[/b] - Oval bokeh mimicking cinema lenses
+[*][b]Sharp Documentary[/b] - Minimal blur, extended depth
+[*][b]Dreamy Haze[/b] - Heavy gaussian blur, ethereal quality
+[*][b]Vintage Film[/b] - Imperfect bokeh with chromatic aberration
+[*][b]Modern Clean[/b] - Precise blur with minimal artifacts
+[*][b]Night Hexagon[/b] - Hexagonal bokeh in night lighting
+[*][b]Macro Detail[/b] - Steep falloff for close-up isolation
+[*][b]Landscape[/b] - Minimal foreground blur, extended background
+[*][b]Artistic Swirl[/b] - Swirly bokeh from vintage lenses
+[*][b]Tilt Shift[/b] - Miniature/diorama effect
+[*][b]Gentle Glow[/b] - Soft focus with light diffusion
+[*][b]Fast Fifty[/b] - Classic 50mm f/1.4 simulation
+[*][b]Telephoto[/b] - Compressed background, smooth large bokeh
+[*][b]Cat Eye[/b] - Edge distortion swirly bokeh
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]BLOOM (60-74)[/color][/b][/size]
+[i]Light Bloom Effects - 15 Styles[/i][/center]
+
+[list]
+[*][b]Subtle Clean[/b] - Refined, minimal bloom
+[*][b]Warm Glow[/b] - Golden-tinted warmth
+[*][b]Cool Atmosphere[/b] - Blue-shifted, cooler lighting
+[*][b]High Key[/b] - Bright, airy high-key look
+[*][b]Film Stock[/b] - Film halation characteristics
+[*][b]Dramatic[/b] - Intense, moody bloom
+[*][b]Ethereal[/b] - Soft, dreamy, otherworldly
+[*][b]Night Enhanced[/b] - Optimized for night sources
+[*][b]Interior Mood[/b] - Balanced for fire and candlelight
+[*][b]HDR Punch[/b] - High contrast, enhanced dynamic range
+[*][b]Crisp Minimal[/b] - Ultra-clean, almost no bloom
+[*][b]Sunset Blaze[/b] - Warm, saturated sunset optimization
+[*][b]Foggy Atmosphere[/b] - Volumetric, hazy for mist
+[*][b]Neon Nights[/b] - Punchy colored bloom for night lights
+[*][b]Candlelight[/b] - Warm, intimate interior warmth
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]CINEMATIC BORDERS (75-79)[/color][/b][/size]
+[i]Letterboxing and Framing[/i][/center]
+
+[list]
+[*][b]Classic 2.35[/b] - Standard widescreen cinematic ratio
+[*][b]Ultra Wide 2.76[/b] - Ultra-panavision extreme letterboxing
+[*][b]Subtle Frame[/b] - Minimal letterboxing
+[*][b]Vintage Corners[/b] - Rounded corners like old projectors
+[*][b]IMAX 1.43[/b] - Taller IMAX-inspired ratio
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]SSAO (80-81)[/color][/b][/size]
+[i]Ambient Occlusion Strength[/i][/center]
+
+[list]
+[*][b]Stronger[/b] - Enhanced AO for deeper shadows
+[*][b]Weaker[/b] - Reduced AO for lighter shadows
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]LOOK (82-119)[/color][/b][/size]
+[i]Film Emulation LUTs - May enable up to 2[/i][/center]
+
+[size=3][b][color=#6DB3F2]Film Stocks (82-102)[/color][/b][/size]
+
+[list]
+[*][b]Agfa RSXII 100[/b] - Vivid slide film
+[*][b]AgfaChroma 1000RS[/b] - High-speed with unique character
+[*][b]Agfacolor Ultra 50[/b] - Low-speed with fine detail
+[*][b]Cinestill 800T Analogica[/b] - Tungsten-balanced cinematic
+[*][b]Cinestill D50 Analogica[/b] - Daylight-balanced Cinestill
+[*][b]Cinestill 800T[/b] - Classic tungsten with halation
+[*][b]FantasticoFiltro Analogica[/b] - Stylized vintage filter
+[*][b]Fuji 3513 Analogica[/b] - Motion picture intermediate
+[*][b]Fuji Velvia 50[/b] - Legendary high-saturation slide
+[*][b]Kodak 200T Analogica[/b] - Tungsten motion picture
+[*][b]Kodak 2383 D55/D60/D65[/b] - Print film at various temps
+[*][b]Kodak 250D Analogica[/b] - Daylight motion picture
+[*][b]Kodak 500T Analogica[/b] - High-speed tungsten
+[*][b]Kodak Kodachrome 25/64[/b] - Classic slide films
+[*][b]Kodak Ultramax Analogica[/b] - Consumer with warm tones
+[*][b]Konica Centuria APS 200[/b] - Japanese consumer character
+[*][b]Teal & Orange Analogica[/b] - Hollywood blockbuster grade
+[*][b]Technicolor 16 Analogica[/b] - Three-strip Technicolor
+[/list]
+
+[size=3][b][color=#6DB3F2]Voyager Collection (103-119)[/color][/b][/size]
+
+Artistic color grades with celestial naming:
+[list]
+[*][b]Algol[/b] - Mysterious, slightly unsettling
+[*][b]Arakon[/b] - Bold, dramatic shifts
+[*][b]Arcturus[/b] - Warm orange character
+[*][b]Argus[/b] - Clear, high clarity
+[*][b]Cambra[/b] - Soft, pastoral
+[*][b]Cerberus[/b] - Dark, underworld guardian
+[*][b]Cruces[/b] - Balanced, navigational
+[*][b]Elora[/b] - Ethereal, fairy-tale
+[*][b]Halka[/b] - Misty, atmospheric
+[*][b]Hypatia[/b] - Scholarly, refined
+[*][b]Mutara[/b] - Nebula-inspired, dramatic
+[*][b]Nelvana[/b] - Northern lights, aurora
+[*][b]Omega[/b] - Complete, balanced
+[*][b]Organia[/b] - Peaceful, organic
+[*][b]Persephone[/b] - Seasonal contrast
+[*][b]Scorpii[/b] - Warm red giant
+[*][b]Valo[/b] - Luminous, light-filled
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]GRAIN (120-125)[/color][/b][/size]
+[i]Film Grain Textures[/i][/center]
+
+[list]
+[*][b]None (Disabled)[/b] - Completely disables grain
+[*][b]Subtle Film[/b] - Fine, barely noticeable texture
+[*][b]Classic 35mm[/b] - Traditional 35mm character
+[*][b]Heavy 16mm[/b] - Coarse, prominent grain
+[*][b]Cinematic Fine[/b] - Refined professional cinema
+[*][b]Noir Gritty[/b] - Heavy, harsh noir aesthetic
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]LENS (126-131)[/color][/b][/size]
+[i]Lens Distortion Characteristics[/i][/center]
+
+[list]
+[*][b]None (Disabled)[/b] - No distortion
+[*][b]Subtle Barrel[/b] - Slight barrel for natural feel
+[*][b]Wide Angle[/b] - Pronounced wide-angle distortion
+[*][b]Anamorphic[/b] - Horizontal squeeze characteristic
+[*][b]Vintage Character[/b] - Imperfect with chromatic aberration
+[*][b]Pincushion Correct[/b] - Inverse distortion correction
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]VIGNETTE (132-137)[/color][/b][/size]
+[i]Edge Darkening Effects[/i][/center]
+
+[list]
+[*][b]None (Disabled)[/b] - No vignette
+[*][b]Subtle Frame[/b] - Gentle natural framing
+[*][b]Classic Portrait[/b] - Traditional portrait style
+[*][b]Heavy Dramatic[/b] - Strong dramatic emphasis
+[*][b]Cinema Wide[/b] - Widescreen-optimized shape
+[*][b]Soft Vintage[/b] - Gradual vintage falloff
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]BLUR (138-143)[/color][/b][/size]
+[i]Artistic Blur Effects[/i][/center]
+
+[list]
+[*][b]None (Disabled)[/b] - No blur effects
+[*][b]Soft Glow[/b] - Gentle softening with glow
+[*][b]Dream Haze[/b] - Heavy diffusion, dreamy
+[*][b]Radial Focus[/b] - Center-focused radial falloff
+[*][b]Motion Style[/b] - Directional sense of movement
+[*][b]Depth Fade[/b] - Distance-based simulation
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]ENV (144-151)[/color][/b][/size]
+[i]Environment Lighting Ratios[/i][/center]
+
+Comprehensive adjustments combining direct/ambient ratios, sky gradients, skylighting, and image-based lighting:
+
+[list]
+[*][b]Photorealistic[/b] - Balanced natural daylight (~5:1) for authentic scenes
+[*][b]Soft Diffused[/b] - Portrait-friendly (~2:1) with open shadows
+[*][b]Harsh Dramatic[/b] - High contrast (~8:1) with deep shadows
+[*][b]Overcast Flat[/b] - Even illumination (~1.2:1) simulating clouds
+[*][b]Golden Hour Enhanced[/b] - Boosted sunrise/sunset (~6:1)
+[*][b]Moody Atmospheric[/b] - Darker overall (~4:1) mysterious mood
+[*][b]Bright Airy[/b] - Lifted exposure (~2.5:1) optimistic atmosphere
+[*][b]Cinematic Contrast[/b] - Film-like balance (~4.3:1) professional lighting
+[/list]
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Creating Your Perfect Look[/color][/b][/size][/center]
+
+The power of this system lies in combination:
+
+[list=1]
+[*][b][color=#6DB3F2]STYLE[/color][/b] - Choose your base color philosophy
+[*][b][color=#6DB3F2]LOOK[/color][/b] - Layer a film emulation for character
+[*][b][color=#6DB3F2]ENV[/color][/b] - Set your lighting character
+[*][b][color=#6DB3F2]LIGHTING[/color][/b] - Match your lighting mod setup
+[*][b][color=#6DB3F2]DOF[/color][/b] - Pick a depth of field style
+[*][b][color=#6DB3F2]BLOOM[/color][/b] - Adjust light behavior
+[*][b][color=#6DB3F2]GRAIN + LENS + VIGNETTE[/color][/b] - Add film-like character
+[*][b][color=#6DB3F2]CINEMATIC BORDERS[/color][/b] - Optional theatrical framing
+[/list]
+
+Use the [b]Amount sliders[/b] to blend each overlay - you don't have to go 100%. Sometimes 30% of a LOOK combined with 50% of a STYLE creates something unique.
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Acknowledgments[/color][/b][/size][/center]
+
+Thank you to those who have inspired this journey - individuals who fostered creativity and shared knowledge. If you know a shader developer, colorist, or creative professional, recognize that their art extends far beyond what appears on screen.
+
+[size=3][b][color=#6DB3F2]Special Thanks[/color][/b][/size]
+
+[list]
+[*]Boris Vorontsov
+[*]LonelyKitsuune
+[*]MartyMcModding / Pascal Gilcher
+[*]Marmotte
+[*]L00ping
+[*]Veeblix
+[*]TreyM
+[*]Kauz
+[*]Ethqnm
+[*]Rudy102
+[*]MechanicalPanda
+[*]HTWW
+[*]Guts
+[*]Adyss
+[*]TheSandvichMaker
+[*]KingEric1992
+[*]IconicDeath
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]Make it your own.[/color][/b][/size][/center]

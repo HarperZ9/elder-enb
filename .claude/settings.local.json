@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(wc:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(dir:*)",
+      "WebSearch",
+      "WebFetch(domain:wiki.nexusmods.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:en.uesp.net)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\Zain\\\\ENB\\\\cleanup_shader_categories.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\Zain\\\\ENB\\\\reorganize_weatherlist.ps1\")",
+      "Bash(powershell:*)",
+      "Bash(Select-String -Pattern \"STATUS|OK|WARNING|Interior files|Weather files|WeatherList|LocationWeather\")",
+      "Bash(Select-String -Pattern \"NAT|Total\")",
+      "Bash(Select-Object -First 35)"
+    ]
+  }
+}

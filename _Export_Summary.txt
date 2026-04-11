@@ -1,0 +1,42 @@
+KreatE Weather Mod Support Export Summary
+=========================================
+Generated: 1/29/2026 12:36:51 PM
+Processing time: 71.5109994169325 seconds
+
+Plugins Processed:
+  - Skyrim.esm
+  - SkyrimSE.exe
+  - Update.esm
+  - Dawnguard.esm
+  - HearthFires.esm
+  - Dragonborn.esm
+  - ccBGSSSE001-Fish.esm
+  - ccQDRSSE001-SurvivalMode.esl
+  - ccbgssse037-curios.esl
+  - ccBGSSSE025-AdvDSGS.esm
+  - _ResourcePack.esl
+  - Vivid WeathersSE.esp
+  - Obsidian Weathers.esp
+  - Cathedral Weathers.esp
+  - Azurite Weathers III.esp
+
+Records Exported:
+  WTHR (Weather):              990
+  CLMT (Climate):              19
+  REGN (Region w/Weather):     206
+  IMGS (ImageSpace):           595
+  SPGD (Shader Particle):      47
+  VOLI (Volumetric Lighting):  125
+  RFCT (Visual Effect):        181
+
+Total Weather Records: 990
+
+Output Files:
+  WeatherID_Master_List.csv - Quick WeatherID reference
+  Weathers_Full.csv - Complete weather data
+  Weathers\ folder - Individual INI files per weather
+  Climates.csv - Climate/weather probability mappings
+  Regions.csv - Regional weather assignments
+
+Use WeatherID_Master_List.csv to identify FormIDs for
+adding weather support to KreatE ENB presets.

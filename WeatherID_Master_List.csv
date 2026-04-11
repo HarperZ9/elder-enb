@@ -1,0 +1,991 @@
+FormID,LocalID,EditorID,SourcePlugin,Classification,ClassificationName,HasPrecipitation,LinkedImageSpaceDay
+0000015E,0x00015E,DefaultWeather,Skyrim.esm,0,Pleasant,No,00000167
+0000081A,0x00081A,SkyrimClear,Skyrim.esm,0,Pleasant,No,00012F88
+00012F89,0x012F89,SkyrimCloudy,Skyrim.esm,0,Pleasant,No,00012F87
+0002E7AB,0x02E7AB,TESTCloudyRain,Skyrim.esm,0,Pleasant,No,00012F87
+0004D7FB,0x04D7FB,SkyrimOvercastSnow,Skyrim.esm,0,Pleasant,No,0004D805
+0006ED5A,0x06ED5A,FXWthrInvertDayNight,Skyrim.esm,0,Pleasant,No,000A2687
+0006ED5B,0x06ED5B,FXWthrCaveBlueSkylight,Skyrim.esm,0,Pleasant,No,000A2687
+00075DE5,0x075DE5,FXWthrCaveBluePaleLight,Skyrim.esm,0,Pleasant,No,000A2687
+000777CF,0x0777CF,FXWthrInvertDayNighWarm,Skyrim.esm,0,Pleasant,No,000A2687
+000923FD,0x0923FD,SovngardeFog,Skyrim.esm,0,Pleasant,No,00061CF0
+000A6858,0x0A6858,WorldMapWeather,Skyrim.esm,0,Pleasant,No,000681F6
+000AEE84,0x0AEE84,FXWthrInvertWindowsWindhelm,Skyrim.esm,0,Pleasant,No,000A2687
+00048C14,0x048C14,BlackreachWeather,Skyrim.esm,0,Pleasant,No,00048C15
+0007548F,0x07548F,FXWthrSunlight,Skyrim.esm,0,Pleasant,No,000A2687
+00075491,0x075491,FXWthrSunlightWhite,Skyrim.esm,0,Pleasant,No,000A2687
+000C821E,0x0C821E,SkyrimFog,Skyrim.esm,0,Pleasant,No,000C820C
+000C821F,0x0C821F,SkyrimOvercastRain,Skyrim.esm,0,Pleasant,No,000C8210
+000C8220,0x0C8220,SkyrimStormRain,Skyrim.esm,0,Pleasant,No,000C8217
+000C8221,0x0C8221,SkyrimStormSnow,Skyrim.esm,0,Pleasant,No,000C821B
+000D299E,0x0D299E,SkyrimOvercastWar,Skyrim.esm,0,Pleasant,No,000D299A
+000D4886,0x0D4886,FXMagicStormRain,Skyrim.esm,0,Pleasant,No,000C8217
+0008277A,0x08277A,FXWthrInvertWindowsWhiterun,Skyrim.esm,0,Pleasant,No,000A2687
+0008282A,0x08282A,FXWthrInvertLightsWhiterun,Skyrim.esm,0,Pleasant,No,000A2687
+0005ED7A,0x05ED7A,FXWthrInvertLightsSolitude,Skyrim.esm,0,Pleasant,No,000A2687
+000D9329,0x0D9329,HelgenAttackWeather,Skyrim.esm,0,Pleasant,No,000D932B
+000ECC96,0x0ECC96,FXWthrInvertWindowsWindhelm2,Skyrim.esm,0,Pleasant,No,000A2687
+00101910,0x101910,FXWthrInvertLightMarkarth,Skyrim.esm,0,Pleasant,No,000A2687
+0010199F,0x10199F,SkyrimMQ206weather,Skyrim.esm,0,Pleasant,No,001019A0
+00104AB4,0x104AB4,SkuldafnCloudy,Skyrim.esm,0,Pleasant,No,00104AB2
+00105941,0x105941,BloatedMansGrottoFog,Skyrim.esm,0,Pleasant,No,00105939
+00105942,0x105942,SolitudeBluePalaceFogARENA,Skyrim.esm,0,Pleasant,No,0010593A
+00105943,0x105943,SolitudeBluePalaceFogFEAR,Skyrim.esm,0,Pleasant,No,0010593B
+00105944,0x105944,SolitudeBluePalaceFogNMARE,Skyrim.esm,0,Pleasant,No,0010593C
+00105945,0x105945,SolitudeBluePalaceFog,Skyrim.esm,0,Pleasant,No,0010593D
+00105F40,0x105F40,SkyrimDA02Weather,Skyrim.esm,0,Pleasant,No,00105F3E
+00106635,0x106635,KarthspireRedoubtFog,Skyrim.esm,0,Pleasant,No,000C820C
+0010A230,0x10A230,SkyrimClearMA,Skyrim.esm,0,Pleasant,No,0010A1C2
+0010A231,0x10A231,SkyrimOvercastRainMA,Skyrim.esm,0,Pleasant,No,0010A1C6
+0010A232,0x10A232,SkyrimFogMA,Skyrim.esm,0,Pleasant,No,0010A1CA
+0010A233,0x10A233,SkyrimCloudyMA,Skyrim.esm,0,Pleasant,No,0010A1CE
+0010A234,0x10A234,SkyrimClearCO,Skyrim.esm,0,Pleasant,No,0010A1D2
+0010A235,0x10A235,SkyrimFogCO,Skyrim.esm,0,Pleasant,No,0010A1D6
+0010A236,0x10A236,SkyrimCloudyCO,Skyrim.esm,0,Pleasant,No,0010A1DA
+0010A237,0x10A237,SkyrimClearRE,Skyrim.esm,0,Pleasant,No,0010A1DE
+0010A238,0x10A238,SkyrimOvercastRainRE,Skyrim.esm,0,Pleasant,No,0010A1E2
+0010A239,0x10A239,SkyrimFogRE,Skyrim.esm,0,Pleasant,No,0010A1E6
+0010A23A,0x10A23A,SkyrimCloudyRE,Skyrim.esm,0,Pleasant,No,0010A1EA
+0010A23B,0x10A23B,SkyrimClearFF,Skyrim.esm,0,Pleasant,No,0010A1EE
+0010A23C,0x10A23C,SkyrimStormRainFF,Skyrim.esm,0,Pleasant,No,0010A1F2
+0010A23D,0x10A23D,SkyrimOvercastRainFF,Skyrim.esm,0,Pleasant,No,0010A1F6
+0010A23E,0x10A23E,SkyrimFogFF,Skyrim.esm,0,Pleasant,No,0010A1FA
+0010A23F,0x10A23F,SkyrimCloudyFF,Skyrim.esm,0,Pleasant,No,0010A1FE
+0010A240,0x10A240,SkyrimClearTU,Skyrim.esm,0,Pleasant,No,0010A202
+0010A241,0x10A241,SkyrimStormRainTU,Skyrim.esm,0,Pleasant,No,0010A206
+0010A242,0x10A242,SkyrimOvercastRainTU,Skyrim.esm,0,Pleasant,No,0010A20A
+0010A243,0x10A243,SkyrimCloudyTU,Skyrim.esm,0,Pleasant,No,0010A20E
+0010A244,0x10A244,SkyrimClearSN,Skyrim.esm,0,Pleasant,No,0010A212
+0010A245,0x10A245,SkyrimCloudySN,Skyrim.esm,0,Pleasant,No,0010A216
+0010A7A5,0x10A7A5,SkyrimClearVT,Skyrim.esm,0,Pleasant,No,0010A798
+0010A7A6,0x10A7A6,SkyrimOvercastRainVT,Skyrim.esm,0,Pleasant,No,0010A79C
+0010A7A7,0x10A7A7,SkyrimFogVT,Skyrim.esm,0,Pleasant,No,0010A7A0
+0010A7A8,0x10A7A8,SkyrimCloudyVT,Skyrim.esm,0,Pleasant,No,0010A7A4
+0010C32F,0x10C32F,FXSkyrimStormBlowingGrass,Skyrim.esm,0,Pleasant,No,000C8217
+0010D9EC,0x10D9EC,SovngardeClear,Skyrim.esm,0,Pleasant,No,0010D9EB
+0010DA13,0x10DA13,FXWthrInvertWindowsWinterhold,Skyrim.esm,0,Pleasant,No,00000161
+0010E1E3,0x10E1E3,SkyrimCloudyVT_A,Skyrim.esm,0,Pleasant,No,0010A7A4
+0010E1E4,0x10E1E4,SkyrimClearVT_A,Skyrim.esm,0,Pleasant,No,0010A798
+0010E1E5,0x10E1E5,SkyrimCloudyMA_A,Skyrim.esm,0,Pleasant,No,0010A1CE
+0010E1E6,0x10E1E6,SkyrimClearMA_A,Skyrim.esm,0,Pleasant,No,0010A1C2
+0010E1E7,0x10E1E7,SkyrimCloudyCO_A,Skyrim.esm,0,Pleasant,No,0010A1DA
+0010E1E8,0x10E1E8,SkyrimClearCO_A,Skyrim.esm,0,Pleasant,No,0010A1D2
+0010E1E9,0x10E1E9,SkyrimCloudyRE_A,Skyrim.esm,0,Pleasant,No,0010A1EA
+0010E1EA,0x10E1EA,SkyrimClearRE_A,Skyrim.esm,0,Pleasant,No,0010A1DE
+0010E1EB,0x10E1EB,SkyrimCloudyFF_A,Skyrim.esm,0,Pleasant,No,0010A1FE
+0010E1EC,0x10E1EC,SkyrimClearFF_A,Skyrim.esm,0,Pleasant,No,0010A1EE
+0010E1ED,0x10E1ED,SkyrimCloudyTU_A,Skyrim.esm,0,Pleasant,No,0010A20E
+0010E1EE,0x10E1EE,SkyrimClearTU_A,Skyrim.esm,0,Pleasant,No,0010A202
+0010E1EF,0x10E1EF,SkyrimCloudySN_A,Skyrim.esm,0,Pleasant,No,0010A216
+0010E1F0,0x10E1F0,SkyrimClearSN_A,Skyrim.esm,0,Pleasant,No,0010A212
+0010E1F1,0x10E1F1,SkyrimCloudy_A,Skyrim.esm,0,Pleasant,No,00012F87
+0010E1F2,0x10E1F2,SkyrimClear_A,Skyrim.esm,0,Pleasant,No,00012F88
+0010E3D4,0x10E3D4,EditorCloudPreview,Skyrim.esm,0,Pleasant,No,00012F87
+0010FE7E,0x10FE7E,RiftenOvercastFog,Skyrim.esm,0,Pleasant,No,0010FE7D
+0010FEF8,0x10FEF8,SovngardeDark,Skyrim.esm,0,Pleasant,No,0010FEF7
+0000081A,0x00081A,SkyrimClear,Update.esm,0,Pleasant,No,00012F88
+00012F89,0x012F89,SkyrimCloudy,Update.esm,0,Pleasant,No,00012F87
+000C821E,0x0C821E,SkyrimFog,Update.esm,0,Pleasant,No,000C820C
+000C821F,0x0C821F,SkyrimOvercastRain,Update.esm,0,Pleasant,No,000C8210
+000C8220,0x0C8220,SkyrimStormRain,Update.esm,0,Pleasant,No,000C8217
+000C8221,0x0C8221,SkyrimStormSnow,Update.esm,0,Pleasant,No,000C821B
+0010E1F1,0x10E1F1,SkyrimCloudy_A,Update.esm,0,Pleasant,No,00012F87
+0010E1F2,0x10E1F2,SkyrimClear_A,Update.esm,0,Pleasant,No,00012F88
+0010A240,0x10A240,SkyrimClearTU,Update.esm,0,Pleasant,No,0010A202
+0010A241,0x10A241,SkyrimStormRainTU,Update.esm,0,Pleasant,No,0010A206
+0010A242,0x10A242,SkyrimOvercastRainTU,Update.esm,0,Pleasant,No,0010A20A
+0010A243,0x10A243,SkyrimCloudyTU,Update.esm,0,Pleasant,No,0010A20E
+0010E1ED,0x10E1ED,SkyrimCloudyTU_A,Update.esm,0,Pleasant,No,0010A20E
+0010E1EE,0x10E1EE,SkyrimClearTU_A,Update.esm,0,Pleasant,No,0010A202
+0010A23B,0x10A23B,SkyrimClearFF,Update.esm,0,Pleasant,No,0010A1EE
+0010A23C,0x10A23C,SkyrimStormRainFF,Update.esm,0,Pleasant,No,0010A1F2
+0010A23D,0x10A23D,SkyrimOvercastRainFF,Update.esm,0,Pleasant,No,0010A1F6
+0010A23E,0x10A23E,SkyrimFogFF,Update.esm,0,Pleasant,No,0010A1FA
+0010A23F,0x10A23F,SkyrimCloudyFF,Update.esm,0,Pleasant,No,0010A1FE
+0010E1EB,0x10E1EB,SkyrimCloudyFF_A,Update.esm,0,Pleasant,No,0010A1FE
+0010E1EC,0x10E1EC,SkyrimClearFF_A,Update.esm,0,Pleasant,No,0010A1EE
+0010A7A5,0x10A7A5,SkyrimClearVT,Update.esm,0,Pleasant,No,0010A798
+0010A7A6,0x10A7A6,SkyrimOvercastRainVT,Update.esm,0,Pleasant,No,0010A79C
+0010A7A7,0x10A7A7,SkyrimFogVT,Update.esm,0,Pleasant,No,0010A7A0
+0010A7A8,0x10A7A8,SkyrimCloudyVT,Update.esm,0,Pleasant,No,0010A7A4
+0010E1E3,0x10E1E3,SkyrimCloudyVT_A,Update.esm,0,Pleasant,No,0010A7A4
+0010E1E4,0x10E1E4,SkyrimClearVT_A,Update.esm,0,Pleasant,No,0010A798
+0010A237,0x10A237,SkyrimClearRE,Update.esm,0,Pleasant,No,0010A1DE
+0010A238,0x10A238,SkyrimOvercastRainRE,Update.esm,0,Pleasant,No,0010A1E2
+0010A239,0x10A239,SkyrimFogRE,Update.esm,0,Pleasant,No,0010A1E6
+0010A23A,0x10A23A,SkyrimCloudyRE,Update.esm,0,Pleasant,No,0010A1EA
+0010E1E9,0x10E1E9,SkyrimCloudyRE_A,Update.esm,0,Pleasant,No,0010A1EA
+0010E1EA,0x10E1EA,SkyrimClearRE_A,Update.esm,0,Pleasant,No,0010A1DE
+0010A230,0x10A230,SkyrimClearMA,Update.esm,0,Pleasant,No,0010A1C2
+0010A232,0x10A232,SkyrimFogMA,Update.esm,0,Pleasant,No,0010A1CA
+0010A233,0x10A233,SkyrimCloudyMA,Update.esm,0,Pleasant,No,0010A1CE
+0010E1E5,0x10E1E5,SkyrimCloudyMA_A,Update.esm,0,Pleasant,No,0010A1CE
+0010E1E6,0x10E1E6,SkyrimClearMA_A,Update.esm,0,Pleasant,No,0010A1C2
+0004D7FB,0x04D7FB,SkyrimOvercastSnow,Update.esm,0,Pleasant,No,0004D805
+000D299E,0x0D299E,SkyrimOvercastWar,Update.esm,0,Pleasant,No,000D299A
+0010A231,0x10A231,SkyrimOvercastRainMA,Update.esm,0,Pleasant,No,0010A1C6
+0010A234,0x10A234,SkyrimClearCO,Update.esm,0,Pleasant,No,0010A1D2
+0010A235,0x10A235,SkyrimFogCO,Update.esm,0,Pleasant,No,0010A1D6
+0010A236,0x10A236,SkyrimCloudyCO,Update.esm,0,Pleasant,No,0010A1DA
+0010A244,0x10A244,SkyrimClearSN,Update.esm,0,Pleasant,No,0010A212
+0010A245,0x10A245,SkyrimCloudySN,Update.esm,0,Pleasant,No,0010A216
+0010E1E7,0x10E1E7,SkyrimCloudyCO_A,Update.esm,0,Pleasant,No,0010A1DA
+0010E1E8,0x10E1E8,SkyrimClearCO_A,Update.esm,0,Pleasant,No,0010A1D2
+0010E1EF,0x10E1EF,SkyrimCloudySN_A,Update.esm,0,Pleasant,No,0010A216
+0010E1F0,0x10E1F0,SkyrimClearSN_A,Update.esm,0,Pleasant,No,0010A212
+000D9329,0x0D9329,HelgenAttackWeather,Update.esm,0,Pleasant,No,000D932B
+0010FE7E,0x10FE7E,RiftenOvercastFog,Update.esm,0,Pleasant,No,0010FE7D
+00104AB4,0x104AB4,SkuldafnCloudy,Update.esm,0,Pleasant,No,00104AB2
+00105941,0x105941,BloatedMansGrottoFog,Update.esm,0,Pleasant,No,00105939
+00106635,0x106635,KarthspireRedoubtFog,Update.esm,0,Pleasant,No,01001BCF
+000923FD,0x0923FD,SovngardeFog,Update.esm,0,Pleasant,No,00061CF0
+0010199F,0x10199F,SkyrimMQ206weather,Update.esm,0,Pleasant,No,001019A0
+00105942,0x105942,SolitudeBluePalaceFogARENA,Update.esm,0,Pleasant,No,0010593A
+00105943,0x105943,SolitudeBluePalaceFogFEAR,Update.esm,0,Pleasant,No,0010593B
+00105944,0x105944,SolitudeBluePalaceFogNMARE,Update.esm,0,Pleasant,No,0010593C
+00105945,0x105945,SolitudeBluePalaceFog,Update.esm,0,Pleasant,No,0010593D
+00105F40,0x105F40,SkyrimDA02Weather,Update.esm,0,Pleasant,No,00105F3E
+0010D9EC,0x10D9EC,SovngardeClear,Update.esm,0,Pleasant,No,0010D9EB
+0010FEF8,0x10FEF8,SovngardeDark,Update.esm,0,Pleasant,No,0010FEF7
+0002E7AB,0x02E7AB,TESTCloudyRain,Update.esm,0,Pleasant,No,00012F87
+00048C14,0x048C14,BlackreachWeather,Update.esm,0,Pleasant,No,00048C15
+00075491,0x075491,FXWthrSunlightWhite,Update.esm,0,Pleasant,No,000A2687
+0010E3D4,0x10E3D4,EditorCloudPreview,Update.esm,0,Pleasant,No,00012F87
+000D4886,0x0D4886,FXMagicStormRain,Update.esm,0,Pleasant,No,000C8217
+02001407,0x001407,SoulCairnAmb01,Dawnguard.esm,0,Pleasant,No,02007AD7
+02006AEC,0x006AEC,DLC1Eclipse,Dawnguard.esm,0,Pleasant,No,02006AED
+0200959F,0x00959F,SoulCairnAurora,Dawnguard.esm,0,Pleasant,No,02007AD7
+0200F89C,0x00F89C,DLC1AurielsBowClearWeather,Dawnguard.esm,0,Pleasant,No,00012F88
+0200F89D,0x00F89D,DLC1MagicAurielBowCloudyWeather,Dawnguard.esm,0,Pleasant,No,0010A7A4
+02018DBB,0x018DBB,SoulCairnAmb02,Dawnguard.esm,0,Pleasant,No,02007AD7
+02018DBC,0x018DBC,SoulCairnAmb03,Dawnguard.esm,0,Pleasant,No,02007AD7
+02018DBD,0x018DBD,SoulCairnAmb04,Dawnguard.esm,0,Pleasant,No,02007AD7
+02019599,0x019599,DLC1FalmerValley_bf,Dawnguard.esm,0,Pleasant,No,00012F87
+020195A0,0x0195A0,DLC1FalmerValley_bfDark,Dawnguard.esm,0,Pleasant,No,00012F87
+02010E0B,0x010E0B,DLC1_SkyrimCloudyFV_A,Dawnguard.esm,0,Pleasant,No,0010A216
+02010E0E,0x010E0E,DLC1_SkyrimCloudyFV,Dawnguard.esm,0,Pleasant,No,0010A216
+02010E0F,0x010E0F,DLC1_SkyrimClearFV,Dawnguard.esm,0,Pleasant,No,0010A212
+02010E10,0x010E10,DLC1_SkyrimClearFV_A,Dawnguard.esm,0,Pleasant,No,0010A212
+02014551,0x014551,SoulCairnAmb01_Rain,Dawnguard.esm,0,Pleasant,No,02007AD7
+02018471,0x018471,DLC02VolcanicAsh01,Dragonborn.esm,0,Pleasant,No,0201867F
+0201D760,0x01D760,DLC02VolcanicAshTundra01,Dragonborn.esm,0,Pleasant,No,0201867F
+0201DFF5,0x01DFF5,DLC2ApocryphaWeather,Dragonborn.esm,0,Pleasant,No,0201C48C
+02031AC0,0x031AC0,DLC02VolcanicAsh02,Dragonborn.esm,0,Pleasant,No,0201867F
+02032336,0x032336,DLC02VolcanicAshStorm01,Dragonborn.esm,0,Pleasant,No,0201867F
+02034CFB,0x034CFB,DLC2ApocryphaWeatherNew,Dragonborn.esm,0,Pleasant,No,02034CFA
+020374B8,0x0374B8,DLC02VolcanicAsh01_A,Dragonborn.esm,0,Pleasant,No,0201867F
+020374B9,0x0374B9,DLC02VolcanicAsh02_A,Dragonborn.esm,0,Pleasant,No,0201867F
+020374BA,0x0374BA,DLC02VolcanicAshTundra01_A,Dragonborn.esm,0,Pleasant,No,0201867F
+0000081A,0x00081A,SkyrimClear,Vivid WeathersSE.esp,0,Pleasant,No,0406F72A
+0000015E,0x00015E,DefaultWeather,Vivid WeathersSE.esp,0,Pleasant,No,0406F72A
+04194EB6,0x194EB6,FXVampireAttack,Vivid WeathersSE.esp,0,Pleasant,No,04194EB7
+0418FDB0,0x18FDB0,DLC2VividAshFall,Vivid WeathersSE.esp,0,Pleasant,No,0406F710
+0418FDAF,0x18FDAF,DLC2VividAshBlizzard,Vivid WeathersSE.esp,0,Pleasant,No,0406F72C
+0418F9AF,0x18F9AF,SkyrimSnowBlizzard_Down_NoFog,Vivid WeathersSE.esp,0,Pleasant,No,0406F72C
+0418BE70,0x18BE70,SkyrimSnowBlizzard_Swirl,Vivid WeathersSE.esp,0,Pleasant,No,0406F72C
+0418BE6E,0x18BE6E,SkyrimOC_Storm_ALWE,Vivid WeathersSE.esp,0,Pleasant,No,0406F712
+0418BE6D,0x18BE6D,SkyrimOC_Storm_ANWE2,Vivid WeathersSE.esp,0,Pleasant,No,0406F712
+04187DD3,0x187DD3,SkyrimOC_Storm_ANWE,Vivid WeathersSE.esp,0,Pleasant,No,0406F712
+0417EC74,0x17EC74,SkyrimCloudy_AuroraMental_Tundra_70,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC73,0x17EC73,SkyrimCloudy_AuroraMental_Snow_70,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC72,0x17EC72,SkyrimCloudy_AuroraMental_Reach_70,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC71,0x17EC71,SkyrimCloudy_AuroraMental_March_70,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC70,0x17EC70,SkyrimCloudy_AuroraMental_FallForrest_70,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC6F,0x17EC6F,SkyrimCloudy_AuroraMental_Coast_70,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC6E,0x17EC6E,SkyrimCloudy_AuroraMental_Tundra_69,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC6D,0x17EC6D,SkyrimCloudy_AuroraMental_Snow_69,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC6C,0x17EC6C,SkyrimCloudy_AuroraMental_Reach_69,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC6B,0x17EC6B,SkyrimCloudy_AuroraMental_March_69,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC6A,0x17EC6A,SkyrimCloudy_AuroraMental_FallForrest_69,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC69,0x17EC69,SkyrimCloudy_AuroraMental_Coast_69,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC68,0x17EC68,SkyrimCloudy_AuroraMental_Tundra_68,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC67,0x17EC67,SkyrimCloudy_AuroraMental_Snow_68,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC66,0x17EC66,SkyrimCloudy_AuroraMental_Reach_68,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC65,0x17EC65,SkyrimCloudy_AuroraMental_March_68,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC64,0x17EC64,SkyrimCloudy_AuroraMental_FallForrest_68,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC63,0x17EC63,SkyrimCloudy_AuroraMental_Coast_68,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC62,0x17EC62,SkyrimCloudy_AuroraPeach_VolTundra_67,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0417EC61,0x17EC61,SkyrimCloudy_AuroraPeach_Tundra_67,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC60,0x17EC60,SkyrimCloudy_AuroraPeach_Snow_67,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC5F,0x17EC5F,SkyrimCloudy_AuroraPeach_Reach_67,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC5E,0x17EC5E,SkyrimCloudy_AuroraPeach_March_67,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC5D,0x17EC5D,SkyrimCloudy_AuroraPeach_FallForrest_67,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC5C,0x17EC5C,SkyrimCloudy_AuroraPeach_Coast_67,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC5B,0x17EC5B,SkyrimCloudy_Tundra_66,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC5A,0x17EC5A,SkyrimCloudy_Snow_66,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC59,0x17EC59,SkyrimCloudy_Reach_66,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC58,0x17EC58,SkyrimCloudy_March_66,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC57,0x17EC57,SkyrimCloudy_FallForrest_66,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC56,0x17EC56,SkyrimCloudy_Coast_66,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC55,0x17EC55,SkyrimCloudy_Tundra_65,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC54,0x17EC54,SkyrimCloudy_Snow_65,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC53,0x17EC53,SkyrimCloudy_Reach_65,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC52,0x17EC52,SkyrimCloudy_March_65,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC51,0x17EC51,SkyrimCloudy_FallForrest_65,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC50,0x17EC50,SkyrimCloudy_Coast_65,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC4F,0x17EC4F,SkyrimCloudy_Tundra_64,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC4E,0x17EC4E,SkyrimCloudy_Snow_64,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC4D,0x17EC4D,SkyrimCloudy_Reach_64,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC4C,0x17EC4C,SkyrimCloudy_March_64,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC4B,0x17EC4B,SkyrimCloudy_FallForrest_64,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC4A,0x17EC4A,SkyrimCloudy_Coast_64,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC49,0x17EC49,SkyrimCloudy_Tundra_63,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC48,0x17EC48,SkyrimCloudy_Snow_63,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC47,0x17EC47,SkyrimCloudy_Reach_63,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC46,0x17EC46,SkyrimCloudy_March_63,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC45,0x17EC45,SkyrimCloudy_FallForrest_63,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC44,0x17EC44,SkyrimCloudy_Coast_63,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC43,0x17EC43,SkyrimCloudy_Tundra_62,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC42,0x17EC42,SkyrimCloudy_Snow_62,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC41,0x17EC41,SkyrimCloudy_Reach_62,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC40,0x17EC40,SkyrimCloudy_March_62,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC3F,0x17EC3F,SkyrimCloudy_FallForrest_62,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC3E,0x17EC3E,SkyrimCloudy_Coast_62,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC3D,0x17EC3D,SkyrimCloudy_Tundra_61,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC3C,0x17EC3C,SkyrimCloudy_Snow_61,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC3B,0x17EC3B,SkyrimCloudy_Reach_61,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC3A,0x17EC3A,SkyrimCloudy_March_61,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC39,0x17EC39,SkyrimCloudy_FallForrest_61,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC38,0x17EC38,SkyrimCloudy_Coast_61,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC37,0x17EC37,SkyrimCloudy_Tundra_60,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC36,0x17EC36,SkyrimCloudy_Snow_60,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC35,0x17EC35,SkyrimCloudy_Reach_60,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC34,0x17EC34,SkyrimCloudy_March_60,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC33,0x17EC33,SkyrimCloudy_FallForrest_60,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC32,0x17EC32,SkyrimCloudy_Coast_60,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC31,0x17EC31,SkyrimCloudy_Tundra_59,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC30,0x17EC30,SkyrimCloudy_Snow_59,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC2F,0x17EC2F,SkyrimCloudy_Reach_59,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC2E,0x17EC2E,SkyrimCloudy_March_59,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC2D,0x17EC2D,SkyrimCloudy_FallForrest_59,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC2C,0x17EC2C,SkyrimCloudy_Coast_59,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC2B,0x17EC2B,SkyrimCloudy_Tundra_58,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC2A,0x17EC2A,SkyrimCloudy_Snow_58,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC29,0x17EC29,SkyrimCloudy_Reach_58,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC28,0x17EC28,SkyrimCloudy_March_58,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC27,0x17EC27,SkyrimCloudy_FallForrest_58,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC26,0x17EC26,SkyrimCloudy_Coast_58,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC25,0x17EC25,SkyrimCloudy_Tundra_57,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC24,0x17EC24,SkyrimCloudy_Snow_57,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC23,0x17EC23,SkyrimCloudy_Reach_57,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC22,0x17EC22,SkyrimCloudy_March_57,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC21,0x17EC21,SkyrimCloudy_FallForrest_57,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC20,0x17EC20,SkyrimCloudy_Coast_57,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC1F,0x17EC1F,SkyrimCloudy_Aurora_Tundra_56,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC1E,0x17EC1E,SkyrimCloudy_Aurora_Snow_56,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC1D,0x17EC1D,SkyrimCloudy_Aurora_Reach_56,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC1C,0x17EC1C,SkyrimCloudy_Aurora_March_56,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC1B,0x17EC1B,SkyrimCloudy_Aurora_FallForrest_56,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC1A,0x17EC1A,SkyrimCloudy_Aurora_Coast_56,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC19,0x17EC19,SkyrimCloudy_Aurora_Tundra_55,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC18,0x17EC18,SkyrimCloudy_Aurora_Snow_55,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC17,0x17EC17,SkyrimCloudy_Aurora_Reach_55,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC16,0x17EC16,SkyrimCloudy_Aurora_March_55,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC15,0x17EC15,SkyrimCloudy_Aurora_FallForrest_55,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC14,0x17EC14,SkyrimCloudy_Aurora_Coast_55,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC13,0x17EC13,SkyrimCloudy_Tundra_54,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC12,0x17EC12,SkyrimCloudy_Snow_54,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC11,0x17EC11,SkyrimCloudy_Reach_54,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC10,0x17EC10,SkyrimCloudy_March_54,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC0F,0x17EC0F,SkyrimCloudy_FallForrest_54,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC0E,0x17EC0E,SkyrimCloudy_Coast_54,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC0D,0x17EC0D,SkyrimCloudy_Tundra_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC0C,0x17EC0C,SkyrimCloudy_Snow_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC0B,0x17EC0B,SkyrimCloudy_Reach_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC0A,0x17EC0A,SkyrimCloudy_March_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC09,0x17EC09,SkyrimCloudy_FallForrest_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC08,0x17EC08,SkyrimCloudy_Coast_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC07,0x17EC07,SkyrimCloudy_Tundra_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC06,0x17EC06,SkyrimCloudy_Snow_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EC05,0x17EC05,SkyrimCloudy_Reach_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EC04,0x17EC04,SkyrimCloudy_March_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EC03,0x17EC03,SkyrimCloudy_FallForrest_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EC02,0x17EC02,SkyrimCloudy_Coast_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EC01,0x17EC01,SkyrimCloudy_Tundra_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EC00,0x17EC00,SkyrimCloudy_Snow_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EBFF,0x17EBFF,SkyrimCloudy_Reach_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EBFE,0x17EBFE,SkyrimCloudy_March_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EBFD,0x17EBFD,SkyrimCloudy_FallForrest_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EBFC,0x17EBFC,SkyrimCloudy_Coast_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EBFB,0x17EBFB,SkyrimCloudy_Tundra_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EBFA,0x17EBFA,SkyrimCloudy_Snow_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EBF9,0x17EBF9,SkyrimCloudy_Reach_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EBF8,0x17EBF8,SkyrimCloudy_March_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EBF7,0x17EBF7,SkyrimCloudy_FallForrest_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EBF6,0x17EBF6,SkyrimCloudy_Coast_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EBF5,0x17EBF5,SkyrimCloudy_Tundra_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EBF4,0x17EBF4,SkyrimCloudy_Snow_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EBF3,0x17EBF3,SkyrimCloudy_Reach_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EBF2,0x17EBF2,SkyrimCloudy_March_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EBF1,0x17EBF1,SkyrimCloudy_FallForrest_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EBF0,0x17EBF0,SkyrimCloudy_Coast_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EBEF,0x17EBEF,SkyrimCloudy_Tundra_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EBEE,0x17EBEE,SkyrimCloudy_Snow_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EBED,0x17EBED,SkyrimCloudy_Reach_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EBEC,0x17EBEC,SkyrimCloudy_March_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EBEB,0x17EBEB,SkyrimCloudy_FallForrest_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EBEA,0x17EBEA,SkyrimCloudy_Coast_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EBE9,0x17EBE9,SkyrimCloudy_Tundra_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EBE8,0x17EBE8,SkyrimCloudy_Snow_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EBE7,0x17EBE7,SkyrimCloudy_Reach_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EBE6,0x17EBE6,SkyrimCloudy_March_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EBE5,0x17EBE5,SkyrimCloudy_FallForrest_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EBE4,0x17EBE4,SkyrimCloudy_Coast_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EBE3,0x17EBE3,SkyrimCloudy_Tundra_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EBE2,0x17EBE2,SkyrimCloudy_Reach_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EBE1,0x17EBE1,SkyrimCloudy_Snow_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EBE0,0x17EBE0,SkyrimCloudy_March_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EBDF,0x17EBDF,SkyrimCloudy_FallForrest_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EBDE,0x17EBDE,SkyrimCloudy_Coast_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EBDD,0x17EBDD,SkyrimCloudy_Tundra_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EBDC,0x17EBDC,SkyrimCloudy_Snow_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EBDB,0x17EBDB,SkyrimCloudy_Reach_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EBDA,0x17EBDA,SkyrimCloudy_March_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EBD9,0x17EBD9,SkyrimCloudy_FallForrest_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EBD8,0x17EBD8,SkyrimCloudy_Coast_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EBD7,0x17EBD7,SkyrimCloudy_VolTundra_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0417EBD6,0x17EBD6,SkyrimCloudy_Tundra_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417EBD5,0x17EBD5,SkyrimCloudy_Snow_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EBD4,0x17EBD4,SkyrimCloudy_Reach_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EBD3,0x17EBD3,SkyrimCloudy_March_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0417EBD2,0x17EBD2,SkyrimCloudy_FallForrest_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EBD1,0x17EBD1,SkyrimCloudy_Coast_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EBD0,0x17EBD0,SkyrimCloudy_Coast_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0417EBCF,0x17EBCF,SkyrimCloudy_Reach_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0417EBCE,0x17EBCE,SkyrimCloudy_VolTundra_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0417EBCD,0x17EBCD,SkyrimCloudy_Snow_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0417EBCC,0x17EBCC,SkyrimCloudy_FallForrest_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0417EBCB,0x17EBCB,SkyrimCloudy_Tundra_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0417DB9E,0x17DB9E,SkyrimClear_VolTundra_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB9D,0x17DB9D,SkyrimClear_VolTundra_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB9C,0x17DB9C,SkyrimClear_VolTundra_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB9B,0x17DB9B,SkyrimClear_VolTundra_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB9A,0x17DB9A,SkyrimClear_VolTundra_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB99,0x17DB99,SkyrimClear_VolTundra_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB98,0x17DB98,SkyrimClear_VolTundra_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB97,0x17DB97,SkyrimClear_VolTundra_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB96,0x17DB96,SkyrimClear_VolTundra_70,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB95,0x17DB95,SkyrimClear_VolTundra_69,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB94,0x17DB94,SkyrimClear_AuroraOverdose_VolTundra_68,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB93,0x17DB93,SkyrimClear_AuroraOverdose_VolTundra_67,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB92,0x17DB92,SkyrimClear_VolTundra_66,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB91,0x17DB91,SkyrimClear_VolTundra_65,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB90,0x17DB90,SkyrimClear_VolTundra_64,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB8F,0x17DB8F,SkyrimClear_VolTundra_63,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB8E,0x17DB8E,SkyrimClear_AuroraOverdose_VolTundra_62,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB8D,0x17DB8D,SkyrimClear_VolTundra_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB8C,0x17DB8C,SkyrimClear_AuroraPeach_VolTundra_61,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB8B,0x17DB8B,SkyrimClear_VolTundra_60,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB8A,0x17DB8A,SkyrimClear_VolTundra_59,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB89,0x17DB89,SkyrimClear_VolTundra_58,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB88,0x17DB88,SkyrimClear_VolTundra_57,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB87,0x17DB87,SkyrimClear_Aurora_VolTundra_56,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB86,0x17DB86,SkyrimClear_Aurora_VolTundra_55,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB85,0x17DB85,SkyrimClear_VolTundra_54,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB84,0x17DB84,SkyrimClear_VolTundra_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB83,0x17DB83,SkyrimClear_VolTundra_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0417DB82,0x17DB82,SkyrimClear_March_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D61A,0x17D61A,SkyrimClear_March_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D619,0x17D619,SkyrimClear_March_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D618,0x17D618,SkyrimClear_March_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D617,0x17D617,SkyrimClear_March_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D616,0x17D616,SkyrimClear_March_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D615,0x17D615,SkyrimClear_March_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D614,0x17D614,SkyrimClear_March_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D613,0x17D613,SkyrimClear_March_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D612,0x17D612,SkyrimClear_March_70,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D611,0x17D611,SkyrimClear_March_69,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D610,0x17D610,SkyrimClear_AuroraOverdose_March_68,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D60F,0x17D60F,SkyrimClear_AuroraOverdose_March_67,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D60E,0x17D60E,SkyrimClear_March_66,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D60D,0x17D60D,SkyrimClear_March_65,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D60C,0x17D60C,SkyrimClear_March_64,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D60B,0x17D60B,SkyrimClear_March_63,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D60A,0x17D60A,SkyrimClear_AuroraOverdose_March_62,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D608,0x17D608,SkyrimClear_AuroraPeach_March_61,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D607,0x17D607,SkyrimClear_March_60,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D606,0x17D606,SkyrimClear_March_59,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D605,0x17D605,SkyrimClear_March_58,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D604,0x17D604,SkyrimClear_March_57,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D603,0x17D603,SkyrimClear_Aurora_March_56,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D602,0x17D602,SkyrimClear_Aurora_March_55,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D601,0x17D601,SkyrimClear_March_54,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D600,0x17D600,SkyrimClear_March_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417D5FF,0x17D5FF,SkyrimClear_March_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0417B5AC,0x17B5AC,SkyrimClear_Snow_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5AB,0x17B5AB,SkyrimClear_Snow_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5AA,0x17B5AA,SkyrimClear_Snow_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5A9,0x17B5A9,SkyrimClear_Snow_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5A8,0x17B5A8,SkyrimClear_Snow_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5A7,0x17B5A7,SkyrimClear_Snow_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5A6,0x17B5A6,SkyrimClear_Snow_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5A5,0x17B5A5,SkyrimClear_Snow_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5A4,0x17B5A4,SkyrimClear_Snow_70,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5A3,0x17B5A3,SkyrimClear_Snow_69,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5A2,0x17B5A2,SkyrimClear_AuroraOverdose_Snow_68,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5A1,0x17B5A1,SkyrimClear_AuroraOverdose_Snow_67,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B5A0,0x17B5A0,SkyrimClear_Snow_66,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B59F,0x17B59F,SkyrimClear_Snow_65,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B59E,0x17B59E,SkyrimClear_Snow_64,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B59D,0x17B59D,SkyrimClear_Snow_63,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B59C,0x17B59C,SkyrimClear_AuroraOverdose_Snow_62,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B59B,0x17B59B,SkyrimClear_Snow_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B59A,0x17B59A,SkyrimClear_AuroraPeach_Snow_61,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B599,0x17B599,SkyrimClear_Snow_60,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B598,0x17B598,SkyrimClear_Snow_59,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B597,0x17B597,SkyrimClear_Snow_58,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B596,0x17B596,SkyrimClear_Snow_57,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B595,0x17B595,SkyrimClear_Aurora_Snow_56,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B594,0x17B594,SkyrimClear_Aurora_Snow_55,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B593,0x17B593,SkyrimClear_Snow_54,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B592,0x17B592,SkyrimClear_Snow_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417B591,0x17B591,SkyrimClear_Snow_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0417A562,0x17A562,SkyrimClear_FallForrest_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A561,0x17A561,SkyrimClear_FallForrest_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A560,0x17A560,SkyrimClear_FallForrest_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A55F,0x17A55F,SkyrimClear_FallForrest_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A55E,0x17A55E,SkyrimClear_FallForrest_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A55D,0x17A55D,SkyrimClear_FallForrest_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A55C,0x17A55C,SkyrimClear_FallForrest_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A55B,0x17A55B,SkyrimClear_FallForrest_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A55A,0x17A55A,SkyrimClear_FallForrest_70,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A559,0x17A559,SkyrimClear_FallForrest_69,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A558,0x17A558,SkyrimClear_AuroraOverdose_FallForrest_68,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A557,0x17A557,SkyrimClear_AuroraOverdose_FallForrest_67,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A556,0x17A556,SkyrimClear_FallForrest_66,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A555,0x17A555,SkyrimClear_FallForrest_65,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A554,0x17A554,SkyrimClear_FallForrest_64,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A553,0x17A553,SkyrimClear_FallForrest_63,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A552,0x17A552,SkyrimClear_AuroraOverdose_FallForrest_62,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A551,0x17A551,SkyrimClear_FallForrest_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A550,0x17A550,SkyrimClear_AuroraPeach_FallForrest_61,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A54F,0x17A54F,SkyrimClear_FallForrest_60,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A54E,0x17A54E,SkyrimClear_FallForrest_59,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A54D,0x17A54D,SkyrimClear_FallForrest_58,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A54C,0x17A54C,SkyrimClear_FallForrest_57,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A54B,0x17A54B,SkyrimClear_Aurora_FallForrest_56,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A54A,0x17A54A,SkyrimClear_Aurora_FallForrest_55,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A549,0x17A549,SkyrimClear_FallForrest_54,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A548,0x17A548,SkyrimClear_FallForrest_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0417A547,0x17A547,SkyrimClear_FallForrest_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+04179A7C,0x179A7C,SkyrimClear_Reach_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A7B,0x179A7B,SkyrimClear_Reach_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A7A,0x179A7A,SkyrimClear_Reach_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A79,0x179A79,SkyrimClear_Reach_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A78,0x179A78,SkyrimClear_Reach_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A77,0x179A77,SkyrimClear_Reach_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A76,0x179A76,SkyrimClear_Reach_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A75,0x179A75,SkyrimClear_Reach_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A74,0x179A74,SkyrimClear_Reach_70,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A73,0x179A73,SkyrimClear_Reach_69,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A72,0x179A72,SkyrimClear_AuroraOverdose_Reach_68,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A71,0x179A71,SkyrimClear_AuroraOverdose_Reach_67,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A70,0x179A70,SkyrimClear_Reach_66,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A6F,0x179A6F,SkyrimClear_Reach_65,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A6E,0x179A6E,SkyrimClear_Reach_64,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A6D,0x179A6D,SkyrimClear_Reach_63,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A6C,0x179A6C,SkyrimClear_AuroraOverdose_Reach_62,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A6B,0x179A6B,SkyrimClear_Reach_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A6A,0x179A6A,SkyrimClear_AuroraPeach_Reach_61,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A69,0x179A69,SkyrimClear_Reach_60,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A68,0x179A68,SkyrimClear_Reach_59,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A67,0x179A67,SkyrimClear_Reach_58,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A66,0x179A66,SkyrimClear_Reach_57,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A65,0x179A65,SkyrimClear_Aurora_Reach_56,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A64,0x179A64,SkyrimClear_Aurora_Reach_55,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A63,0x179A63,SkyrimClear_Reach_54,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A62,0x179A62,SkyrimClear_Reach_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+04179A61,0x179A61,SkyrimClear_Reach_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+041794F9,0x1794F9,SkyrimClear_Coast_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794F8,0x1794F8,SkyrimClear_Coast_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794F5,0x1794F5,SkyrimClear_Coast_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794F4,0x1794F4,SkyrimClear_Coast_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794F3,0x1794F3,SkyrimClear_Coast_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794F2,0x1794F2,SkyrimClear_Coast_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794F1,0x1794F1,SkyrimClear_Coast_70,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794F0,0x1794F0,SkyrimClear_Coast_69,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794EF,0x1794EF,SkyrimClear_AuroraOverdose_Coast_68,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794EE,0x1794EE,SkyrimClear_AuroraOverdose_Coast_67,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794ED,0x1794ED,SkyrimClear_Coast_66,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794EC,0x1794EC,SkyrimClear_Coast_65,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794EB,0x1794EB,SkyrimClear_Coast_64,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794EA,0x1794EA,SkyrimClear_Coast_63,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794E9,0x1794E9,SkyrimClear_AuroraOverdose_Coast_62,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794E8,0x1794E8,SkyrimClear_Coast_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794E7,0x1794E7,SkyrimClear_AuroraPeach_Coast_61,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794E6,0x1794E6,SkyrimClear_Coast_60,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794E5,0x1794E5,SkyrimClear_Coast_59,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794E4,0x1794E4,SkyrimClear_Coast_58,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794E3,0x1794E3,SkyrimClear_Coast_57,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794E2,0x1794E2,SkyrimClear_Aurora_Coast_56,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794E1,0x1794E1,SkyrimClear_Aurora_Coast_55,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794E0,0x1794E0,SkyrimClear_Coast_54,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794DF,0x1794DF,SkyrimClear_Coast_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041794DE,0x1794DE,SkyrimClear_Coast_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+041769C9,0x1769C9,SkyrimFogRIFTENWind,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+041769C7,0x1769C7,SkyrimFogRIFTEN_48,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+041769C5,0x1769C5,SkyrimFogRIFTEN_47,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+041769C2,0x1769C2,SkyrimFogRIFTEN_46,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+041769C1,0x1769C1,SkyrimFogRIFTEN_45,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+041769BF,0x1769BF,SkyrimFogRIFTEN_44,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+041769BD,0x1769BD,SkyrimFogRIFTEN_43,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+0416BD7C,0x16BD7C,SkyrimSnow_HS_A,Vivid WeathersSE.esp,0,Pleasant,No,0406F714
+0416BD7B,0x16BD7B,SkyrimSnow_HS_AP,Vivid WeathersSE.esp,0,Pleasant,No,0406F714
+0416B818,0x16B818,SkyrimSnow_HS_AM,Vivid WeathersSE.esp,0,Pleasant,No,0406F714
+0416B29B,0x16B29B,SkyrimClear_AuroraOverdose_Interior_68,Vivid WeathersSE.esp,0,Pleasant,No,0406F72A
+0416B29A,0x16B29A,SkyrimClear_AuroraOverdose_Interior_67,Vivid WeathersSE.esp,0,Pleasant,No,0406F72A
+0416B295,0x16B295,SkyrimClear_AuroraOverdose_Interior_62,Vivid WeathersSE.esp,0,Pleasant,No,0406F72A
+0416B293,0x16B293,SkyrimClear_AuroraPeach_Interior_61,Vivid WeathersSE.esp,0,Pleasant,No,0406F72A
+0416B28F,0x16B28F,SkyrimClear_Aurora_Interior_56,Vivid WeathersSE.esp,0,Pleasant,No,0406F72A
+0416B28D,0x16B28D,SkyrimClear_Aurora_Interior_55,Vivid WeathersSE.esp,0,Pleasant,No,0406F72A
+0416B287,0x16B287,SkyrimSnowStorm_T,Vivid WeathersSE.esp,0,Pleasant,No,0406F710
+0416B286,0x16B286,SkyrimSnow_HS,Vivid WeathersSE.esp,0,Pleasant,No,0406F714
+0416B285,0x16B285,SkyrimSnow_NS_T,Vivid WeathersSE.esp,0,Pleasant,No,0406F714
+0416B284,0x16B284,SkyrimFogWind,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+0416A7B8,0x16A7B8,SkyrimSnow_LS,Vivid WeathersSE.esp,0,Pleasant,No,0406F714
+04168CC8,0x168CC8,SkyrimFog_48,Vivid WeathersSE.esp,0,Pleasant,No,04074295
+04168CC6,0x168CC6,SkyrimFog_47,Vivid WeathersSE.esp,0,Pleasant,No,04074295
+04168CC4,0x168CC4,SkyrimFog_46,Vivid WeathersSE.esp,0,Pleasant,No,04074295
+04168CC2,0x168CC2,SkyrimFog_45,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+04168CC0,0x168CC0,SkyrimFog_44,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+04168CBE,0x168CBE,SkyrimFog_43,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+04167C91,0x167C91,SkyrimOvercast_LowRain_Thunder_48,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C90,0x167C90,SkyrimOvercast_HighRain_Thunder_48,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C8F,0x167C8F,SkyrimOvercast_LowRain_Thunder_47,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C8E,0x167C8E,SkyrimOvercast_HighRain_Thunder_47,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C8D,0x167C8D,SkyrimOvercast_LowRain_Thunder_46,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C8C,0x167C8C,SkyrimOvercast_HighRain_Thunder_46,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C8B,0x167C8B,SkyrimOvercast_LowRain_45,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C8A,0x167C8A,SkyrimOvercast_HighRain_45,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C89,0x167C89,SkyrimOvercast_LowRain_44,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C88,0x167C88,SkyrimOvercast_HighRain_44,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C87,0x167C87,SkyrimOvercast_HighRain_Thunder_43,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C86,0x167C86,SkyrimOvercast_LowRain_43,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C85,0x167C85,SkyrimOvercast_Thunder_48,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C84,0x167C84,SkyrimOvercast_Thunder_47,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C83,0x167C83,SkyrimOvercast_Thunder_45,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C82,0x167C82,SkyrimOvercast_Thunder_46,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C81,0x167C81,SkyrimOvercast_Thunder_44,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C80,0x167C80,SkyrimOvercast_Thunder_43,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C7F,0x167C7F,SkyrimOvercast_AuroraMental_48,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C7D,0x167C7D,SkyrimOvercast_AuroraPeach_47,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C7C,0x167C7C,SkyrimOvercast_46,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C7B,0x167C7B,SkyrimOvercast_45,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04167C7A,0x167C7A,SkyrimOvercast_44,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04166C4F,0x166C4F,SkyrimOvercast_43,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+04164130,0x164130,SkyrimCloudy_AuroraMental_VolTundra_70,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0416412F,0x16412F,SkyrimCloudy_AuroraMental_VolTundra_69,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0416412E,0x16412E,SkyrimCloudy_AuroraMental_VolTundra_68,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0416412C,0x16412C,SkyrimCloudy_VolTundra_66,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0416412B,0x16412B,SkyrimCloudy_VolTundra_65,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0416412A,0x16412A,SkyrimCloudy_VolTundra_64,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+04164129,0x164129,SkyrimCloudy_VolTundra_63,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+04164128,0x164128,SkyrimCloudy_VolTundra_62,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+04164127,0x164127,SkyrimCloudy_VolTundra_61,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+04164126,0x164126,SkyrimCloudy_VolTundra_60,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+04164125,0x164125,SkyrimCloudy_VolTundra_59,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+04164124,0x164124,SkyrimCloudy_VolTundra_58,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+04163BBD,0x163BBD,SkyrimCloudy_VolTundra_57,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+041620D2,0x1620D2,SkyrimCloudy_Aurora_VolTundra_56,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+041620D1,0x1620D1,SkyrimCloudy_Aurora_VolTundra_55,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+041620D0,0x1620D0,SkyrimCloudy_VolTundra_54,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0416160B,0x16160B,SkyrimCloudy_VolTundra_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+041610A8,0x1610A8,SkyrimCloudy_VolTundra_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+04160B45,0x160B45,SkyrimCloudy_VolTundra_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+04160080,0x160080,SkyrimCloudy_VolTundra_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0415EAF7,0x15EAF7,SkyrimCloudy_VolTundra_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0415E594,0x15E594,SkyrimCloudy_VolTundra_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0415E593,0x15E593,SkyrimCloudy_VolTundra_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0415DACE,0x15DACE,SkyrimCloudy_VolTundra_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0415D56B,0x15D56B,SkyrimCloudy_VolTundra_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0415AFB7,0x15AFB7,SkyrimCloudy_March_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+04157F44,0x157F44,SkyrimClear_Tundra_51_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+04156459,0x156459,SkyrimClear_Tundra_45_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+04155EF6,0x155EF6,SkyrimClear_Tundra_44_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+04155431,0x155431,SkyrimClear_Tundra_43_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+041523BA,0x1523BA,SkyrimClear_Tundra_46_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+041518F4,0x1518F4,SkyrimClear_Tundra_70,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+041518F3,0x1518F3,SkyrimClear_Tundra_69,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+041518F2,0x1518F2,SkyrimClear_AuroraOverdose_Tundra_68,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+041518F1,0x1518F1,SkyrimClear_AuroraOverdose_Tundra_67,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+041518F0,0x1518F0,SkyrimClear_Tundra_66,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+041518EF,0x1518EF,SkyrimClear_Tundra_65,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0415138C,0x15138C,SkyrimClear_Tundra_64,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0415138B,0x15138B,SkyrimClear_Tundra_63,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+04150E28,0x150E28,SkyrimClear_AuroraOverdose_Tundra_62,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+04150E27,0x150E27,SkyrimClear_AuroraPeach_Tundra_61,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+041508C4,0x1508C4,SkyrimClear_Tundra_60,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+041508C3,0x1508C3,SkyrimClear_Tundra_59,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414F89C,0x14F89C,SkyrimClear_Tundra_58,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414F89B,0x14F89B,SkyrimClear_Tundra_57,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414EDD6,0x14EDD6,SkyrimClear_Aurora_Tundra_56,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414EDD5,0x14EDD5,SkyrimClear_Tundra_54,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414EDD3,0x14EDD3,SkyrimClear_Aurora_Tundra_55,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414E86F,0x14E86F,SkyrimClear_Tundra_53_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414E30C,0x14E30C,SkyrimClear_Tundra_52_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414DDA8,0x14DDA8,SkyrimClear_Tundra_50_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414DDA7,0x14DDA7,SkyrimClear_Tundra_49_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414D2E0,0x14D2E0,SkyrimClear_Tundra_48_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0414D2DF,0x14D2DF,SkyrimClear_Tundra_47_misty,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0412DDEE,0x12DDEE,SkyrimSnowStorm_44,Vivid WeathersSE.esp,0,Pleasant,No,0406F710
+0412DDED,0x12DDED,SkyrimSnowStorm_45,Vivid WeathersSE.esp,0,Pleasant,No,0406F710
+0412DDEC,0x12DDEC,SkyrimSnowStorm_46,Vivid WeathersSE.esp,0,Pleasant,No,0406F710
+0412DDEB,0x12DDEB,SkyrimSnowBlizzard_Swirl1,Vivid WeathersSE.esp,0,Pleasant,No,0406F72C
+0412DDEA,0x12DDEA,SkyrimSnowBlizzard_Swirl2,Vivid WeathersSE.esp,0,Pleasant,No,0406F72C
+0412DDE9,0x12DDE9,SkyrimSnowBlizzard_Swirl3,Vivid WeathersSE.esp,0,Pleasant,No,0406F72C
+0412DDE8,0x12DDE8,SkyrimSnowBlizzard_Down_NoFog1,Vivid WeathersSE.esp,0,Pleasant,No,0406F72C
+0412DDE7,0x12DDE7,SkyrimSnowBlizzard_Down_NoFog2,Vivid WeathersSE.esp,0,Pleasant,No,0406F72C
+0412DDE6,0x12DDE6,SkyrimSnowBlizzard_Down_NoFog3,Vivid WeathersSE.esp,0,Pleasant,No,0406F72C
+040036D3,0x0036D3,DLC2VividSnow_NS_T,Vivid WeathersSE.esp,0,Pleasant,No,0406F714
+040036D2,0x0036D2,DLC2VividSnow_LS,Vivid WeathersSE.esp,0,Pleasant,No,0406F714
+040036CE,0x0036CE,DLC2Ashfall_HS,Vivid WeathersSE.esp,0,Pleasant,No,0406F714
+03034CFB,0x034CFB,DLC2ApocryphaWeatherNew,Vivid WeathersSE.esp,0,Pleasant,No,03034CFA
+02018DBD,0x018DBD,SoulCairnAmb04,Vivid WeathersSE.esp,0,Pleasant,No,02007AD7
+02018DBC,0x018DBC,SoulCairnAmb03,Vivid WeathersSE.esp,0,Pleasant,No,02007AD7
+02018DBB,0x018DBB,SoulCairnAmb02,Vivid WeathersSE.esp,0,Pleasant,No,02007AD7
+02014551,0x014551,SoulCairnAmb01_Rain,Vivid WeathersSE.esp,0,Pleasant,No,02007AD7
+02010E0F,0x010E0F,DLC1_SkyrimClearFV,Vivid WeathersSE.esp,0,Pleasant,No,0010A212
+0200F89D,0x00F89D,DLC1MagicAurielBowCloudyWeather,Vivid WeathersSE.esp,0,Pleasant,No,0406F726
+0200F89C,0x00F89C,DLC1AurielsBowClearWeather,Vivid WeathersSE.esp,0,Pleasant,No,0406F72A
+0200959F,0x00959F,SoulCairnAurora,Vivid WeathersSE.esp,0,Pleasant,No,02007AD7
+02006AEC,0x006AEC,DLC1Eclipse,Vivid WeathersSE.esp,0,Pleasant,No,02006AED
+02001407,0x001407,SoulCairnAmb01,Vivid WeathersSE.esp,0,Pleasant,No,02007AD7
+0010FEF8,0x10FEF8,SovngardeDark,Vivid WeathersSE.esp,0,Pleasant,No,0010FEF7
+0010FE7E,0x10FE7E,RiftenOvercastFog,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+0010E1F2,0x10E1F2,SkyrimClear_A,Vivid WeathersSE.esp,0,Pleasant,No,0406F72A
+0010E1F1,0x10E1F1,SkyrimCloudy_A,Vivid WeathersSE.esp,0,Pleasant,No,0406F726
+0010E1F0,0x10E1F0,SkyrimClearSN_A,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0010E1EF,0x10E1EF,SkyrimCloudySN_A,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0010E1EE,0x10E1EE,SkyrimClearTU_A,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0010E1ED,0x10E1ED,SkyrimCloudyTU_A,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0010E1EC,0x10E1EC,SkyrimClearFF_A,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0010E1EB,0x10E1EB,SkyrimCloudyFF_A,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0010E1EA,0x10E1EA,SkyrimClearRE_A,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+0010E1E9,0x10E1E9,SkyrimCloudyRE_A,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0010E1E8,0x10E1E8,SkyrimClearCO_A,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+0010E1E7,0x10E1E7,SkyrimCloudyCO_A,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0010E1E6,0x10E1E6,SkyrimClearMA_A,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+0010E1E5,0x10E1E5,SkyrimCloudyMA_A,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0010E1E4,0x10E1E4,SkyrimClearVT_A,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0010E1E3,0x10E1E3,SkyrimCloudyVT_A,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0010D9EC,0x10D9EC,SovngardeClear,Vivid WeathersSE.esp,0,Pleasant,No,0010D9EB
+0010C32F,0x10C32F,FXSkyrimStormBlowingGrass,Vivid WeathersSE.esp,0,Pleasant,No,000C8217
+0010A7A8,0x10A7A8,SkyrimCloudyVT,Vivid WeathersSE.esp,0,Pleasant,No,044731D5
+0010A7A7,0x10A7A7,SkyrimFogVT,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+0010A7A6,0x10A7A6,SkyrimOvercastRainVT,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+0010A7A5,0x10A7A5,SkyrimClearVT,Vivid WeathersSE.esp,0,Pleasant,No,044731CA
+0010A245,0x10A245,SkyrimCloudySN,Vivid WeathersSE.esp,0,Pleasant,No,044731C5
+0010A244,0x10A244,SkyrimClearSN,Vivid WeathersSE.esp,0,Pleasant,No,04310B3D
+0010A243,0x10A243,SkyrimCloudyTU,Vivid WeathersSE.esp,0,Pleasant,No,04366C4B
+0010A242,0x10A242,SkyrimOvercastRainTU,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+0010A241,0x10A241,SkyrimStormRainTU,Vivid WeathersSE.esp,0,Pleasant,No,0406F712
+0010A240,0x10A240,SkyrimClearTU,Vivid WeathersSE.esp,0,Pleasant,No,04366C4A
+0010A23F,0x10A23F,SkyrimCloudyFF,Vivid WeathersSE.esp,0,Pleasant,No,044731D1
+0010A23E,0x10A23E,SkyrimFogFF,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+0010A23D,0x10A23D,SkyrimOvercastRainFF,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+0010A23C,0x10A23C,SkyrimStormRainFF,Vivid WeathersSE.esp,0,Pleasant,No,0406F712
+0010A23B,0x10A23B,SkyrimClearFF,Vivid WeathersSE.esp,0,Pleasant,No,044731C7
+0010A23A,0x10A23A,SkyrimCloudyRE,Vivid WeathersSE.esp,0,Pleasant,No,044731D4
+0010A239,0x10A239,SkyrimFogRE,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+0010A238,0x10A238,SkyrimOvercastRainRE,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+0010A237,0x10A237,SkyrimClearRE,Vivid WeathersSE.esp,0,Pleasant,No,044731C9
+0010A236,0x10A236,SkyrimCloudyCO,Vivid WeathersSE.esp,0,Pleasant,No,044731D0
+0010A235,0x10A235,SkyrimFogCO,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+0010A234,0x10A234,SkyrimClearCO,Vivid WeathersSE.esp,0,Pleasant,No,044731C6
+0010A233,0x10A233,SkyrimCloudyMA,Vivid WeathersSE.esp,0,Pleasant,No,044731D2
+0010A232,0x10A232,SkyrimFogMA,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+0010A231,0x10A231,SkyrimOvercastRainMA,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+0010A230,0x10A230,SkyrimClearMA,Vivid WeathersSE.esp,0,Pleasant,No,044731C8
+00105F40,0x105F40,SkyrimDA02Weather,Vivid WeathersSE.esp,0,Pleasant,No,00105F3E
+000D9329,0x0D9329,HelgenAttackWeather,Vivid WeathersSE.esp,0,Pleasant,No,0406F733
+000D4886,0x0D4886,FXMagicStormRain,Vivid WeathersSE.esp,0,Pleasant,No,0406F712
+000D299E,0x0D299E,SkyrimOvercastWar,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+000C8221,0x0C8221,SkyrimStormSnow,Vivid WeathersSE.esp,0,Pleasant,No,0406F710
+000C8220,0x0C8220,SkyrimStormRain,Vivid WeathersSE.esp,0,Pleasant,No,0406F712
+000C821F,0x0C821F,SkyrimOvercastRain,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+000C821E,0x0C821E,SkyrimFog,Vivid WeathersSE.esp,0,Pleasant,No,0406F722
+000A6858,0x0A6858,WorldMapWeather,Vivid WeathersSE.esp,0,Pleasant,No,000681F6
+000923FD,0x0923FD,SovngardeFog,Vivid WeathersSE.esp,0,Pleasant,No,00061CF0
+0004D7FB,0x04D7FB,SkyrimOvercastSnow,Vivid WeathersSE.esp,0,Pleasant,No,0406F71D
+00012F89,0x012F89,SkyrimCloudy,Vivid WeathersSE.esp,0,Pleasant,No,0406F726
+030374BA,0x0374BA,DLC02VolcanicAshTundra01_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+030374B9,0x0374B9,DLC02VolcanicAsh02_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+030374B8,0x0374B8,DLC02VolcanicAsh01_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+03032336,0x032336,DLC02VolcanicAshStorm01,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+03031AC0,0x031AC0,DLC02VolcanicAsh02,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0301D760,0x01D760,DLC02VolcanicAshTundra01,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+03018471,0x018471,DLC02VolcanicAsh01,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+020195A0,0x0195A0,DLC1FalmerValley_bfDark,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+02019599,0x019599,DLC1FalmerValley_bf,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+02018DBD,0x018DBD,SoulCairnAmb04,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+02018DBC,0x018DBC,SoulCairnAmb03,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+02018DBB,0x018DBB,SoulCairnAmb02,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+02014551,0x014551,SoulCairnAmb01_Rain,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+02010E10,0x010E10,DLC1_SkyrimClearFV_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+02010E0F,0x010E0F,DLC1_SkyrimClearFV,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+02010E0E,0x010E0E,DLC1_SkyrimCloudyFV,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+02010E0B,0x010E0B,DLC1_SkyrimCloudyFV_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0200F89D,0x00F89D,DLC1MagicAurielBowCloudyWeather,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0200F89C,0x00F89C,DLC1AurielsBowClearWeather,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0200959F,0x00959F,SoulCairnAurora,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+02006AEC,0x006AEC,DLC1Eclipse,Obsidian Weathers.esp,0,Pleasant,No,040B3043
+02001407,0x001407,SoulCairnAmb01,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010FEF8,0x10FEF8,SovngardeDark,Obsidian Weathers.esp,0,Pleasant,No,040B3043
+0010FE7E,0x10FE7E,RiftenOvercastFog,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1F2,0x10E1F2,SkyrimClear_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1F1,0x10E1F1,SkyrimCloudy_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1F0,0x10E1F0,SkyrimClearSN_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1EF,0x10E1EF,SkyrimCloudySN_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1EE,0x10E1EE,SkyrimClearTU_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1ED,0x10E1ED,SkyrimCloudyTU_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1EC,0x10E1EC,SkyrimClearFF_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1EB,0x10E1EB,SkyrimCloudyFF_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1EA,0x10E1EA,SkyrimClearRE_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1E9,0x10E1E9,SkyrimCloudyRE_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1E8,0x10E1E8,SkyrimClearCO_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1E7,0x10E1E7,SkyrimCloudyCO_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1E6,0x10E1E6,SkyrimClearMA_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1E5,0x10E1E5,SkyrimCloudyMA_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1E4,0x10E1E4,SkyrimClearVT_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010E1E3,0x10E1E3,SkyrimCloudyVT_A,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010D9EC,0x10D9EC,SovngardeClear,Obsidian Weathers.esp,0,Pleasant,No,040B3043
+0010A7A8,0x10A7A8,SkyrimCloudyVT,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A7A7,0x10A7A7,SkyrimFogVT,Obsidian Weathers.esp,0,Pleasant,No,04127793
+0010A7A6,0x10A7A6,SkyrimOvercastRainVT,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A7A5,0x10A7A5,SkyrimClearVT,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A245,0x10A245,SkyrimCloudySN,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A244,0x10A244,SkyrimClearSN,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A243,0x10A243,SkyrimCloudyTU,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A242,0x10A242,SkyrimOvercastRainTU,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A241,0x10A241,SkyrimStormRainTU,Obsidian Weathers.esp,0,Pleasant,No,0412778C
+0010A240,0x10A240,SkyrimClearTU,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A23F,0x10A23F,SkyrimCloudyFF,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A23E,0x10A23E,SkyrimFogFF,Obsidian Weathers.esp,0,Pleasant,No,04127793
+0010A23D,0x10A23D,SkyrimOvercastRainFF,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A23C,0x10A23C,SkyrimStormRainFF,Obsidian Weathers.esp,0,Pleasant,No,0412778C
+0010A23B,0x10A23B,SkyrimClearFF,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A23A,0x10A23A,SkyrimCloudyRE,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A239,0x10A239,SkyrimFogRE,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A238,0x10A238,SkyrimOvercastRainRE,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A237,0x10A237,SkyrimClearRE,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A236,0x10A236,SkyrimCloudyCO,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A235,0x10A235,SkyrimFogCO,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A234,0x10A234,SkyrimClearCO,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A233,0x10A233,SkyrimCloudyMA,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A232,0x10A232,SkyrimFogMA,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A231,0x10A231,SkyrimOvercastRainMA,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0010A230,0x10A230,SkyrimClearMA,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+00106635,0x106635,KarthspireRedoubtFog,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+00105945,0x105945,SolitudeBluePalaceFog,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+00105944,0x105944,SolitudeBluePalaceFogNMARE,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+00105943,0x105943,SolitudeBluePalaceFogFEAR,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+00105942,0x105942,SolitudeBluePalaceFogARENA,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+00105941,0x105941,BloatedMansGrottoFog,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+00104AB4,0x104AB4,SkuldafnCloudy,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+000D9329,0x0D9329,HelgenAttackWeather,Obsidian Weathers.esp,0,Pleasant,No,04127793
+000D4886,0x0D4886,FXMagicStormRain,Obsidian Weathers.esp,0,Pleasant,No,0412778C
+000D299E,0x0D299E,SkyrimOvercastWar,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+000C8221,0x0C8221,SkyrimStormSnow,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+000C8220,0x0C8220,SkyrimStormRain,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+000C821F,0x0C821F,SkyrimOvercastRain,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+000C821E,0x0C821E,SkyrimFog,Obsidian Weathers.esp,0,Pleasant,No,04127793
+000923FD,0x0923FD,SovngardeFog,Obsidian Weathers.esp,0,Pleasant,No,040B3043
+0004D7FB,0x04D7FB,SkyrimOvercastSnow,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+00048C14,0x048C14,BlackreachWeather,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+00012F89,0x012F89,SkyrimCloudy,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0000081A,0x00081A,SkyrimClear,Obsidian Weathers.esp,0,Pleasant,No,040B3042
+0400088A,0x00088A,xStormRain,Cathedral Weathers.esp,0,Pleasant,No,0412778C
+0400081E,0x00081E,xCloudySN_A,Cathedral Weathers.esp,0,Pleasant,No,0400080D
+0400081D,0x00081D,xOvercastFog,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0400081C,0x00081C,xStormSnow_WildernessOnly,Cathedral Weathers.esp,0,Pleasant,No,04000815
+0400081B,0x00081B,xStormSnow,Cathedral Weathers.esp,0,Pleasant,No,04000815
+04000819,0x000819,xOvercastSnow,Cathedral Weathers.esp,0,Pleasant,No,0400080D
+04000818,0x000818,xOvercastRain,Cathedral Weathers.esp,0,Pleasant,No,0412778C
+04000817,0x000817,xFog,Cathedral Weathers.esp,0,Pleasant,No,04127793
+04000808,0x000808,SkyrimStormSnow_WildernessOnly,Cathedral Weathers.esp,0,Pleasant,No,04000815
+030374BA,0x0374BA,DLC02VolcanicAshTundra01_A,Cathedral Weathers.esp,0,Pleasant,No,04000810
+030374B9,0x0374B9,DLC02VolcanicAsh02_A,Cathedral Weathers.esp,0,Pleasant,No,04000810
+030374B8,0x0374B8,DLC02VolcanicAsh01_A,Cathedral Weathers.esp,0,Pleasant,No,04000810
+03034CFB,0x034CFB,DLC2ApocryphaWeatherNew,Cathedral Weathers.esp,0,Pleasant,No,0400080F
+03032336,0x032336,DLC02VolcanicAshStorm01,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+03031AC0,0x031AC0,DLC02VolcanicAsh02,Cathedral Weathers.esp,0,Pleasant,No,04000810
+0301DFF5,0x01DFF5,DLC2ApocryphaWeather,Cathedral Weathers.esp,0,Pleasant,No,0400080F
+0301D760,0x01D760,DLC02VolcanicAshTundra01,Cathedral Weathers.esp,0,Pleasant,No,04000810
+03018471,0x018471,DLC02VolcanicAsh01,Cathedral Weathers.esp,0,Pleasant,No,04000810
+020195A0,0x0195A0,DLC1FalmerValley_bfDark,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+02019599,0x019599,DLC1FalmerValley_bf,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+02018DBD,0x018DBD,SoulCairnAmb04,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+02018DBC,0x018DBC,SoulCairnAmb03,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+02018DBB,0x018DBB,SoulCairnAmb02,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+02014551,0x014551,SoulCairnAmb01_Rain,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+02010E10,0x010E10,DLC1_SkyrimClearFV_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+02010E0F,0x010E0F,DLC1_SkyrimClearFV,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+02010E0E,0x010E0E,DLC1_SkyrimCloudyFV,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+02010E0B,0x010E0B,DLC1_SkyrimCloudyFV_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0200F89D,0x00F89D,DLC1MagicAurielBowCloudyWeather,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0200F89C,0x00F89C,DLC1AurielsBowClearWeather,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0200959F,0x00959F,SoulCairnAurora,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+02006AEC,0x006AEC,DLC1Eclipse,Cathedral Weathers.esp,0,Pleasant,No,040B3043
+02001407,0x001407,SoulCairnAmb01,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010FEF8,0x10FEF8,SovngardeDark,Cathedral Weathers.esp,0,Pleasant,No,040B3043
+0010FE7E,0x10FE7E,RiftenOvercastFog,Cathedral Weathers.esp,0,Pleasant,No,04127793
+0010E3D4,0x10E3D4,EditorCloudPreview,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1F2,0x10E1F2,SkyrimClear_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1F1,0x10E1F1,SkyrimCloudy_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1F0,0x10E1F0,SkyrimClearSN_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1EF,0x10E1EF,SkyrimCloudySN_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1EE,0x10E1EE,SkyrimClearTU_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1ED,0x10E1ED,SkyrimCloudyTU_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1EC,0x10E1EC,SkyrimClearFF_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1EB,0x10E1EB,SkyrimCloudyFF_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1EA,0x10E1EA,SkyrimClearRE_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1E9,0x10E1E9,SkyrimCloudyRE_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1E8,0x10E1E8,SkyrimClearCO_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1E7,0x10E1E7,SkyrimCloudyCO_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1E6,0x10E1E6,SkyrimClearMA_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1E5,0x10E1E5,SkyrimCloudyMA_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1E4,0x10E1E4,SkyrimClearVT_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010E1E3,0x10E1E3,SkyrimCloudyVT_A,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010D9EC,0x10D9EC,SovngardeClear,Cathedral Weathers.esp,0,Pleasant,No,040B3043
+0010C32F,0x10C32F,FXSkyrimStormBlowingGrass,Cathedral Weathers.esp,0,Pleasant,No,0400080F
+0010A7A8,0x10A7A8,SkyrimCloudyVT,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A7A7,0x10A7A7,SkyrimFogVT,Cathedral Weathers.esp,0,Pleasant,No,04127793
+0010A7A6,0x10A7A6,SkyrimOvercastRainVT,Cathedral Weathers.esp,0,Pleasant,No,04127793
+0010A7A5,0x10A7A5,SkyrimClearVT,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A245,0x10A245,SkyrimCloudySN,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A244,0x10A244,SkyrimClearSN,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A243,0x10A243,SkyrimCloudyTU,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A242,0x10A242,SkyrimOvercastRainTU,Cathedral Weathers.esp,0,Pleasant,No,04127793
+0010A241,0x10A241,SkyrimStormRainTU,Cathedral Weathers.esp,0,Pleasant,No,0412778C
+0010A240,0x10A240,SkyrimClearTU,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A23F,0x10A23F,SkyrimCloudyFF,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A23E,0x10A23E,SkyrimFogFF,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A23D,0x10A23D,SkyrimOvercastRainFF,Cathedral Weathers.esp,0,Pleasant,No,0412778C
+0010A23C,0x10A23C,SkyrimStormRainFF,Cathedral Weathers.esp,0,Pleasant,No,04127793
+0010A23B,0x10A23B,SkyrimClearFF,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A23A,0x10A23A,SkyrimCloudyRE,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A239,0x10A239,SkyrimFogRE,Cathedral Weathers.esp,0,Pleasant,No,0412778C
+0010A238,0x10A238,SkyrimOvercastRainRE,Cathedral Weathers.esp,0,Pleasant,No,04127793
+0010A237,0x10A237,SkyrimClearRE,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A236,0x10A236,SkyrimCloudyCO,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A235,0x10A235,SkyrimFogCO,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A234,0x10A234,SkyrimClearCO,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A233,0x10A233,SkyrimCloudyMA,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010A232,0x10A232,SkyrimFogMA,Cathedral Weathers.esp,0,Pleasant,No,0400080D
+0010A231,0x10A231,SkyrimOvercastRainMA,Cathedral Weathers.esp,0,Pleasant,No,0412778C
+0010A230,0x10A230,SkyrimClearMA,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+00106635,0x106635,KarthspireRedoubtFog,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+00105F40,0x105F40,SkyrimDA02Weather,Cathedral Weathers.esp,0,Pleasant,No,00105F3E
+00105945,0x105945,SolitudeBluePalaceFog,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+00105944,0x105944,SolitudeBluePalaceFogNMARE,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+00105943,0x105943,SolitudeBluePalaceFogFEAR,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+00105942,0x105942,SolitudeBluePalaceFogARENA,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+00105941,0x105941,BloatedMansGrottoFog,Cathedral Weathers.esp,0,Pleasant,No,00105939
+00104AB4,0x104AB4,SkuldafnCloudy,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0010199F,0x10199F,SkyrimMQ206weather,Cathedral Weathers.esp,0,Pleasant,No,001019A0
+000D9329,0x0D9329,HelgenAttackWeather,Cathedral Weathers.esp,0,Pleasant,No,04127793
+000D4886,0x0D4886,FXMagicStormRain,Cathedral Weathers.esp,0,Pleasant,No,0412778C
+000D299E,0x0D299E,SkyrimOvercastWar,Cathedral Weathers.esp,0,Pleasant,No,0400080F
+000C8221,0x0C8221,SkyrimStormSnow,Cathedral Weathers.esp,0,Pleasant,No,04000815
+000C8220,0x0C8220,SkyrimStormRain,Cathedral Weathers.esp,0,Pleasant,No,0412778C
+000C821F,0x0C821F,SkyrimOvercastRain,Cathedral Weathers.esp,0,Pleasant,No,0400080D
+000C821E,0x0C821E,SkyrimFog,Cathedral Weathers.esp,0,Pleasant,No,04127793
+000923FD,0x0923FD,SovngardeFog,Cathedral Weathers.esp,0,Pleasant,No,040B3043
+0004D7FB,0x04D7FB,SkyrimOvercastSnow,Cathedral Weathers.esp,0,Pleasant,No,04127793
+00048C14,0x048C14,BlackreachWeather,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0002E7AB,0x02E7AB,TESTCloudyRain,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+00012F89,0x012F89,SkyrimCloudy,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0000081A,0x00081A,SkyrimClear,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+0000015E,0x00015E,DefaultWeather,Cathedral Weathers.esp,0,Pleasant,No,040B3042
+030374BA,0x0374BA,DLC02VolcanicAshTundra01_A,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+030374B9,0x0374B9,DLC02VolcanicAsh02_A,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+030374B8,0x0374B8,DLC02VolcanicAsh01_A,Azurite Weathers III.esp,0,Pleasant,No,04000803
+03034CFB,0x034CFB,DLC2ApocryphaWeatherNew,Azurite Weathers III.esp,0,Pleasant,No,0400080D
+03032336,0x032336,DLC02VolcanicAshStorm01,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+03031AC0,0x031AC0,DLC02VolcanicAsh02,Azurite Weathers III.esp,0,Pleasant,No,04000830
+0301DFF5,0x01DFF5,DLC2ApocryphaWeather,Azurite Weathers III.esp,0,Pleasant,No,0400080D
+0301D760,0x01D760,DLC02VolcanicAshTundra01,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+03018471,0x018471,DLC02VolcanicAsh01,Azurite Weathers III.esp,0,Pleasant,No,04000830
+020195A0,0x0195A0,DLC1FalmerValley_bfDark,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+02019599,0x019599,DLC1FalmerValley_bf,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+02018DBD,0x018DBD,SoulCairnAmb04,Azurite Weathers III.esp,0,Pleasant,No,04000801
+02018DBC,0x018DBC,SoulCairnAmb03,Azurite Weathers III.esp,0,Pleasant,No,04000801
+02018DBB,0x018DBB,SoulCairnAmb02,Azurite Weathers III.esp,0,Pleasant,No,04000801
+02014551,0x014551,SoulCairnAmb01_Rain,Azurite Weathers III.esp,0,Pleasant,No,04000801
+02010E10,0x010E10,DLC1_SkyrimClearFV_A,Azurite Weathers III.esp,0,Pleasant,No,04000803
+02010E0F,0x010E0F,DLC1_SkyrimClearFV,Azurite Weathers III.esp,0,Pleasant,No,04000803
+02010E0E,0x010E0E,DLC1_SkyrimCloudyFV,Azurite Weathers III.esp,0,Pleasant,No,04000803
+02010E0B,0x010E0B,DLC1_SkyrimCloudyFV_A,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0200F89D,0x00F89D,DLC1MagicAurielBowCloudyWeather,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0200F89C,0x00F89C,DLC1AurielsBowClearWeather,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0200959F,0x00959F,SoulCairnAurora,Azurite Weathers III.esp,0,Pleasant,No,04000801
+02006AEC,0x006AEC,DLC1Eclipse,Azurite Weathers III.esp,0,Pleasant,No,0400080C
+02001407,0x001407,SoulCairnAmb01,Azurite Weathers III.esp,0,Pleasant,No,04000801
+0010FEF8,0x10FEF8,SovngardeDark,Azurite Weathers III.esp,0,Pleasant,No,0400080E
+0010FE7E,0x10FE7E,RiftenOvercastFog,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010E3D4,0x10E3D4,Seasons_FogMA,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010E1F2,0x10E1F2,SkyrimClear_A,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010E1F1,0x10E1F1,SkyrimCloudy_A,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010E1F0,0x10E1F0,SkyrimClearSN_A,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010E1EF,0x10E1EF,SkyrimCloudySN_A,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010E1EE,0x10E1EE,SkyrimClearTU_A,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010E1ED,0x10E1ED,SkyrimCloudyTU_A,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010E1EC,0x10E1EC,SkyrimClearFF_A,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010E1EB,0x10E1EB,SkyrimCloudyFF_A,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010E1EA,0x10E1EA,SkyrimClearRE_A,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010E1E9,0x10E1E9,SkyrimCloudyRE_A,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010E1E8,0x10E1E8,SkyrimClearCO_A,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010E1E7,0x10E1E7,SkyrimCloudyCO_A,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010E1E6,0x10E1E6,SkyrimClearMA_A,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010E1E5,0x10E1E5,SkyrimCloudyMA_A,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010E1E4,0x10E1E4,SkyrimClearVT_A,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010E1E3,0x10E1E3,SkyrimCloudyVT_A,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010D9EC,0x10D9EC,SovngardeClear,Azurite Weathers III.esp,0,Pleasant,No,0400080E
+0010A7A8,0x10A7A8,SkyrimCloudyVT,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010A7A7,0x10A7A7,SkyrimFogVT,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A7A6,0x10A7A6,SkyrimOvercastRainVT,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A7A5,0x10A7A5,SkyrimClearVT,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010A245,0x10A245,SkyrimCloudySN,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010A244,0x10A244,SkyrimClearSN,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010A243,0x10A243,SkyrimCloudyTU,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010A242,0x10A242,SkyrimOvercastRainTU,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A241,0x10A241,SkyrimStormRainTU,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A240,0x10A240,SkyrimClearTU,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010A23F,0x10A23F,SkyrimCloudyFF,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010A23E,0x10A23E,SkyrimFogFF,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A23D,0x10A23D,SkyrimOvercastRainFF,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A23C,0x10A23C,SkyrimStormRainFF,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A23B,0x10A23B,SkyrimClearFF,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010A23A,0x10A23A,SkyrimCloudyRE,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010A239,0x10A239,SkyrimFogRE,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A238,0x10A238,SkyrimOvercastRainRE,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A237,0x10A237,SkyrimClearRE,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0010A236,0x10A236,SkyrimCloudyCO,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010A235,0x10A235,SkyrimFogCO,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A234,0x10A234,SkyrimClearCO,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010A233,0x10A233,SkyrimCloudyMA,Azurite Weathers III.esp,0,Pleasant,No,04000803
+0010A232,0x10A232,SkyrimFogMA,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A231,0x10A231,SkyrimOvercastRainMA,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+0010A230,0x10A230,SkyrimClearMA,Azurite Weathers III.esp,0,Pleasant,No,04000803
+00106635,0x106635,KarthspireRedoubtFog,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+00105F40,0x105F40,SkyrimDA02Weather,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+00105945,0x105945,SolitudeBluePalaceFog,Azurite Weathers III.esp,0,Pleasant,No,0010593D
+00105944,0x105944,SolitudeBluePalaceFogNMARE,Azurite Weathers III.esp,0,Pleasant,No,0010593C
+00105943,0x105943,SolitudeBluePalaceFogFEAR,Azurite Weathers III.esp,0,Pleasant,No,0010593B
+00105942,0x105942,SolitudeBluePalaceFogARENA,Azurite Weathers III.esp,0,Pleasant,No,0010593A
+00105941,0x105941,BloatedMansGrottoFog,Azurite Weathers III.esp,0,Pleasant,No,0400080F
+00104AB4,0x104AB4,SkuldafnCloudy,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+000D9329,0x0D9329,HelgenAttackWeather,Azurite Weathers III.esp,0,Pleasant,No,0400080F
+000D4886,0x0D4886,FXMagicStormRain_Electric,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+000D299E,0x0D299E,SkyrimOvercastWar,Azurite Weathers III.esp,0,Pleasant,No,0400080F
+000C8221,0x0C8221,SkyrimStormSnow,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+000C8220,0x0C8220,SkyrimStormRain,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+000C821F,0x0C821F,SkyrimOvercastRain,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+000C821E,0x0C821E,SkyrimFog,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+000923FD,0x0923FD,SovngardeFog,Azurite Weathers III.esp,0,Pleasant,No,0400080E
+0004D7FB,0x04D7FB,SkyrimOvercastSnow,Azurite Weathers III.esp,0,Pleasant,No,0400080B
+00048C14,0x048C14,BlackreachWeather,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0002E7AB,0x02E7AB,Seasons_CloudySN,Azurite Weathers III.esp,0,Pleasant,No,04000803
+00012F89,0x012F89,SkyrimCloudy,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0000081A,0x00081A,SkyrimClear,Azurite Weathers III.esp,0,Pleasant,No,04000800
+0000015E,0x00015E,Seasons_OvercastSN,Azurite Weathers III.esp,0,Pleasant,No,0400080B

@@ -1,0 +1,14 @@
+----------------------------------------------------------------------------------------------
+Kitsuune Shader Utilities - Texture license and credits
+
+Default license for all textures unless specified otherwise:
+    Copyright (c) 2022-2025 Kitsuune - All rights reserved
+
+
+----------------------------------------------------------------------------------------------
+Credits:
+
+ > Individual blue noise textures by Christoph Peters (Moments in Graphics Blog)
+ > "Gidole Regular" font: Copyright (c) 2015 Andreas Larsen @andreaslarsendk - SIL OPEN FONT LICENSE 1.1 (http://scripts.sil.org/OFL)
+ > SMAA texture share their license with the SMAA shader. Look into 'Antialiasing/SMAA.fxh' file for more info
+ > AgX LUT was generated from Eary's version (https://github.com/EaryChow/AgX)

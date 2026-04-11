@@ -1,0 +1,8 @@
+node_modules/
+__pycache__/
+*.pyc
+.vs/
+out/
+build/
+dist/
+nul

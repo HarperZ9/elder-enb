@@ -1,0 +1,292 @@
+SourcePlugin,CellFormID,CellLocalFormID,CellEditorID,CellFullName,LocationFormID,LocationEditorID,LocationFullName,WorldspaceFormID,WorldspaceEditorID,IsInterior,IsModAdded
+Enderal - Forgotten Stories.esm,00070771,00070771,CapitalCityUpperCityEntrance,,000A1A12,CapitalCityLocation,,0007072B,CapitalCityUpperCity,No,No
+Enderal - Forgotten Stories.esm,00070770,00070770,UpperQuarterWatchtower,,000A1A12,CapitalCityLocation,,0007072B,CapitalCityUpperCity,No,No
+Enderal - Forgotten Stories.esm,0007076E,0007076E,CapitalCityUpperCity00,,000A1A12,CapitalCityLocation,,0007072B,CapitalCityUpperCity,No,No
+Enderal - Forgotten Stories.esm,0007076D,0007076D,,,000A1A12,CapitalCityLocation,,0007072B,CapitalCityUpperCity,No,No
+Enderal - Forgotten Stories.esm,00070763,00070763,,,000A1A12,CapitalCityLocation,,0007072B,CapitalCityUpperCity,No,No
+Enderal - Forgotten Stories.esm,00070794,00070794,ArkMarket,,000A1A12,CapitalCityLocation,,0007072A,CapitalCityMarketArea,No,No
+Enderal - Forgotten Stories.esm,00070793,00070793,,,000A1A12,CapitalCityLocation,,0007072A,CapitalCityMarketArea,No,No
+Enderal - Forgotten Stories.esm,00070791,00070791,,,000A1A12,CapitalCityLocation,,0007072A,CapitalCityMarketArea,No,No
+Enderal - Forgotten Stories.esm,0006C969,0006C969,,,000A1A12,CapitalCityLocation,,0006C943,CapitalCityStrangerArea,No,No
+Enderal - Forgotten Stories.esm,0006C962,0006C962,,,000A1A12,CapitalCityLocation,,0006C943,CapitalCityStrangerArea,No,No
+Enderal - Forgotten Stories.esm,00011060,00011060,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052D5,000052D5,HarborTest,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000048F4,000048F4,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000048F3,000048F3,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000489B,0000489B,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000033EE,000033EE,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000030E9,000030E9,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000030E7,000030E7,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000292F,0000292F,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000292E,0000292E,ArkHarborBridge,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000292D,0000292D,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000292C,0000292C,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000292B,0000292B,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000292A,0000292A,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020F0,000020F0,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020E7,000020E7,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020E6,000020E6,BeachTest,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020E0,000020E0,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020DF,000020DF,HerzlandEiche,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020DE,000020DE,HerzlandEiche2,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020AD,000020AD,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020AC,000020AC,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020A7,000020A7,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020A6,000020A6,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020A1,000020A1,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020A0,000020A0,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000209F,0000209F,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000209A,0000209A,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002099,00002099,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002094,00002094,MQ12bHarborGate,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002093,00002093,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000208E,0000208E,MQ12bHarborStart,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000208D,0000208D,MQ12bHarbor,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002088,00002088,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002087,00002087,CapitalCityEmpty01,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002082,00002082,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002081,00002081,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FFE,00001FFE,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FFD,00001FFD,CapitalCityHarbour,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FFC,00001FFC,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FFB,00001FFB,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FFA,00001FFA,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FF9,00001FF9,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FF8,00001FF8,Friedhof,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FF7,00001FF7,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FF6,00001FF6,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FAE,00001FAE,ArkMyradOutside,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FAC,00001FAC,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FA7,00001FA7,FarmCoastMyrad,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FA6,00001FA6,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FA5,00001FA5,CapitalCityDoor,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F80,00001F80,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F7F,00001F7F,CapitalCityEmpty03,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F7E,00001F7E,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F62,00001F62,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F61,00001F61,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F60,00001F60,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F5C,00001F5C,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F5B,00001F5B,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F5A,00001F5A,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0012956E,0012956E,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0012956D,0012956D,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0012956B,0012956B,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00072BB4,00072BB4,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00072BB3,00072BB3,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00072BB2,00072BB2,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00072BB1,00072BB1,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00072BB0,00072BB0,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000607CC,000607CC,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00018120,00018120,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001105F,0001105F,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001105E,0001105E,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001105C,0001105C,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00011050,00011050,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052D4,000052D4,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052D3,000052D3,HerzlandSuedkueste,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052D2,000052D2,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052D1,000052D1,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052D0,000052D0,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052CF,000052CF,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052CE,000052CE,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052CD,000052CD,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052CB,000052CB,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052CA,000052CA,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052C9,000052C9,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052C8,000052C8,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052C1,000052C1,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052C0,000052C0,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052BF,000052BF,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000052BE,000052BE,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000030EA,000030EA,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000030E8,000030E8,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020BE,000020BE,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020BD,000020BD,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020BC,000020BC,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020B6,000020B6,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020B5,000020B5,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020B4,000020B4,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020B3,000020B3,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020B2,000020B2,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FB1,00001FB1,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001EB8,00001EB8,FlusshaimPond,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001EB2,00001EB2,FlusshaimHonigpresse,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001EB1,00001EB1,FlusshaimZentrum,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001EB0,00001EB0,FlusshaimMarktplatz2,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001EA7,00001EA7,FlusshaimMittelweg,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001EA6,00001EA6,FlusshaimMarktplatz,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001EA0,00001EA0,FlusshaimMyradenturm,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001E9D,00001E9D,FlusshaimFarm,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001E9C,00001E9C,FlusshaimEingang,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001E9B,00001E9B,FlusshaimErsteBrcke,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001E93,00001E93,FlusshaimTavernExt,,00032706,FlusshaimLocation,Riverville,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001504C,0001504C,SonnenkuesteUeberfalll,,0003494A,_00E_SuncoastLocation,Sun Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001505F,0001505F,SonnenkuesteKleineInsel,,0003494A,_00E_SuncoastLocation,Sun Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F95,00001F95,,,00066859,_00E_VynLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F94,00001F94,,,00066859,_00E_VynLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F81,00001F81,,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001E59,00001E59,,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020ED,000020ED,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020EC,000020EC,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020EB,000020EB,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020EA,000020EA,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020E4,000020E4,ArkWachturm,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020E3,000020E3,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020E2,000020E2,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020E1,000020E1,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020DD,000020DD,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020DC,000020DC,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020DB,000020DB,FelsenzufluchtAusgang,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020DA,000020DA,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000209E,0000209E,,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000209C,0000209C,,,00066859,_00E_VynLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000209B,0000209B,,,00066859,_00E_VynLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002090,00002090,,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000208A,0000208A,,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002089,00002089,,,00066859,_00E_VynLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002085,00002085,,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002084,00002084,,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002083,00002083,SumpfStart,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000207F,0000207F,BauernkuesteBrueckenkopfhof,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000207E,0000207E,NQG01CaveExit,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FAB,00001FAB,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FAA,00001FAA,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FA9,00001FA9,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FA8,00001FA8,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FA4,00001FA4,CapitalCityTorBauernhof,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FA3,00001FA3,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FA2,00001FA2,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001FA1,00001FA1,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F8A,00001F8A,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F89,00001F89,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F88,00001F88,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F87,00001F87,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F85,00001F85,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F82,00001F82,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F7D,00001F7D,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F7C,00001F7C,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020D9,000020D9,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020BB,000020BB,HeartlandTest,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020BA,000020BA,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020B1,000020B1,Seenlandschaft,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0002AD5F,0002AD5F,FSNQR05TempleStart,,0502F20A,_00E_FS_NQR05_TempleOutside,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00015D52,00015D52,SonnenkuesteTempelschlucht,,0003494A,_00E_SuncoastLocation,Sun Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00015D2A,00015D2A,Schneefelstaverne,,000D9151,SchneefelstaverneLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00015D00,00015D00,,,000D9151,SchneefelstaverneLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00015D35,00015D35,SonnenkuesteTempelschluchtFelsbogen,,0003494A,_00E_SuncoastLocation,Sun Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00033B0A,00033B0A,SonnenkuestePiratenzuflucht,,0003494A,_00E_SuncoastLocation,Sun Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00036F3E,00036F3E,,,00096803,_00E_MQ11c_SilberhainExterior,Silvergrove,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001DA4,00001DA4,,,0010BBCB,_00E_DesertPulvermineLocation,DesertPulvermineLocation,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000059C2,000059C2,DesertVersorgungsschiff,,0010BBCA,_00E_DesertVersorgungsschiffLocation,Duneville's Supply Ship,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000059C1,000059C1,,,0010BBCA,_00E_DesertVersorgungsschiffLocation,Duneville's Supply Ship,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000059C0,000059C0,,,0010BBCA,_00E_DesertVersorgungsschiffLocation,Duneville's Supply Ship,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0000489A,0000489A,NQ11Cave,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00004899,00004899,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002929,00002929,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002928,00002928,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002070,00002070,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002000,00002000,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F7B,00001F7B,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F5F,00001F5F,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F59,00001F59,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0012956C,0012956C,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001105D,0001105D,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001105B,0001105B,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001105A,0001105A,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00011059,00011059,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00011058,00011058,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00011057,00011057,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00011056,00011056,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00011051,00011051,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001104F,0001104F,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001104E,0001104E,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0001103B,0001103B,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000195DA,000195DA,,,00096803,_00E_MQ11c_SilberhainExterior,Silvergrove,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001E53,00001E53,,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001E50,00001E50,,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001E4F,00001E4F,BauernkuesteOberhof,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001E45,00001E45,,,00066859,_00E_VynLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001E44,00001E44,BauernkuesteBauernthron,,00066859,_00E_VynLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020F1,000020F1,,,000A1A12,CapitalCityLocation,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,000020E8,000020E8,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00002079,00002079,,,0010BBC8,AAFarmcoastLocation,Farmers Coast,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F7A,00001F7A,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F79,00001F79,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F75,00001F75,,,050133FA,ArkSiegeWeather,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F74,00001F74,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F73,00001F73,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F71,00001F71,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F70,00001F70,,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,00001F6F,00001F6F,Eisbrecherwarte,,050133FB,ArkSiegeWeatherEdge,,00001D3C,Vyn,No,No
+Enderal - Forgotten Stories.esm,0008320B,0008320B,BDerRoteOchseWohnraum,The Red Ox; Living Rooms,0010BBC8,AAFarmcoastLocation,Farmers Coast,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0502B47F,0002B47F,FSNQ03Tavern,Ark; The Dancing Nomad,000B5795,CapitalCityZumTanzendenNomadenLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0502E805,0002E805,FSNQ10Grave,Vatyra's Tomb,00040ABC,CapitalCityCryptLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00055DB5,00055DB5,FlusshaimHouseMayor,Riverville; Mayor's House,00032706,FlusshaimLocation,Riverville,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00012C3B,00012C3B,ForgottenTemple,Forgotten Temple,000ECF4C,AbandonedPrisonLocation,Abandoned Prison,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000E2CAB,000E2CAB,MQ11CCS,Castle Dal'Galar; Sanctuary,00150152,SchlossDalGalar,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,05028441,00028441,FSNQ02DalMercerHouse,Ark; Dal'Mercer's Estate,05028FB2,_00E_FS_NQ02_Locations,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000A5F1D,000A5F1D,SuntempleQuarters,Sun Temple; Quarters,001495B4,_00E_SuntempleQuarters,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00024BCE,00024BCE,MQ07aManor,Aged Man's Manor,0502F39A,_00E_MQ07a_AgedManLocation,Aged Man's Manor,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00015282,00015282,FlusshaimTemple,Riverville; Temple,0014FFCC,_00E_TempleLocation,Temple,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0007FBF0,0007FBF0,UndercityBarracks1,Undercity; Barracks,00103392,_00E_UEMasterLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000098EC,000098EC,CapitalCityWaterMill02,Watermill,000A1A12,CapitalCityLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000ED979,000ED979,UndercityBarracks2MinesPit,Tarpit,00103392,_00E_UEMasterLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00024BCD,00024BCD,MQ07aManorSanct,Aged Man's Manor; Sanctum,0502F39A,_00E_MQ07a_AgedManLocation,Aged Man's Manor,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0007FA69,0007FA69,MQ01Dam,Old Dam Lookout,000ECF4C,AbandonedPrisonLocation,Abandoned Prison,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000D89CF,000D89CF,MQ11CaliaCastleQuarter,Castle Dal'Galar; Quarters,00150152,SchlossDalGalar,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0501CB21,0001CB21,FSNQR05Temple03,Old Temple; Heart,0502E544,_00E_FS_NQR05_Temple,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,001344F5,001344F5,NPCContainer,Barracke,0005254C,AbandonedShackInteriorLocation,Abandoned Shack,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00102DF1,00102DF1,UndercityBarracks2ZorkbansCellar,Zorkban's Cellar,001033DA,_00E_UEMarket_ZorkbanCeller_Location,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000CBEA5,000CBEA5,UndercityBarracks3,Undercity; Arena,00103392,_00E_UEMasterLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000169D3,000169D3,VerlasseneZollstation,Abandoned Customs Facilities,000ECF4C,AbandonedPrisonLocation,Abandoned Prison,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00147F2C,00147F2C,BRoterOchse,The Red Ox,0014CE92,BauernkuesteRoterOchseLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00055DBC,00055DBC,FlusshaimHouseGatzidoma,Riverville; Gatzidormatalata's House,00032706,FlusshaimLocation,Riverville,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000813CC,000813CC,UndercityBarracks2,Undercity; Marketplace,00103392,_00E_UEMasterLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000098EA,000098EA,BKornhofMirellHaus,Mirell's House,0010BBC8,AAFarmcoastLocation,Farmers Coast,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0501CB20,0001CB20,FSNQR05Temple01,Old Temple; Upper Floor,0502E544,_00E_FS_NQR05_Temple,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0011DC68,0011DC68,DuenenhaimWohnhaus,Duneville; House,0010BBC9,_00E_DunehomeLocation,Duneville,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000A5894,000A5894,AltIshmartepL1,Old Ishmartep,05028FB2,_00E_FS_NQ02_Locations,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00098553,00098553,CapitalCitySchraubeHutUndPfuschAGUnterkunft,Screw; Hats; Odds and Ends; Incorporated,000B577F,CapitalCitySHPAGLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000813CB,000813CB,UndercityBarracks0Entrance,Undercity; Main Cavern,00103392,_00E_UEMasterLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0011DC67,0011DC67,DuenenhaimPrison,Duneville; Prison,000469F5,_00E_DunevillePrisonLocation,Duneville,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000CEB85,000CEB85,FSNQR03Rhalata,Barrack,001130F2,_00E_UEArenaRhalata_Location,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000A19FF,000A19FF,SuntempleKuratorium,Sun Temple; Curarium,000CE2CF,_00E_SuntempleLocation,Sun Temple,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00009906,00009906,CapitalCityBar01,Ark; The Fat Leoran,0014C077,CapitalCityTheFatLeoranLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0009710C,0009710C,CapitalCityGoldenSickleKontor,Ark; Golden Sickle's Trading Post,000B558F,CapitalCityKontorLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000D9B6A,000D9B6A,MQ11CaliaCastleDinnerhall,Castle Dal'Galar; Dining Hall,00150152,SchlossDalGalar,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0007D400,0007D400,AltDothulgradLevelhub,Old Dothûlgrad; Rock Dome,000A9A72,_00E_AltDothulgrad,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00076E70,00076E70,UndercityBarracks3BashHole,Undercity; Dust Pit,001031E7,_00E_Undercity_Location,Undercity; Arena,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000E1A2C,000E1A2C,MQ11CL,Castle Dal'Galar; Library,00150152,SchlossDalGalar,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000BCB8C,000BCB8C,SuntempleSanctum,Sun Temple; Sanctum,000CE2CF,_00E_SuntempleLocation,Sun Temple,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0502E04D,0002E04D,DuenenhaimWohnhaus02,Duneville; House,0010BBC9,_00E_DunehomeLocation,Duneville,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000DE74F,000DE74F,UndercityBarracks2ApothekariUpper,House of the Apothecarii,00103392,_00E_UEMasterLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0000990F,0000990F,CapitalCityBankSafe,Ark; Bank,000A1A12,CapitalCityLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0010D1C1,0010D1C1,FSNQR02ForgottenMine,Tarpit; Abandoned Shaft,0010DD90,_00E_UEDungeon_CanalB,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000AECC5,000AECC5,SuntempleEmporiumTealor,Grandmaster's Rooms,000CE2CE,_00E_SuntempleEmporium,Sun Temple; Emporium,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,05028E8B,00028E8B,FSNQ02BurgInt,Castle Bleakstar,05028FB2,_00E_FS_NQ02_Locations,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000C6677,000C6677,SchneefelstaverneInterior,Frostcliff Tavern,00023060,SchneefelstaverneInteriorLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0009710B,0009710B,CapitalCityGaborsWarenhaus,Ark; Gaboff's Premium Wares,000A1A18,CapitalCityGaborsWarenhausLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000D9B69,000D9B69,MQ11DR,Castle Dal'Galar; Research Room,00150152,SchlossDalGalar,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00089123,00089123,SilberhainTaverne,Silvergrove; Tavern,00139AAB,SilberhaimLoc,Silvergrove,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0013CF2F,0013CF2F,NQG06Cave,Cave,000EAD7A,TestLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00086739,00086739,CapitalCityCommonTavern,Ark; The Dancing Nomad,000B5795,CapitalCityZumTanzendenNomadenLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000BCB8B,000BCB8B,SuntempleArmory,Sun Temple; Armory,000F76D1,_00E_SuntempleArchery,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0007EB50,0007EB50,CapitalCityBankNew,Ark; Bank,000A1A12,CapitalCityLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000DE74E,000DE74E,UndercityBarracks2ApothekariCellar,Apothecarii' Cellar,00103392,_00E_UEMasterLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0501C75C,0001C75C,FSNQ05Keller,Basement,0010BBC8,AAFarmcoastLocation,Farmers Coast,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00055DB8,00055DB8,FlusshaimShopKurro,Riverville; Kurro's General Store,00032706,FlusshaimLocation,Riverville,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0009710A,0009710A,CapitalCityBibliothek,Ark; Library,000A1A13,CapitalCityBibliothekLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00069C6E,00069C6E,IsleOfKorHouse03,Cabin,000ECF4C,AbandonedPrisonLocation,Abandoned Prison,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00019C50,00019C50,FlusshaimTavern,The Drunken Bee,0001DDF5,_00E_FlusshaimTaverneLocation,The Drunken Bee,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0007D3FE,0007D3FE,AltDothulgradFactory,Old Dothûlgrad; Workshop,000A9A72,_00E_AltDothulgrad,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00081CF6,00081CF6,BKuramsHaus,Borek's House,0010BBC8,AAFarmcoastLocation,Farmers Coast,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,00048F32,00048F32,DuenenhaimMain,Duneville,001495BD,_00E_DunevilleInteriorLocation,Duneville,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000E4959,000E4959,UndercityBarracks0FalseDogTavern,The False Dog,0010D2DB,_00E_UEEntr_FalseDog_Location,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000ED973,000ED973,UndercityBarracks1BarrackC,Residential Barrack; Ash Head,00103576,_00E_UELiving_BarrackC_Location,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,000A2635,000A2635,CapitalCityMuseum,Ark; Museum,05028FB2,_00E_FS_NQ02_Locations,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0003D825,0003D825,SuntempleStorage,Sun Temple; Warehouse,000CE2CF,_00E_SuntempleLocation,Sun Temple,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0007A7D9,0007A7D9,CapitalCityBlacksmith,Ark; Floorhammer's Forge Work,000A85FC,CapitalCitySchmiedLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0007284E,0007284E,FlusshaimJail,Riverville; Detention Cells,00032706,FlusshaimLocation,Riverville,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,001421B6,001421B6,ArkTomb,Ark; Crypt,00040ABC,CapitalCityCryptLocation,,00000000,Interior,Yes,No
+Enderal - Forgotten Stories.esm,0007B89A,0007B89A,GlimmerdustCave,Glimmerdustcave,000480B4,GlimmerdustCaveLocation,Glimmerdustcave,00000000,Interior,Yes,No

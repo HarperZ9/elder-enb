@@ -1,0 +1,429 @@
+[center][size=6][b][color=#D4AF37]Elder ENB - Universal[/color][/b][/size]
+
+[size=3][i]Presented with love, by [color=#6DB3F2]papacr0w[/color][/i][/size][/center]
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Design Philosophy[/color][/b][/size][/center]
+
+Elder ENB is built on a foundational principle: [b]separation of concerns[/b]. Rather than offering a single locked-in visual style, the system divides visual control into distinct layers that work together harmoniously:
+
+[list]
+[*][b]KreatE Weather Presets[/b] - The atmospheric foundation (sky, sun, clouds, fog, ambient light)
+[*][b]Preset Overlays[/b] - Stackable adjustments for style, lighting, effects, and post-processing
+[/list]
+
+This architecture means you're never locked into a single look. Change your entire atmosphere by switching KreatE presets, or fine-tune specific aspects through overlays - all without compromising the carefully calibrated baseline.
+
+[line]
+
+[center][size=5][b][color=#D4AF37]KreatE Weather Presets[/color][/b][/size]
+
+[i]The Atmospheric Foundation - 38 Unique Visual Atmospheres[/i][/center]
+
+[size=4][b][color=#6DB3F2]Core Design Principles[/color][/b][/size]
+
+KreatE presets don't simply adjust colors - they rebuild the entire atmospheric system from the ground up. Each preset contains 724 meticulously crafted configuration files covering every aspect of Skyrim's environmental rendering.
+
+[b]Color Coherence[/b]
+Every color in a KreatE preset flows from a unified palette. Sun color influences sunlight, which influences cloud illumination, which influences sky gradients. This isn't arbitrary - it follows how light actually behaves:
+
+[list]
+[*][b]DALC (Directional Ambient Light Colors)[/b] - Top derives from SkyUpper, Middle blends SkyLower with Horizon, Bottom reflects FogNear
+[*][b]Cloud Colors[/b] - Automatically aligned with Sun and Sunlight values for natural illumination
+[*][b]Sky Gradients[/b] - Upper, Lower, and Horizon colors maintain proper atmospheric perspective
+[/list]
+
+[b]Time-of-Day Consistency[/b]
+Each preset defines colors for six time periods: Dawn, Sunrise, Day, Sunset, Dusk, and Night. Transitions between these periods are smooth and natural, with careful attention to how colors shift as the sun moves.
+
+[b]Weather-Specific Tuning[/b]
+Clear skies behave differently than overcast conditions. Fog weathers receive 33% ambient reduction for proper visibility. Snow and rain conditions adjust bloom and particle effects appropriately.
+
+[size=4][b][color=#6DB3F2]What Each Preset Contains[/color][/b][/size]
+
+[code]
+Component                   Files    Purpose
+────────────────────────────────────────────────────────────
+Weathers                    241      Sky, fog, wind, precipitation
+ImageSpaces                 240      Exposure, contrast, tint
+LightingTemplates           197      Interior/exterior light balance
+VolumetricLighting           31      God rays, atmospheric scattering
+ShaderParticleGeometries     14      Rain, snow, dust particles
+────────────────────────────────────────────────────────────
+Total per preset            724      Complete atmospheric definition
+[/code]
+
+[size=4][b][color=#6DB3F2]Preset Categories[/color][/b][/size]
+
+[b]Foundation Styles[/b]
+[list]
+[*][b]DALC Fix[/b] - The technical baseline. Perfectly calibrated lighting ratios used as reference for all other presets.
+[*][b]10.28.16[/b] - Special Edition authenticity. Balanced, natural enhancement of vanilla aesthetics.
+[*][b]11.11.11[/b] - Legendary Edition nostalgia. Warmer tones recalling the original 2011 release.
+[*][b]Elder Originals[/b] - Classic Elder Scrolls palette. Deep greens, stone grays, warm firelight.
+[/list]
+
+[b]Cinematic Interpretations[/b]
+Each inspired by specific filmmakers and their visual signatures:
+
+[list]
+[*][b]The Revenant[/b] - Cold frontier survival (Iñárritu). 75-85% desaturation, steel-blue shadows.
+[*][b]Nordic Saga[/b] - Viking mythology (Eggers' The Northman). Cyan undertones, brutal contrast.
+[*][b]Gothic Shadows[/b] - Romantic horror (Eggers' Nosferatu). Candlelit warmth in oppressive darkness.
+[*][b]The Zone[/b] - Ethereal otherworld (Tarkovsky's Stalker). Green-cyan dreamscape.
+[*][b]Samurai Epic / Wanderer / Storm and Chaos[/b] - Japanese master cinema (Kurosawa). Bold composition, dramatic skies.
+[/list]
+
+[b]Atmospheric Moods[/b]
+[list]
+[*][b]Vibrant Fantasy[/b] - Saturated storybook colors (140% intensity)
+[*][b]Jötunheimar[/b] - Frozen Nordic wasteland with icy blue undertones
+[*][b]Golden Hour Extreme[/b] - Perpetual sunset warmth
+[*][b]Arctic Silence[/b] - Stark polar minimalism (25% saturation)
+[*][b]Emerald Forest[/b] - Dense jungle humidity
+[*][b]Wretched[/b] - Oppressive horror atmosphere
+[/list]
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Preset Overlay System[/color][/b][/size]
+
+[i]170+ Configurations for Precise Visual Control[/i][/center]
+
+Overlays modify shader parameters on top of the base ENB configuration. They're organized into functional categories, each addressing a specific aspect of the visual pipeline.
+
+[b][color=#D4AF37]Usage Rules:[/color][/b]
+[list]
+[*]Enable [b]ONE[/b] overlay per category unless noted otherwise
+[*]Use [b]Amount sliders[/b] to blend any overlay from 0-100%
+[*]Categories marked [b](stackable)[/b] allow multiple selections
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]ENV - Environment Lighting[/color][/b][/size]
+[i]The Technical Foundation of Light[/i][/center]
+
+ENV overlays control the fundamental physics of light in your game world. These aren't color filters - they modify how light interacts with surfaces, how shadows form, and how the atmosphere scatters illumination.
+
+[b]Core Parameters:[/b]
+[list]
+[*][b]ColorPow[/b] - Controls color intensity response (baseline 1.4). Lower values produce richer saturation; higher values increase contrast punch.
+[*][b]DirectLightingIntensity[/b] - Sunlight/moonlight strength across all six time periods
+[*][b]AmbientLightingIntensity[/b] - Fill light from the sky dome
+[*][b]DirectLightingCurve[/b] - Falloff behavior of direct illumination
+[*][b]FogCurveMultiplier[/b] - Atmospheric depth and haze
+[/list]
+
+[b]Available ENV Overlays:[/b]
+
+[list]
+[*][b]Golden Hour[/b] - Reduced ColorPow (-0.25 to -0.30) for rich, saturated golden tones. Enhanced volumetric fog during transitions. Warm color filters throughout.
+
+[*][b]Deep Contrast[/b] - Elevated ColorPow (+0.15 to +0.20) for punchy, dramatic lighting. Increased direct lighting curves, reduced ambient. Professional moody aesthetic.
+
+[*][b]Nordic Light[/b] - Subtle cool balance with slight ColorPow increase. Captures soft Scandinavian diffusion with maintained shadow detail.
+
+[*][b]Cinematic Drama[/b] - Strong contrast ratios with controlled highlights. Film-like lighting balance optimized for storytelling moments.
+
+[*][b]Fantasy Vivid[/b] - Lower ColorPow for lush color rendering. Enhanced bloom during transitions. Magical atmosphere without oversaturation.
+
+[*][b]Natural Documentary[/b] - Neutral baseline. No ColorPow modifications. Authenticity-focused for realistic gameplay.
+
+[*][b]Lifted Shadows[/b] - Reduced ColorPow with elevated ambient. Better shadow visibility without sacrificing depth.
+
+[*][b]Linear Light[/b] - Linear response curve modifications for HDR-like rendering. Technical accuracy over stylization.
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]STYLE - KreatE Color Philosophies[/color][/b][/size]
+[i]Complete Visual Identities[/i][/center]
+
+STYLE overlays are comprehensive visual packages that transform the entire color pipeline. Each represents a complete aesthetic philosophy - from tonemapping through color grading to final output.
+
+Unlike ENV overlays which focus on lighting physics, STYLE overlays work in the color domain: saturation, contrast, tint, vibrance, and tonal relationships.
+
+[b]What STYLE Overlays Control:[/b]
+[list]
+[*][b]CG.HDR[/b] - Primary color grading (contrast, saturation, exposure)
+[*][b]Tonemapping[/b] - Highlight/shadow compression curves
+[*][b]CG.KiSuite[/b] - Secondary grading (vibrance, tinting, split-toning)
+[*][b]Bloom characteristics[/b] - Color and intensity of light bloom
+[/list]
+
+[b]Classic Styles:[/b]
+[list]
+[*][b]10.28.16 (SE)[/b] - Clean Special Edition authenticity
+[*][b]11.11.11 (LE)[/b] - Warm Legendary Edition nostalgia
+[*][b]Rudy Inspired[/b] - Documentary neutrality with subtle cool undertones
+[*][b]Ethqnm Edition[/b] - Refined clarity with balanced enhancement
+[/list]
+
+[b]Cinematic Styles:[/b]
+[list]
+[*][b]Blockbuster[/b] - Teal shadows, orange highlights (Hollywood standard)
+[*][b]The Revenant[/b] - Cold frontier desaturation with steel-blue tint
+[*][b]Nordic Saga[/b] - Viking brutalism with cyan undertones
+[*][b]Gothic Shadows[/b] - Romantic horror with warm candlelight
+[*][b]Noir[/b] - Classic film noir contrast and desaturation
+[/list]
+
+[b]Fantasy & Artistic:[/b]
+[list]
+[*][b]Vibrant Fantasy[/b] - Hypersaturated storybook colors
+[*][b]Mystic Night[/b] - Purple-violet magical atmosphere
+[*][b]Pastel Dream[/b] - Soft romantic pastels
+[*][b]The Zone[/b] - Ethereal green-cyan otherworld
+[*][b]Emerald Forest[/b] - Lush jungle humidity
+[/list]
+
+[b]Monochrome:[/b]
+[list]
+[*][b]Monochrome Classic[/b] - Full tonal range black and white
+[*][b]Monochrome Dramatic[/b] - High contrast artistic B&W
+[*][b]Maritime Noir[/b] - Claustrophobic psychological B&W
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]LIGHTING - Mod Adaptation[/color][/b][/size]
+[i]Compatibility Layers (Stackable - up to 2)[/i][/center]
+
+LIGHTING overlays adjust the ENB to work optimally with specific lighting mod configurations or gameplay preferences.
+
+[list]
+[*][b]MLO2 Lighting Profile[/b] - Optimized for Mists of Lighting Overhaul 2
+[*][b]Brighter Interiors[/b] - Lifted ambient and point lighting for better dungeon visibility
+[*][b]Darker Interiors[/b] - Deeper shadows for dramatic interior spaces
+[*][b]Brighter Nights[/b] - Increased moonlight and ambient for nighttime visibility
+[*][b]Darker Nights[/b] - Reduced exposure for immersive darkness (light sources become essential)
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]QUALITY - Performance Scaling[/color][/b][/size]
+[i]Hardware Optimization[/i][/center]
+
+QUALITY overlays scale shader complexity to match your hardware capabilities.
+
+[list]
+[*][b]Low[/b] - Minimum shader complexity for entry-level GPUs
+[*][b]Medium[/b] - Balanced quality/performance
+[*][b]High[/b] - Full quality for mid-range GPUs
+[*][b]Very High[/b] - Enhanced effects
+[*][b]Ultra[/b] - Maximum quality
+[*][b]Extreme[/b] - Beyond Ultra for enthusiast hardware (4080+)
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]LOOK - Film Emulation LUTs[/color][/b][/size]
+[i]Analog Film Character (Stackable - up to 2)[/i][/center]
+
+LOOK overlays apply color lookup tables (LUTs) that emulate the characteristics of real film stocks. These can be layered with STYLE overlays to add analog texture.
+
+[b]Motion Picture Stocks:[/b]
+[list]
+[*][b]Kodak 500T / 250D / 200T[/b] - Professional cinema standards
+[*][b]Cinestill 800T[/b] - Tungsten-balanced with characteristic halation
+[*][b]Fujifilm 3513[/b] - Motion picture intermediate
+[*][b]Technicolor 16[/b] - Three-strip Technicolor glory
+[/list]
+
+[b]Still Photography Stocks:[/b]
+[list]
+[*][b]Kodak Kodachrome 25/64[/b] - Legendary slide film richness
+[*][b]Fuji Velvia 50[/b] - High saturation landscape standard
+[*][b]Agfa RSXII 100[/b] - European slide film character
+[*][b]Kodak UltraMax[/b] - Consumer warmth
+[/list]
+
+[b]Voyager Collection:[/b]
+Original artistic grades with celestial naming:
+Algol, Arakon, Arcturus, Argus, Cambra, Cerberus, Cruces, Elora, Halka, Hypatia, Mutara, Nelvana, Omega, Organia, Persephone, Scorpii, Valo
+
+[line]
+
+[center][size=4][b][color=#D4AF37]DOF - Depth of Field[/color][/b][/size]
+[i]Photographic Focus Simulation[/i][/center]
+
+DOF overlays control how the game simulates camera focus and out-of-focus rendering.
+
+[list]
+[*][b]Soft Portrait[/b] - Smooth bokeh for character photography
+[*][b]Cinematic Anamorphic[/b] - Oval bokeh from cinema lenses
+[*][b]Sharp Documentary[/b] - Extended depth for environmental clarity
+[*][b]Dreamy Haze[/b] - Heavy ethereal blur
+[*][b]Tilt Shift[/b] - Miniature/diorama effect
+[*][b]Vintage Film[/b] - Imperfect bokeh with chromatic aberration
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]BLOOM - Light Behavior[/color][/b][/size]
+[i]How Light Bleeds and Glows[/i][/center]
+
+BLOOM overlays control the intensity, threshold, and color characteristics of light bloom effects.
+
+[list]
+[*][b]Subtle Clean[/b] - Minimal, refined bloom
+[*][b]Warm Glow[/b] - Golden-tinted light bleeding
+[*][b]Cool Atmosphere[/b] - Blue-shifted bloom for cold environments
+[*][b]Film Stock[/b] - Halation characteristics of analog film
+[*][b]Ethereal[/b] - Heavy, dreamy light diffusion
+[*][b]Night Enhanced[/b] - Optimized for artificial light sources
+[*][b]Candlelight[/b] - Warm, intimate interior bloom
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]ADAPTATION - Eye Adjustment[/color][/b][/size]
+[i]Dynamic Exposure Response[/i][/center]
+
+ADAPTATION overlays control how the "camera eye" responds to changing light conditions.
+
+[list]
+[*][b]Balanced Natural[/b] - Smooth, natural transitions
+[*][b]Cinematic Dark[/b] - Dramatic dark adaptation for moody interiors
+[*][b]Bright & Vivid[/b] - Lifted exposure for airy brightness
+[*][b]Night Vision[/b] - Enhanced dark adaptation for night gameplay
+[*][b]Horror Atmosphere[/b] - Slow, unsettling adaptation
+[*][b]Documentary[/b] - Neutral, realistic response
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]Film Character Overlays[/color][/b][/size][/center]
+
+[b]GRAIN[/b] - Film grain texture
+[list]
+[*]None, Subtle Film, Classic 35mm, Heavy 16mm, Cinematic Fine, Noir Gritty
+[/list]
+
+[b]LENS[/b] - Optical characteristics
+[list]
+[*]None, Subtle Barrel, Anamorphic, Chromatic Vintage, Dirty Cinema, Full Cinematic
+[/list]
+
+[b]VIGNETTE[/b] - Edge darkening
+[list]
+[*]None, Subtle Frame, Classic Portrait, Heavy Dramatic, Cinema Wide, Soft Vintage
+[/list]
+
+[b]BLUR[/b] - Artistic diffusion
+[list]
+[*]None, Soft Glow, Dream Haze, Radial Focus, Motion Style, Depth Fade
+[/list]
+
+[b]CINEMATIC BORDERS[/b] - Letterboxing
+[list]
+[*]Classic 2.35:1, Ultra Wide 2.76:1, Subtle Frame, IMAX 1.43:1, Vintage Corners
+[/list]
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Building Your Look[/color][/b][/size][/center]
+
+The power of this system lies in intentional layering:
+
+[list=1]
+[*][b]Start with KreatE[/b] - Choose your atmospheric foundation
+[*][b]Add ENV[/b] - Set your lighting physics (ColorPow, intensities, curves)
+[*][b]Apply STYLE[/b] - Define your color philosophy
+[*][b]Layer LOOK[/b] - Optional film stock character
+[*][b]Set LIGHTING[/b] - Match your lighting mod configuration
+[*][b]Choose DOF + BLOOM[/b] - Define focus and light behavior
+[*][b]Add finishing touches[/b] - Grain, lens, vignette as desired
+[/list]
+
+[b]Example Combinations:[/b]
+
+[code]
+The Survivalist
+├── KreatE: The Revenant
+├── ENV: Deep Contrast
+├── STYLE: Nordic Saga
+├── LIGHTING: Darker Nights
+└── LOOK: None (preserve desaturation)
+
+Fantasy Adventure
+├── KreatE: Vibrant Fantasy
+├── ENV: Fantasy Vivid
+├── STYLE: Vibrant Fantasy
+├── BLOOM: Ethereal
+└── LOOK: Fuji Velvia 50
+
+Cinematic Horror
+├── KreatE: Wretched
+├── ENV: Cinematic Drama
+├── STYLE: Gothic Shadows
+├── LIGHTING: Darker Interiors
+└── VIGNETTE: Heavy Dramatic
+[/code]
+
+Use the [b]Amount sliders[/b] - 30% of a LOOK combined with 60% of a STYLE often creates something more nuanced than either at full strength.
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Requirements[/color][/b][/size][/center]
+
+[list]
+[*][url=http://enbdev.com/]ENB Binary[/url] (Wrapper Version)
+[*][url=LINK]Silent Horizons 2 - Shader Core[/url]
+[*][url=LINK]ENB Extender & Helper[/url] (+ prerequisites)
+[*][url=LINK]KreatE[/url] (+ prerequisites)
+[*][url=LINK]KiLoader[/url] (+ prerequisites)
+[/list]
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Installation[/color][/b][/size][/center]
+
+[size=4][b][color=#6DB3F2]Step 1: ENB Binary[/color][/b][/size]
+
+[list=1]
+[*]Download the latest ENB Binary from [url=http://enbdev.com/]enbdev.com[/url]
+[*]Open the archive, navigate to [b]WrapperVersion[/b]
+[*]Extract [b]ONLY d3d11.dll[/b] to your Skyrim game directory
+[*]Do NOT extract any other files - Elder ENB provides the rest
+[/list]
+
+[size=4][b][color=#6DB3F2]Step 2: Installation[/color][/b][/size]
+
+[list=1]
+[*]Delete all files from previous ENB configurations
+[*]Clear your ENB shader cache (Overwrite folder)
+[*]Install all requirements and prerequisites
+[*]Copy enbseries.ini and enblocal.ini to your game directory
+[*]Copy enbseries folder contents to your existing enbseries folder
+[*]Install Required Files via Mod Organizer 2
+[/list]
+
+[size=4][b][color=#6DB3F2]Step 3: Verification[/color][/b][/size]
+
+[list=1]
+[*]Launch the game
+[*]Press [b]Shift + Enter[/b] to verify ENB is active
+[*]Press [b]END[/b] to confirm KreatE menu opens
+[*]Select your desired KreatE preset
+[*]Configure overlays in the ENB menu's right-hand pane
+[/list]
+
+[line]
+
+[center][size=5][b][color=#D4AF37]Acknowledgments[/color][/b][/size][/center]
+
+[size=3][b][color=#6DB3F2]Special Thanks[/color][/b][/size]
+
+[list]
+[*]Boris Vorontsov - ENB Series
+[*]LonelyKitsuune - KiShader ecosystem
+[*]MartyMcModding / Pascal Gilcher - Shader development
+[*]The filmmakers whose visual artistry inspired KreatE presets: Robert Eggers, Andrei Tarkovsky, Alejandro González Iñárritu, Akira Kurosawa
+[/list]
+
+[line]
+
+[center][size=4][b][color=#D4AF37]Find your atmosphere. Layer your style. Make it your own.[/color][/b][/size][/center]

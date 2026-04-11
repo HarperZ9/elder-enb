@@ -1,0 +1,207 @@
+FormID,LocalID,EditorID,SourcePlugin,RegionName,Weather1_FormID,Weather1_EditorID,Weather1_Chance,Weather2_FormID,Weather2_EditorID,Weather2_Chance,Weather3_FormID,Weather3_EditorID,Weather3_Chance,Weather4_FormID,Weather4_EditorID,Weather4_Chance,TotalWeathers
+0002A72D,0x02A72D,WeatherPineForest,Skyrim.esm,,,,,,,,,,,,,,0
+0004D7FD,0x04D7FD,WeatherMountains,Skyrim.esm,,,,,,,,,,,,,,0
+0006ED59,0x06ED59,FXLightRegionInvertDayNight,Skyrim.esm,,,,,,,,,,,,,,0
+0006ED5C,0x06ED5C,FXLightRegionCaveBlueSkylight,Skyrim.esm,,,,,,,,,,,,,,0
+00075DE6,0x075DE6,FXLightRegionCaveBluePale,Skyrim.esm,,,,,,,,,,,,,,0
+000777D0,0x0777D0,FXlightRegioninvertWarm,Skyrim.esm,,,,,,,,,,,,,,0
+000AEE85,0x0AEE85,FXLightRegionInvertWindowWindhelm,Skyrim.esm,,,,,,,,,,,,,,0
+00048C2E,0x048C2E,BlackreachRegion,Skyrim.esm,,,,,,,,,,,,,,0
+0007548E,0x07548E,FXLightRegionSunlight,Skyrim.esm,,,,,,,,,,,,,,0
+00075492,0x075492,FXLightRegionSunlightWhite,Skyrim.esm,,,,,,,,,,,,,,0
+000C5852,0x0C5852,WeatherCoast,Skyrim.esm,,,,,,,,,,,,,,0
+000C5853,0x0C5853,WeatherSnow,Skyrim.esm,,,,,,,,,,,,,,0
+000C5854,0x0C5854,WeatherVolcanicTundra,Skyrim.esm,,,,,,,,,,,,,,0
+000C5855,0x0C5855,WeatherTundraMarsh,Skyrim.esm,,,,,,,,,,,,,,0
+000C5856,0x0C5856,WeatherReach,Skyrim.esm,,,,,,,,,,,,,,0
+000C5857,0x0C5857,WeatherFallForest,Skyrim.esm,,,,,,,,,,,,,,0
+000C5858,0x0C5858,WeatherTundra,Skyrim.esm,,,,,,,,,,,,,,0
+00069E2B,0x069E2B,WeatherJaphetsFolly,Skyrim.esm,,,,,,,,,,,,,,0
+000703C2,0x0703C2,WeatherWindhelm,Skyrim.esm,,,,,,,,,,,,,,0
+00070408,0x070408,WeatherWhiterun,Skyrim.esm,,,,,,,,,,,,,,0
+0007042A,0x07042A,WeatherSolitude,Skyrim.esm,,,,,,,,,,,,,,0
+0007042E,0x07042E,WeatherRiften,Skyrim.esm,,,,,,,,,,,,,,0
+0007042F,0x07042F,WeatherMarkarth,Skyrim.esm,,,,,,,,,,,,,,0
+0008277B,0x08277B,FXLightRegionInvertWindowWhiterun,Skyrim.esm,,,,,,,,,,,,,,0
+0008282B,0x08282B,FXLightRegionInvertLightsWhiterun,Skyrim.esm,,,,,,,,,,,,,,0
+0005ED99,0x05ED99,FXLightRegionInvertWindowSolitude,Skyrim.esm,,,,,,,,,,,,,,0
+000A9783,0x0A9783,WeatherBluePalaceWing,Skyrim.esm,,,,,,,,,,,,,,0
+000EA25F,0x0EA25F,WeatherThroatOfTheWorld,Skyrim.esm,,,,,,,,,,,,,,0
+000EA260,0x0EA260,WeatherHighHrothgar,Skyrim.esm,,,,,,,,,,,,,,0
+000ECC97,0x0ECC97,FXLightRegionInvertWindowWindhelm2,Skyrim.esm,,,,,,,,,,,,,,0
+001046C7,0x1046C7,WeatherVolcanicTundraNoPrecip,Skyrim.esm,,,,,,,,,,,,,,0
+001046C8,0x1046C8,WeatherTundraMarshNoPrecip,Skyrim.esm,,,,,,,,,,,,,,0
+001046C9,0x1046C9,WeatherTundraNoPrecip,Skyrim.esm,,,,,,,,,,,,,,0
+001046CA,0x1046CA,WeatherSnowNoPrecip,Skyrim.esm,,,,,,,,,,,,,,0
+001046CB,0x1046CB,WeatherMountainsNoPrecip,Skyrim.esm,,,,,,,,,,,,,,0
+001046CC,0x1046CC,WeatherFallForestNoPrecip,Skyrim.esm,,,,,,,,,,,,,,0
+0010474D,0x10474D,WeatherFalkreath,Skyrim.esm,,,,,,,,,,,,,,0
+0010474E,0x10474E,WeatherDarklightTower,Skyrim.esm,,,,,,,,,,,,,,0
+00104AB3,0x104AB3,WeatherSkuldafn,Skyrim.esm,,,,,,,,,,,,,,0
+0010593E,0x10593E,WeatherBluePalaceWingFEAR,Skyrim.esm,,,,,,,,,,,,,,0
+0010593F,0x10593F,WeatherBluePalaceWingNMARE,Skyrim.esm,,,,,,,,,,,,,,0
+00105940,0x105940,WeatherBluePalaceWingARENA,Skyrim.esm,,,,,,,,,,,,,,0
+00105F3F,0x105F3F,WeatherDA02,Skyrim.esm,,,,,,,,,,,,,,0
+00106631,0x106631,WeatherKarthspireRedoubt,Skyrim.esm,,,,,,,,,,,,,,0
+00106632,0x106632,WeatherFallowstone,Skyrim.esm,,,,,,,,,,,,,,0
+00106634,0x106634,WeatherDeepwoodRedoubt,Skyrim.esm,,,,,,,,,,,,,,0
+00106667,0x106667,WeatherLabyrinthian,Skyrim.esm,,,,,,,,,,,,,,0
+00106668,0x106668,WeatherLabyrinthianMaze,Skyrim.esm,,,,,,,,,,,,,,0
+0010AFC5,0x10AFC5,WhiterunDragonsreachWeather,Skyrim.esm,,,,,,,,,,,,,,0
+0010C1B5,0x10C1B5,FXRainyRegion,Skyrim.esm,,,,,,,,,,,,,,0
+0010DA12,0x10DA12,FXLightRegionWinterholdInvert,Skyrim.esm,,,,,,,,,,,,,,0
+0010FDC5,0x10FDC5,WeatherFFRiften,Skyrim.esm,,,,,,,,,,,,,,0
+0010FDC6,0x10FDC6,WeatherWinterhold,Skyrim.esm,,,,,,,,,,,,,,0
+0010FE79,0x10FE79,WeatherCoastFog,Skyrim.esm,,,,,,,,,,,,,,0
+0010FF20,0x10FF20,SovngardeIntWeather,Skyrim.esm,,,,,,,,,,,,,,0
+02005099,0x005099,DLC01WeatherGrove,Dawnguard.esm,,,,,,,,,,,,,,0
+0002A72D,0x02A72D,WeatherPineForest,Dawnguard.esm,,,,,,,,,,,,,,0
+020191D2,0x0191D2,DLC01WeatherPlayground,Dawnguard.esm,,,,,,,,,,,,,,0
+020191D3,0x0191D3,DLC01WeatherIce,Dawnguard.esm,,,,,,,,,,,,,,0
+02019218,0x019218,DLC01Weather02,Dawnguard.esm,,,,,,,,,,,,,,0
+02019219,0x019219,DLC01Weather03,Dawnguard.esm,,,,,,,,,,,,,,0
+0004D7FD,0x04D7FD,WeatherMountains,Dawnguard.esm,,,,,,,,,,,,,,0
+000C5852,0x0C5852,WeatherCoast,Dawnguard.esm,,,,,,,,,,,,,,0
+000C5853,0x0C5853,WeatherSnow,Dawnguard.esm,,,,,,,,,,,,,,0
+000C5854,0x0C5854,WeatherVolcanicTundra,Dawnguard.esm,,,,,,,,,,,,,,0
+000C5855,0x0C5855,WeatherTundraMarsh,Dawnguard.esm,,,,,,,,,,,,,,0
+000C5856,0x0C5856,WeatherReach,Dawnguard.esm,,,,,,,,,,,,,,0
+000C5857,0x0C5857,WeatherFallForest,Dawnguard.esm,,,,,,,,,,,,,,0
+000C5858,0x0C5858,WeatherTundra,Dawnguard.esm,,,,,,,,,,,,,,0
+000EA260,0x0EA260,WeatherHighHrothgar,Dawnguard.esm,,,,,,,,,,,,,,0
+001046C7,0x1046C7,WeatherVolcanicTundraNoPrecip,Dawnguard.esm,,,,,,,,,,,,,,0
+001046C8,0x1046C8,WeatherTundraMarshNoPrecip,Dawnguard.esm,,,,,,,,,,,,,,0
+001046C9,0x1046C9,WeatherTundraNoPrecip,Dawnguard.esm,,,,,,,,,,,,,,0
+001046CA,0x1046CA,WeatherSnowNoPrecip,Dawnguard.esm,,,,,,,,,,,,,,0
+001046CB,0x1046CB,WeatherMountainsNoPrecip,Dawnguard.esm,,,,,,,,,,,,,,0
+001046CC,0x1046CC,WeatherFallForestNoPrecip,Dawnguard.esm,,,,,,,,,,,,,,0
+0010474D,0x10474D,WeatherFalkreath,Dawnguard.esm,,,,,,,,,,,,,,0
+0010FDC6,0x10FDC6,WeatherWinterhold,Dawnguard.esm,,,,,,,,,,,,,,0
+0010FE79,0x10FE79,WeatherCoastFog,Dawnguard.esm,,,,,,,,,,,,,,0
+0201A880,0x01A880,DLC01WeatherCanyon,Dawnguard.esm,,,,,,,,,,,,,,0
+020029E5,0x0029E5,DLC01WeatherFVBoss,Dawnguard.esm,,,,,,,,,,,,,,0
+02012DAD,0x012DAD,DLC01VampCastleStorm,Dawnguard.esm,,,,,,,,,,,,,,0
+02018681,0x018681,WeatherVolcanicAsh01,Dragonborn.esm,,,,,,,,,,,,,,0
+00071E66,0x071E66,DLC2ApocryphaRegion,Dragonborn.esm,,,,,,,,,,,,,,0
+0201EF70,0x01EF70,WeatherVolcanicAsh02,Dragonborn.esm,,,,,,,,,,,,,,0
+02024FD2,0x024FD2,Region325,Dragonborn.esm,,,,,,,,,,,,,,0
+02029F3B,0x029F3B,WeatherDLC2SolstheimSnow,Dragonborn.esm,,,,,,,,,,,,,,0
+0202A201,0x02A201,WeatherDLC2SolstheimMtns,Dragonborn.esm,,,,,,,,,,,,,,0
+0202ADC6,0x02ADC6,WeatherDLC2SolstheimSnowHeavy,Dragonborn.esm,,,,,,,,,,,,,,0
+020374BC,0x0374BC,WeatherRavenRock01,Dragonborn.esm,,,,,,,,,,,,,,0
+02037562,0x037562,WeatherSkaalVillage01,Dragonborn.esm,,,,,,,,,,,,,,0
+0002A72D,0x02A72D,WeatherPineForest,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000C5858,0x0C5858,WeatherTundra,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+030374BC,0x0374BC,WeatherRavenRock01,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0302ADC6,0x02ADC6,WeatherDLC2SolstheimSnowHeavy,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0302A201,0x02A201,WeatherDLC2SolstheimMtns,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+03029F3B,0x029F3B,WeatherDLC2SolstheimSnow,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0301EF70,0x01EF70,WeatherVolcanicAsh02,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+03018681,0x018681,WeatherVolcanicAsh01,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0010FE79,0x10FE79,WeatherCoastFog,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0010FDC6,0x10FDC6,WeatherWinterhold,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0010FDC5,0x10FDC5,WeatherFFRiften,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0010AFC5,0x10AFC5,WhiterunDragonsreachWeather,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+00106668,0x106668,WeatherLabyrinthianMaze,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+00106667,0x106667,WeatherLabyrinthian,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+00106634,0x106634,WeatherDeepwoodRedoubt,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+00106632,0x106632,WeatherFallowstone,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+00106631,0x106631,WeatherKarthspireRedoubt,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+00104AB3,0x104AB3,WeatherSkuldafn,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0010474E,0x10474E,WeatherDarklightTower,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0010474D,0x10474D,WeatherFalkreath,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+001046CC,0x1046CC,WeatherFallForestNoPrecip,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+001046CB,0x1046CB,WeatherMountainsNoPrecip,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+001046CA,0x1046CA,WeatherSnowNoPrecip,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+001046C9,0x1046C9,WeatherTundraNoPrecip,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+001046C8,0x1046C8,WeatherTundraMarshNoPrecip,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+001046C7,0x1046C7,WeatherVolcanicTundraNoPrecip,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000FF259,0x0FF259,AudioIntDungeoncustom,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000EA260,0x0EA260,WeatherHighHrothgar,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000EA25F,0x0EA25F,WeatherThroatOfTheWorld,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+03037562,0x037562,WeatherSkaalVillage01,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000C5857,0x0C5857,WeatherFallForest,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000C5856,0x0C5856,WeatherReach,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000C5855,0x0C5855,WeatherTundraMarsh,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000C5854,0x0C5854,WeatherVolcanicTundra,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000C5853,0x0C5853,WeatherSnow,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000C5852,0x0C5852,WeatherCoast,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0007042F,0x07042F,WeatherMarkarth,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0007042E,0x07042E,WeatherRiften,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0007042A,0x07042A,WeatherSolitude,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+00070408,0x070408,WeatherWhiterun,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+000703C2,0x0703C2,WeatherWindhelm,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+00069E2B,0x069E2B,WeatherJaphetsFolly,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0004D7FD,0x04D7FD,WeatherMountains,Vivid WeathersSE.esp,,,,,,,,,,,,,,0
+0002A72D,0x02A72D,WeatherPineForest,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+03037562,0x037562,WeatherSkaalVillage01,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+030374BC,0x0374BC,WeatherRavenRock01,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+0302A201,0x02A201,WeatherDLC2SolstheimMtns,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+03029F3B,0x029F3B,WeatherDLC2SolstheimSnow,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+0301EF70,0x01EF70,WeatherVolcanicAsh02,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+03018681,0x018681,WeatherVolcanicAsh01,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+0010FE79,0x10FE79,WeatherCoastFog,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+0010FDC6,0x10FDC6,WeatherWinterhold,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+0010FDC5,0x10FDC5,WeatherFFRiften,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+0010474D,0x10474D,WeatherFalkreath,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+000C5858,0x0C5858,WeatherTundra,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+000C5857,0x0C5857,WeatherFallForest,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+000C5856,0x0C5856,WeatherReach,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+000C5855,0x0C5855,WeatherTundraMarsh,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+000C5854,0x0C5854,WeatherVolcanicTundra,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+000C5853,0x0C5853,WeatherSnow,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+000C5852,0x0C5852,WeatherCoast,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+0007042F,0x07042F,WeatherMarkarth,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+0007042E,0x07042E,WeatherRiften,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+0007042A,0x07042A,WeatherSolitude,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+00070408,0x070408,WeatherWhiterun,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+000703C2,0x0703C2,WeatherWindhelm,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+0004D7FD,0x04D7FD,WeatherMountains,Obsidian Weathers.esp,,,,,,,,,,,,,,0
+03037562,0x037562,WeatherSkaalVillage01,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+030374BC,0x0374BC,WeatherRavenRock01,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0302A201,0x02A201,WeatherDLC2SolstheimMtns,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+03029F3B,0x029F3B,WeatherDLC2SolstheimSnow,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0301EF70,0x01EF70,WeatherVolcanicAsh02,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+03018681,0x018681,WeatherVolcanicAsh01,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0010FE79,0x10FE79,WeatherCoastFog,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0010FDC6,0x10FDC6,WeatherWinterhold,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0010FDC5,0x10FDC5,WeatherFFRiften,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0010474D,0x10474D,WeatherFalkreath,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+000C5858,0x0C5858,WeatherTundra,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+000C5857,0x0C5857,WeatherFallForest,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+000C5856,0x0C5856,WeatherReach,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+000C5855,0x0C5855,WeatherTundraMarsh,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+000C5854,0x0C5854,WeatherVolcanicTundra,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+000C5853,0x0C5853,WeatherSnow,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+000C5852,0x0C5852,WeatherCoast,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0007042F,0x07042F,WeatherMarkarth,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0007042E,0x07042E,WeatherRiften,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0007042A,0x07042A,WeatherSolitude,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+00070408,0x070408,WeatherWhiterun,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+000703C2,0x0703C2,WeatherWindhelm,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0004D7FD,0x04D7FD,WeatherMountains,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+0002A72D,0x02A72D,WeatherPineForest,Cathedral Weathers.esp,,,,,,,,,,,,,,0
+03037562,0x037562,WeatherSkaalVillage01,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+030374BC,0x0374BC,WeatherRavenRock01,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0302A201,0x02A201,WeatherDLC2SolstheimMtns,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+03029F3B,0x029F3B,WeatherDLC2SolstheimSnow,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0301EF70,0x01EF70,WeatherVolcanicAsh02,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+03018681,0x018681,WeatherVolcanicAsh01,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0010FE79,0x10FE79,WeatherCoastFog,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0010FDC6,0x10FDC6,WeatherWinterhold,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0010FDC5,0x10FDC5,WeatherFFRiften,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0010474D,0x10474D,WeatherFalkreath,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+000C5858,0x0C5858,WeatherTundra,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+000C5857,0x0C5857,WeatherFallForest,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+000C5856,0x0C5856,WeatherReach,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+000C5855,0x0C5855,WeatherTundraMarsh,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+000C5854,0x0C5854,WeatherVolcanicTundra,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+000C5853,0x0C5853,WeatherSnow,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+000C5852,0x0C5852,WeatherCoast,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0007042F,0x07042F,WeatherMarkarth,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0007042E,0x07042E,WeatherRiften,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0007042A,0x07042A,WeatherSolitude,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+00070408,0x070408,WeatherWhiterun,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+000703C2,0x0703C2,WeatherWindhelm,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0004D7FD,0x04D7FD,WeatherMountains,Azurite Weathers III.esp,,,,,,,,,,,,,,0
+0002A72D,0x02A72D,WeatherPineForest,Azurite Weathers III.esp,,,,,,,,,,,,,,0

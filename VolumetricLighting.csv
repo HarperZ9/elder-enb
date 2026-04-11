@@ -1,0 +1,126 @@
+FormID,LocalID,EditorID,SourcePlugin,Intensity,CustomColorR,CustomColorG,CustomColorB
+01000D51,0x000D51,VLClearDay,Update.esm,0,0,0,0
+01000D52,0x000D52,VLClearSunset,Update.esm,0,0,0,0
+01000D53,0x000D53,VLClearSunrise,Update.esm,0,0,0,0
+01000D54,0x000D54,VLCloudyNight,Update.esm,0,0,0,0
+01000D55,0x000D55,VLCloudySunrise,Update.esm,0,0,0,0
+01000D56,0x000D56,VLCloudyDay,Update.esm,0,0,0,0
+01000D57,0x000D57,VLCloudySunset,Update.esm,0,0,0,0
+01000D58,0x000D58,VLClearNight,Update.esm,0,0,0,0
+01000D59,0x000D59,VLFogDay,Update.esm,0,0,0,0
+01000D5A,0x000D5A,VLFogNight,Update.esm,0,0,0,0
+01000D5B,0x000D5B,VLFogSunrise,Update.esm,0,0,0,0
+01000D5C,0x000D5C,VLFogSunset,Update.esm,0,0,0,0
+01000D5D,0x000D5D,VLOvercastRainDay,Update.esm,0,0,0,0
+01000D5E,0x000D5E,VLOvercastRainNight,Update.esm,0,0,0,0
+01000D5F,0x000D5F,VLOvercastRainSunrise,Update.esm,0,0,0,0
+01000D60,0x000D60,VLOvercastRainSunset,Update.esm,0,0,0,0
+01000D61,0x000D61,VLStormRainDay,Update.esm,0,0,0,0
+01000D62,0x000D62,VLStormRainNight,Update.esm,0,0,0,0
+01000D63,0x000D63,VLStormRainSunrise,Update.esm,0,0,0,0
+01000D64,0x000D64,VLStormRainSunset,Update.esm,0,0,0,0
+01000D65,0x000D65,VLStormSnowDay,Update.esm,0,0,0,0
+01000D66,0x000D66,VLStormSnowNight,Update.esm,0,0,0,0
+01000D67,0x000D67,VLStormSnowSunrise,Update.esm,0,0,0,0
+01000D68,0x000D68,VLStormSnowSunset,Update.esm,0,0,0,0
+01000D69,0x000D69,VLOvercastSnowDay,Update.esm,0,0,0,0
+01000D6A,0x000D6A,VLOvercastSnowNight,Update.esm,0,0,0,0
+01000D6B,0x000D6B,VLOvercastSnowSunrise,Update.esm,0,0,0,0
+01000D6C,0x000D6C,VLOvercastSnowSunset,Update.esm,0,0,0,0
+01000D6D,0x000D6D,VLOvercastWarDay,Update.esm,0,0,0,0
+01000D6E,0x000D6E,VLOvercastWarNight,Update.esm,0,0,0,0
+01000D6F,0x000D6F,VLOvercastWarSunrise,Update.esm,0,0,0,0
+01000D70,0x000D70,VLOvercastWarSunset,Update.esm,0,0,0,0
+01001BDA,0x001BDA,VLSovngardeClear,Update.esm,0,0,0,0
+01001BDB,0x001BDB,VLSovngardeDark,Update.esm,0,0,0,0
+01001BDC,0x001BDC,VLSovngardeFog,Update.esm,0,0,0,0
+01002713,0x002713,VLBloatedMansGrotto,Update.esm,0,0,0,0
+02014CF8,0x014CF8,VLSoulCairn,Dawnguard.esm,0,0,0,0
+0201E2CD,0x01E2CD,VLDLC2Ash01Day,Dragonborn.esm,0,0,0,0
+0201E2CE,0x01E2CE,VLDLC2Ash01Sunrise,Dragonborn.esm,0,0,0,0
+0201E2CF,0x01E2CF,VLDLC2Ash01Night,Dragonborn.esm,0,0,0,0
+0201E2D0,0x01E2D0,VLDLC2Ash01Sunset,Dragonborn.esm,0,0,0,0
+0201E2D1,0x01E2D1,VLDLC2Apocrypha,Dragonborn.esm,0,0,0,0
+042699F9,0x2699F9,Vivid_Fog_Day_dark2,Vivid WeathersSE.esp,0,0,0,0
+0427DE33,0x27DE33,VividNight,Vivid WeathersSE.esp,0,0,0,0
+042699FA,0x2699FA,Vivid_NON_NAN_NJET_NIX_NOTHING,Vivid WeathersSE.esp,0,0,0,0
+042D9037,0x2D9037,VividDayMediumDUPLICATE001,Vivid WeathersSE.esp,0,0,0,0
+04273C19,0x273C19,Vivid_Fog_Day_dark3,Vivid WeathersSE.esp,0,0,0,0
+0427DE31,0x27DE31,VividDayMedium,Vivid WeathersSE.esp,0,0,0,0
+01000D53,0x000D53,VLClearSunrise,Vivid WeathersSE.esp,0,0,0,0
+01000D51,0x000D51,VLClearDay,Vivid WeathersSE.esp,0,0,0,0
+01000D52,0x000D52,VLClearSunset,Vivid WeathersSE.esp,0,0,0,0
+042095DD,0x2095DD,Vivid_Fog_Day2,Vivid WeathersSE.esp,0,0,0,0
+01000D55,0x000D55,VLCloudySunrise,Vivid WeathersSE.esp,0,0,0,0
+01000D56,0x000D56,VLCloudyDay,Vivid WeathersSE.esp,0,0,0,0
+01000D57,0x000D57,VLCloudySunset,Vivid WeathersSE.esp,0,0,0,0
+01000D5D,0x000D5D,VLOvercastRainDay,Vivid WeathersSE.esp,0,0,0,0
+041D6BD5,0x1D6BD5,VividDayLite,Vivid WeathersSE.esp,0,0,0,0
+042095DC,0x2095DC,Vivid_Fog_Day,Vivid WeathersSE.esp,0,0,0,0
+042095DE,0x2095DE,Vivid_Fog_Day3,Vivid WeathersSE.esp,0,0,0,0
+042095DF,0x2095DF,Vivid_Fog_Day4,Vivid WeathersSE.esp,0,0,0,0
+042095E0,0x2095E0,Vivid_Fog_Day5,Vivid WeathersSE.esp,0,0,0,0
+0423BFE8,0x23BFE8,VividSunset,Vivid WeathersSE.esp,0,0,0,0
+0423BFEC,0x23BFEC,VividCloudy_DAY,Vivid WeathersSE.esp,0,0,0,0
+0423BFED,0x23BFED,VividSunsetCloudy,Vivid WeathersSE.esp,0,0,0,0
+0423BFEF,0x23BFEF,VividRAINY_DAY,Vivid WeathersSE.esp,0,0,0,0
+0423BFF0,0x23BFF0,Vivid_SNOW,Vivid WeathersSE.esp,0,0,0,0
+042699F8,0x2699F8,Vivid_Fog_Day_dark,Vivid WeathersSE.esp,0,0,0,0
+04127817,0x127817,3Obsidian_Powder_Blue,Obsidian Weathers.esp,0,0,0,0
+04127816,0x127816,2Obsidian_Powder_Blue,Obsidian Weathers.esp,0,0,0,0
+04127815,0x127815,1Obsidian_Powder_Blue,Obsidian Weathers.esp,0,0,0,0
+04127794,0x127794,1Obsidian_Fog3_Smoke,Obsidian Weathers.esp,0,0,0,0
+04127792,0x127792,1Obsidian_Fog3_Night,Obsidian Weathers.esp,0,0,0,0
+04127791,0x127791,1Obsidian_Fog3,Obsidian Weathers.esp,0,0,0,0
+04127790,0x127790,1Obsidian_StormRain_Night,Obsidian Weathers.esp,0,0,0,0
+0412778B,0x12778B,1Obsidian_StormRain,Obsidian Weathers.esp,0,0,0,0
+0412777D,0x12777D,1Obsidian_Fog2_Storm_WAR,Obsidian Weathers.esp,0,0,0,0
+0412777B,0x12777B,1Obsidian_Fog2_Storm_TU,Obsidian Weathers.esp,0,0,0,0
+0412777A,0x12777A,1Obsidian_Fog2_Storm_FF,Obsidian Weathers.esp,0,0,0,0
+04127777,0x127777,1Obsidian_Fog2_Storm,Obsidian Weathers.esp,0,0,0,0
+0412776C,0x12776C,1Obsidian_Fog2_Sunset,Obsidian Weathers.esp,0,0,0,0
+0412776A,0x12776A,1Obsidian_Fog2,Obsidian Weathers.esp,0,0,0,0
+04127768,0x127768,1Obsidian_Fog_Ice,Obsidian Weathers.esp,0,0,0,0
+04127766,0x127766,1Obsidian_Ultra_Blue,Obsidian Weathers.esp,0,0,0,0
+04127758,0x127758,1Obsidian_Fog,Obsidian Weathers.esp,0,0,0,0
+040EAB4D,0x0EAB4D,1Obsidian_Powder,Obsidian Weathers.esp,0,0,0,0
+040DB848,0x0DB848,1Obsidian_White,Obsidian Weathers.esp,0,0,0,0
+040CC547,0x0CC547,1Obsidian_Blue,Obsidian Weathers.esp,0,0,0,0
+040B3046,0x0B3046,1Obsidian_Rosey,Obsidian Weathers.esp,0,0,0,0
+040B3045,0x0B3045,1Obsidian_None,Obsidian Weathers.esp,0,0,0,0
+040B3044,0x0B3044,1Obsidian_Gold,Obsidian Weathers.esp,0,0,0,0
+04127817,0x127817,1Cathedral_HeavyFog,Cathedral Weathers.esp,0,0,0,0
+04127816,0x127816,Aeq_MildStormRainMist,Cathedral Weathers.esp,0,0,0,0
+04127815,0x127815,1Obsidian_Powder_Blue,Cathedral Weathers.esp,0,0,0,0
+04127794,0x127794,1Obsidian_Fog3_Smoke,Cathedral Weathers.esp,0,0,0,0
+04127792,0x127792,1Obsidian_Fog3_Night,Cathedral Weathers.esp,0,0,0,0
+04127791,0x127791,1Cathedral_Fog3,Cathedral Weathers.esp,0,0,0,0
+04127790,0x127790,1Cathedral_StormRain_Night,Cathedral Weathers.esp,0,0,0,0
+0412778B,0x12778B,1Cathedral_StormRain,Cathedral Weathers.esp,0,0,0,0
+0412777D,0x12777D,1Obsidian_Fog2_Storm_WAR,Cathedral Weathers.esp,0,0,0,0
+0412777B,0x12777B,1Obsidian_Fog2_Storm_TU,Cathedral Weathers.esp,0,0,0,0
+0412777A,0x12777A,1Obsidian_Fog2_Storm_FF,Cathedral Weathers.esp,0,0,0,0
+04127777,0x127777,1Obsidian_Fog2_Storm,Cathedral Weathers.esp,0,0,0,0
+0412776C,0x12776C,1CathedralFog3_Magenta,Cathedral Weathers.esp,0,0,0,0
+0412776A,0x12776A,1Obsidian_Fog2,Cathedral Weathers.esp,0,0,0,0
+04127768,0x127768,1Cathedral_SnowStorm,Cathedral Weathers.esp,0,0,0,0
+04127766,0x127766,1CathedralFog3_Cold,Cathedral Weathers.esp,0,0,0,0
+04127758,0x127758,1Obsidian_Fog,Cathedral Weathers.esp,0,0,0,0
+040EAB4D,0x0EAB4D,1Obsidian_Powder,Cathedral Weathers.esp,0,0,0,0
+040DB848,0x0DB848,1Obsidian_White,Cathedral Weathers.esp,0,0,0,0
+040CC547,0x0CC547,1Cathedral_Pure_Dense,Cathedral Weathers.esp,0,0,0,0
+040B3046,0x0B3046,1Cathedral_Red,Cathedral Weathers.esp,0,0,0,0
+040B3045,0x0B3045,1Obsidian_None,Cathedral Weathers.esp,0,0,0,0
+040B3044,0x0B3044,1Obsidian_Gold,Cathedral Weathers.esp,0,0,0,0
+04000814,0x000814,Aeq_StormRainMist,Cathedral Weathers.esp,0,0,0,0
+04000805,0x000805,1Cathedral_Pure_Sunset,Cathedral Weathers.esp,0,0,0,0
+04000804,0x000804,1CathedralFog3_Red,Cathedral Weathers.esp,0,0,0,0
+04000801,0x000801,1Cathedral_Pure_Light,Cathedral Weathers.esp,0,0,0,0
+0400085B,0x00085B,3Sakura_VL_Storm_Night,Azurite Weathers III.esp,0,0,0,0
+0400085A,0x00085A,3Sakura_VL_Storm,Azurite Weathers III.esp,0,0,0,0
+04000814,0x000814,3Sakura_VL_Azurite,Azurite Weathers III.esp,0,0,0,0
+04000813,0x000813,3Sakura_VL_Gold,Azurite Weathers III.esp,0,0,0,0
+04000812,0x000812,3Sakura_VL_High,Azurite Weathers III.esp,0,0,0,0
+04000811,0x000811,3Sakura_VL_Low,Azurite Weathers III.esp,0,0,0,0
+04000810,0x000810,3Sakura_VL_Medium,Azurite Weathers III.esp,0,0,0,0
+04000802,0x000802,3Sakura_None,Azurite Weathers III.esp,0,0,0,0

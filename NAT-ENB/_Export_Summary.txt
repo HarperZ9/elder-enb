@@ -1,0 +1,28 @@
+KreatE Weather Mod Support Export Summary
+=========================================
+Generated: 1/30/2026 12:22:29 PM
+Processing time: 1.97200009133667 seconds
+
+Plugins Processed:
+  - NAT-ENB.esp
+
+Records Exported:
+  WTHR (Weather):              111
+  CLMT (Climate):              4
+  REGN (Region w/Weather):     31
+  IMGS (ImageSpace):           127
+  SPGD (Shader Particle):      9
+  VOLI (Volumetric Lighting):  34
+  RFCT (Visual Effect):        1
+
+Total Weather Records: 111
+
+Output Files:
+  WeatherID_Master_List.csv - Quick WeatherID reference
+  Weathers_Full.csv - Complete weather data
+  Weathers\ folder - Individual INI files per weather
+  Climates.csv - Climate/weather probability mappings
+  Regions.csv - Regional weather assignments
+
+Use WeatherID_Master_List.csv to identify FormIDs for
+adding weather support to KreatE ENB presets.
