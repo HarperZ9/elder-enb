@@ -1,6 +1,6 @@
 # Elder ENB - Universal
 
-> A modular ENB visual framework for Skyrim Special Edition - 155 overlays across 14 categories, built on the Silent Horizons shader core.
+> A modular ENB visual framework for Skyrim Special Edition - 190+ overlays across 15 categories, built on the Silent Horizons shader core.
 
 ![license: proprietary](https://img.shields.io/badge/license-proprietary-lightgrey.svg)
 ![HLSL](https://img.shields.io/badge/shaders-HLSL-orange.svg)
