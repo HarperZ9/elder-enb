@@ -100,6 +100,34 @@ If neither root is supplied, the portable unit-test suite remains enabled and
 the recovery-only integration test is omitted. Supplying only one root, or a
 relative root, fails configuration.
 
+## Legacy KreatE Record Auditor
+
+`elder_preset_auditor` recursively validates only the 37 preset directories
+selected by the binding catalog. It tokenizes UTF-8 INI structure, validates
+record identity and typed values, detects duplicate keys/sections and record
+identities, and hashes every INI plus a normalized per-preset tree. Its
+manifest and report contain only relative identities/paths, hashes, counts,
+line numbers, and stable diagnostic codes; legacy record bodies are never
+copied into generated output.
+
+Content findings do not abort the default audit. `--fail-on-findings` provides
+an explicit strict mode for release gates, while I/O, UTF-8, and structural
+parse faults always fail. The large read-only corpus integration is Release
+only; Debug retains the fast unit and binding suites:
+
+```powershell
+cmake --build --preset vs2026-debug
+ctest --preset vs2026-debug --output-on-failure --no-tests=error
+cmake --build --preset vs2026-release
+ctest --preset vs2026-release --output-on-failure --no-tests=error
+```
+
+Against the current recovered corpus, the integration accounts for 37 presets
+and 49,358 INIs. It reports 1,077 `INVALID_NUMERIC_TOKEN` findings across four
+presets and 481 `SUSPICIOUS_DUPLICATE_FILENAME` findings (13 per preset), with
+zero fatal errors. These are repair inputs rather than silently ignored load
+failures.
+
 ## License Status
 
 No license has been selected. See [LICENSE](LICENSE) for the explicit placeholder notice.

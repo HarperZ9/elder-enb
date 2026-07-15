@@ -52,3 +52,26 @@ reviewed CSV + authorized overlay/preset roots
 The reviewed CSV—not file order, numeric prefixes, or timestamps—is the disposition authority. `BINDING`, `RETIRED`, and `ALIAS` rows make every one of the 55 target overlays explicit. Outputs must be distinct and outside both input roots; the CLI rejects unsafe paths before attempting any write.
 
 The compiler does not load runtime operations. Overlay parsing stops when `[OVERLAYINFO]` ends, `PresetInfo.ini` retains only five identity fields, and manifest/report surfaces expose only identities, filenames, hashes, counts, and stable diagnostic codes.
+
+## Legacy Record Audit Boundary
+
+The record auditor consumes the catalog's 37 bound preset directories through
+an explicitly supplied read-only root:
+
+```text
+catalog-bound preset directories
+    -> normalized UTF-8 relative paths + deterministic INI tokenization
+    -> identity, Optional, section/key, scalar/vector, and quoted-value checks
+    -> duplicate identity check scoped to preset + category
+    -> per-file SHA-256 leaves
+    -> path-bound per-preset SHA-256 tree
+    -> metadata-only manifest and diagnostic report under the build tree
+```
+
+Malformed values and suspicious duplicate filenames are actionable findings;
+the normal audit still completes and emits its full inventory. I/O failures,
+invalid UTF-8, and structurally unparseable INI input are fatal. A separate
+strict exit mode promotes any finding to a failing command without changing
+the report. Full-corpus integration is Release-only because the portable
+scalar SHA-256 implementation processes hundreds of MiB; Debug remains the
+fast semantic test configuration.

@@ -24,6 +24,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 add_library(elder_profiles STATIC
+    src/audit/LegacyPresetAudit.cpp
     src/bindings/LegacyKreateBindings.cpp
     src/profiles/TransactionalProfile.cpp
 )
@@ -47,6 +48,16 @@ target_link_libraries(elder_binding_compiler PRIVATE elder_profiles)
 
 if(MSVC)
     target_compile_options(elder_binding_compiler PRIVATE /W4 /WX /permissive- /utf-8)
+endif()
+
+add_executable(elder_preset_auditor
+    src/tools/LegacyPresetAuditMain.cpp
+)
+
+target_link_libraries(elder_preset_auditor PRIVATE elder_profiles)
+
+if(MSVC)
+    target_compile_options(elder_preset_auditor PRIVATE /W4 /WX /permissive- /utf-8)
 endif()
 
 include(CTest)
@@ -77,6 +88,19 @@ if(BUILD_TESTING)
 
     add_test(NAME legacy_kreate_binding_tests COMMAND elder_binding_tests)
     set_tests_properties(legacy_kreate_binding_tests PROPERTIES TIMEOUT 30)
+
+    add_executable(elder_preset_audit_tests
+        tests/LegacyPresetAuditTests.cpp
+    )
+
+    target_link_libraries(elder_preset_audit_tests PRIVATE elder_profiles)
+
+    if(MSVC)
+        target_compile_options(elder_preset_audit_tests PRIVATE /W4 /WX /permissive- /utf-8)
+    endif()
+
+    add_test(NAME legacy_kreate_preset_audit_tests COMMAND elder_preset_audit_tests)
+    set_tests_properties(legacy_kreate_preset_audit_tests PROPERTIES TIMEOUT 30)
 
     if(
         (ELDER_LEGACY_OVERLAY_ROOT STREQUAL ""
@@ -115,5 +139,23 @@ if(BUILD_TESTING)
                 --require-identity "Arrival of Autumn"
         )
         set_tests_properties(legacy_kreate_readonly_integration PROPERTIES TIMEOUT 120)
+
+        add_test(
+            NAME legacy_kreate_record_audit_integration
+            COMMAND elder_preset_auditor
+                --preset-root "${ELDER_LEGACY_PRESET_ROOT}"
+                --catalog "${CMAKE_CURRENT_SOURCE_DIR}/config/legacy-kreate-bindings.csv"
+                --manifest "${CMAKE_CURRENT_BINARY_DIR}/artifacts/task-03/legacy-preset-audit.csv"
+                --report "${CMAKE_CURRENT_BINARY_DIR}/artifacts/task-03/legacy-preset-audit.txt"
+                --expect-presets 37
+                --expect-ini-files 49358
+                --require-preset "Arrival of Autumn"
+            CONFIGURATIONS Release
+        )
+        set_tests_properties(
+            legacy_kreate_record_audit_integration
+            PROPERTIES
+                TIMEOUT 300
+        )
     endif()
 endif()

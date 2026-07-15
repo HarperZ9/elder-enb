@@ -29,6 +29,12 @@
       "displayName": "Build Debug with Visual Studio 18 2026 x64",
       "configurePreset": "vs2026-x64",
       "configuration": "Debug"
+    },
+    {
+      "name": "vs2026-release",
+      "displayName": "Build Release with Visual Studio 18 2026 x64",
+      "configurePreset": "vs2026-x64",
+      "configuration": "Release"
     }
   ],
   "testPresets": [
@@ -37,6 +43,15 @@
       "displayName": "Test Debug with Visual Studio 18 2026 x64",
       "configurePreset": "vs2026-x64",
       "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "vs2026-release",
+      "displayName": "Test Release with Visual Studio 18 2026 x64",
+      "configurePreset": "vs2026-x64",
+      "configuration": "Release",
       "output": {
         "outputOnFailure": true
       }
