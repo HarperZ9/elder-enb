@@ -67,9 +67,9 @@ The recovered state establishes the following defects and risks:
 - The prior conversion script inferred baselines from name substrings. That heuristic is unsafe for additive overlays because a wrong baseline changes both application and removal behavior.
 - Four prepass add-ons are included unconditionally by shipping shader source but absent from the public main archive:
   - `Addons/PrePass_StylizationSuite.fxh`
-  - `PrePass_ParticleField.fxh`
-  - `PrePass_PhotoStudio.fxh`
-  - `PrePass_SnowCover.fxh`
+  - `Addons/PrePass_ParticleField.fxh`
+  - `Addons/PrePass_PhotoStudio.fxh`
+  - `Addons/PrePass_SnowCover.fxh`
 
 The reported failures align with the newer Silent Horizons 2 / ENB Extender overlay path and KreatE conversion workflow. AELAS/EVLaS configuration files are inert in this context and are not treated as the root cause.
 
