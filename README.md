@@ -154,7 +154,7 @@ semantics.
 
 When the two external legacy roots are configured, the real-corpus integration
 test emits ignored build artifacts under
-`out/build/vs2026-x64/artifacts/task-04/first-five-bundles/`:
+`out/build/vs2026-x64/artifacts/task-04/<configuration>/first-five-bundles/`:
 
 - five complete paired profile directories;
 - `bundle-index.csv` with hashes, byte sizes, repair/change counts, and debt;
@@ -165,6 +165,86 @@ The tracked manifest intentionally preserves suspicious duplicate export names
 as debt instead of conflating them with duplicate record identities. The five
 current bundles carry 65 such filenames (13 each); the complete 37-profile
 legacy corpus retains the previously audited total of 481.
+
+## Five-Profile Weather Themes
+
+`elder_weather_theme_compiler` matures the complete weather set for the same
+five paired bundles. It first reproduces the guarded first-pass bundle and then
+transforms every selected weather record as one transactional publication. The
+tracked [theme registry](config/five-profile-weather-themes.csv) separates
+profile intent from six weather-family targets and four time-of-day targets.
+The project-owned world-weather layer owns physical scene color; the overlay
+remains the photographic response layer.
+
+The emitted profile and weather content is self-contained. The current adapter
+preserves the recovered KreatE directory shape only for one-time offline
+migration and evidence. The validated result is a seed corpus for Elder's own
+typed native profile format; it is not a runtime compatibility promise. KreatE,
+Extender, and Silent Horizons are not runtime requirements and none of their
+shader payloads are shipped here. The finished Elder distribution's only true
+external runtime requirements are ENBSeries and Address Library.
+
+The pass covers sky upper/lower, horizon and far fog, sunlight, ambient and
+directional ambient, cloud LOD, and all 29 authored cloud layers. It validates
+every cloud component with the authored alpha contribution (412,380 checks in
+the current five-profile corpus), preserves alpha tokens, and does not alter
+effect lighting, water multipliers, volumetrics, precipitation, or ImageSpace
+references. Publication fails on missing fields, changed source trees,
+non-finite or out-of-range values, temporal inversion, fog/horizon divergence,
+lost cloud/sky separation, unreadable nights, clipped snow, protected-field
+drift, a profile's cross-layer tint budget, a mismatched expected count, or any
+unlisted bundle/file outside the exact first-pass payload contract. Every
+successful package carries `input-tree-manifest.csv`, a deterministic manifest
+of every snapshotted input file, byte count, and SHA-256.
+
+The tracked [shader semantic registry](config/shader-semantic-registry.csv) is
+a clean-room manifest. It contains only project semantic IDs, opaque evidence
+IDs, artifact and span fingerprints, span lengths, flank-context fingerprints,
+paraphrased meaning, and the exact profiles that require each typed binding.
+Each tuple is checked independently in every listed profile; bindings from one
+overlay cannot satisfy another. Raw source paths, symbols, and source spans live
+only in an ignored protected sidecar outside this repository. Structural
+registry validation is a non-publishing dry run and never creates a compile
+capability. Weather publication requires the protected evidence pass, which
+re-hashes the protected artifacts and re-checks every exact span and its
+context before minting the opaque capability. The unresolved
+Vignette intensity binding remains explicit uncertainty, so the compiler does
+not guess or emit a mutation for it. External evidence is read-only, is not
+shipped, and is neither a runtime nor ordinary-build dependency.
+
+Weather publication uses an exclusive destination lock and unique owned stage,
+backup, snapshot, and scratch trees. The source is copied into an owned snapshot,
+the snapshot hash is checked against the initial source hash, and all validation
+and transformation reads only that snapshot. The original source and snapshot
+must match during snapshot creation, and the immutable snapshot is re-hashed
+before publication. Existing output is replaceable only when it
+carries the exact versioned Elder ownership marker. Canonical, final-path,
+case-insensitive, file-identity, ancestor/descendant, and reparse-point checks
+reject aliases before staging. A failed swap rolls the owned backup back into
+place. Backup-cleanup failure is also rolled back before failure is reported;
+if rollback is impossible after a committed swap, the transaction reports the
+commit explicitly. Cleanup verifies the original marker and never recreates or
+"repairs" ownership evidence. All `--expect-*` gates run before the final swap,
+so a mismatch leaves an absent or pre-existing destination byte-identical.
+
+Enable the full read-only integration by supplying the recovered shader source
+root and its separately protected evidence sidecar in addition to the two
+legacy roots:
+
+```powershell
+cmake --preset vs2026-x64 `
+  -DELDER_LEGACY_OVERLAY_ROOT="<absolute overlay directory>" `
+  -DELDER_LEGACY_PRESET_ROOT="<absolute KreatE preset directory>" `
+  -DELDER_SH2_SOURCE_ROOT="<absolute protected shader source directory>" `
+  -DELDER_SH2_EVIDENCE_SIDECAR="<absolute protected evidence sidecar>"
+cmake --build --preset vs2026-release
+ctest --preset vs2026-release -R elder_five_profile_weather_theme_integration `
+  --output-on-failure --no-tests=error
+```
+
+Generated bundles and their index, per-record provenance, and validation report
+are written only under
+`out/build/.../artifacts/task-05/<configuration>/weather-theme-bundles/`.
 
 ## License Status
 

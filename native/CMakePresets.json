@@ -1,0 +1,62 @@
+{
+  "version": 10,
+  "cmakeMinimumRequired": {
+    "major": 4,
+    "minor": 0,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "vs18-x64-static",
+      "displayName": "Elder native schema - Visual Studio 18 2026 x64",
+      "generator": "Visual Studio 18 2026",
+      "binaryDir": "${sourceDir}/../out/native-schema/vs18-x64-static",
+      "architecture": {
+        "value": "x64",
+        "strategy": "set"
+      },
+      "cacheVariables": {
+        "BUILD_TESTING": "ON",
+        "CMAKE_CXX_EXTENSIONS": "OFF",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded$<$<CONFIG:Debug>:Debug>",
+        "CMAKE_VS_GLOBALS": "VcpkgEnabled=false"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "vs18-x64-static-debug",
+      "configurePreset": "vs18-x64-static",
+      "configuration": "Debug"
+    },
+    {
+      "name": "vs18-x64-static-release",
+      "configurePreset": "vs18-x64-static",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "vs18-x64-static-debug",
+      "configurePreset": "vs18-x64-static",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
+      }
+    },
+    {
+      "name": "vs18-x64-static-release",
+      "configurePreset": "vs18-x64-static",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+schema,ordinal,semantic_id,symbol,type,unit,min,max,step,default,layer_min,layer_max,layer_identity,ui_group,ui_label,widget,layer_policy,dependency
+ELDER_NATIVE_PARAMETERS_V1,1,elder.master.enabled,ElderMasterEnabled,bool,unitless,0,1,1,1,0,1,1,Master,Enabled,checkbox,replace,always
+ELDER_NATIVE_PARAMETERS_V1,2,elder.exposure.compensation_ev,ElderExposureCompensationEv,float,ev,-8,8,0.05,0,-4,4,0,Exposure,Compensation EV,spinner,add,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,3,elder.tonemap.toe,ElderTonemapToe,float,ratio,0,1,0.005,0.22,0,1,0.22,Tonemap,Toe,spinner,replace,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,4,elder.tonemap.shoulder,ElderTonemapShoulder,float,ratio,0,1,0.005,0.58,0,1,0.58,Tonemap,Shoulder,spinner,replace,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,5,elder.tonemap.mid_gray,ElderTonemapMidGray,float,ratio,0.05,0.5,0.005,0.18,0.05,0.5,0.18,Tonemap,Middle Gray,spinner,replace,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,6,elder.tonemap.white_point,ElderTonemapWhitePoint,float,ratio,1,32,0.05,11.2,1,32,11.2,Tonemap,White Point,spinner,replace,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,7,elder.tonemap.local_contrast,ElderTonemapLocalContrast,float,ratio,0,2,0.01,0.34,-1,1,0,Tonemap,Local Contrast,spinner,add,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,8,elder.color.warm_cool,ElderColorWarmCool,float,ratio,-1,1,0.005,0,-1,1,0,Color,Warm - Cool Balance,spinner,add,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,9,elder.color.tint,ElderColorTint,float,ratio,-1,1,0.005,0,-1,1,0,Color,Green - Magenta Tint,spinner,add,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,10,elder.color.saturation,ElderColorSaturation,float,ratio,0,2,0.005,1,0,2,1,Color,Saturation,spinner,multiply,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,11,elder.color.vibrance,ElderColorVibrance,float,ratio,-1,1,0.005,0.08,-1,1,0,Color,Vibrance,spinner,add,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,12,elder.color.highlight_desaturation,ElderHighlightDesaturation,float,percent,0,1,0.005,0.16,0,1,0.16,Color,Highlight Desaturation,spinner,replace,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,13,elder.color.highlight_gamut_preservation,ElderHighlightGamutPreservation,float,percent,0,1,0.005,0.28,0,1,0.28,Color,Highlight Gamut Preservation,spinner,replace,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,14,elder.color.shadow_hue_stability,ElderShadowHueStability,float,percent,0,1,0.005,0.72,0,1,0.72,Color,Shadow Hue Stability,spinner,replace,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,15,elder.color.shadow_tint,ElderShadowTint,color3,unitless,0,2,0.005,1|1|1,0,2,1|1|1,Color,Shadow Tint,color,multiply,elder.master.enabled==1
+ELDER_NATIVE_PARAMETERS_V1,16,elder.color.highlight_tint,ElderHighlightTint,color3,unitless,0,2,0.005,1|1|1,0,2,1|1|1,Color,Highlight Tint,color,multiply,elder.master.enabled==1
