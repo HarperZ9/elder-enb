@@ -34,3 +34,21 @@ When active, `RemoveActive` copies the baseline before mutation, swaps it into c
 ## Scope
 
 This vertical slice intentionally excludes persistence, file parsing, synchronization, rendering integration, and third-party dependencies. It is the in-memory transaction boundary those later adapters can call.
+
+## Legacy Binding Compilation
+
+The binding compiler is a read-only adapter in front of the transaction boundary:
+
+```text
+reviewed CSV + authorized overlay/preset roots
+    -> validate catalog structure
+    -> parse whitelisted identity metadata + stream SHA-256
+    -> account for every selected, retired, and preset entry
+       -> any diagnostic: no bindings, deterministic failure report
+       -> no diagnostics: sorted binding manifest
+          -> exact overlay filename + preset directory -> ProfilePackage IDs
+```
+
+The reviewed CSV—not file order, numeric prefixes, or timestamps—is the disposition authority. `BINDING`, `RETIRED`, and `ALIAS` rows make every one of the 55 target overlays explicit. Outputs must be distinct and outside both input roots; the CLI rejects unsafe paths before attempting any write.
+
+The compiler does not load runtime operations. Overlay parsing stops when `[OVERLAYINFO]` ends, `PresetInfo.ini` retains only five identity fields, and manifest/report surfaces expose only identities, filenames, hashes, counts, and stable diagnostic codes.

@@ -73,6 +73,33 @@ if (!report.committed()) {
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the state transition and failure model.
 
+## Legacy KreatE Binding Compiler
+
+`elder_binding_compiler` validates the recovered overlay ↔ preset relationship against [config/legacy-kreate-bindings.csv](config/legacy-kreate-bindings.csv). The reviewed catalog contains 37 selected bindings, 18 retired divergent duplicates, and four explicit aliases. It locks exact source filenames/directories and SHA-256 values; runtime selection never uses timestamps.
+
+The scanner captures only `[OVERLAYINFO]` `UIName`, `UIGroups`, and `UIOrdering`, plus the five identity fields in `PresetInfo.ini`. Source files are otherwise handled only as opaque SHA-256 byte streams. Generated manifests contain IDs and hashes, never legacy operation bodies.
+
+```powershell
+cmake --preset vs2026-x64
+cmake --build --preset vs2026-debug
+ctest --preset vs2026-debug --output-on-failure --no-tests=error
+```
+
+The integration CTest runs the CLI against the configured read-only roots and writes its deterministic manifest/report under `out/build/vs2026-x64/artifacts/task-02/`. Any missing, changed, ambiguous, duplicate, orphaned, unaccounted, or unbound entry fails closed.
+
+The normal build contains no workstation-specific source path. To enable the
+read-only recovery integration test, configure both external roots explicitly:
+
+```powershell
+cmake --preset vs2026-x64 `
+  -DELDER_LEGACY_OVERLAY_ROOT="<absolute overlay directory>" `
+  -DELDER_LEGACY_PRESET_ROOT="<absolute KreatE preset directory>"
+```
+
+If neither root is supplied, the portable unit-test suite remains enabled and
+the recovery-only integration test is omitted. Supplying only one root, or a
+relative root, fails configuration.
+
 ## License Status
 
 No license has been selected. See [LICENSE](LICENSE) for the explicit placeholder notice.
