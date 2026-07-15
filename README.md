@@ -128,6 +128,44 @@ presets and 481 `SUSPICIOUS_DUPLICATE_FILENAME` findings (13 per preset), with
 zero fatal errors. These are repair inputs rather than silently ignored load
 failures.
 
+## First-Five Paired Improvement Bundles
+
+`elder_profile_bundle_compiler` turns the guarded rules in
+[`config/first-five-improvements.csv`](config/first-five-improvements.csv) into
+complete one-selection bundles for 10.28.16, 11.11.11, Arrival of Autumn,
+Jötunheimar, and Neutral. Each bundle contains exactly one overlay and its full
+KreatE preset tree. They are not independent menu choices.
+
+The compiler verifies the selected binding, source file SHA-256 values, preset
+tree SHA-256, exact old values, semantic types, and numeric bounds before it
+copies anything. It repairs only the exact fused form
+`Tint = r,g,b,a[DepthOfField]`; near matches fail closed. Generated trees are
+then re-audited for malformed or non-finite values, invalid numeric tokens,
+record identity drift, unsupported overlay keys, and pairing drift. Source
+roots are re-hashed after compilation and are never modified.
+
+For every changed `OVERLAYPARAM`, the compiler also resolves the source
+section's existing `Category`, `Name`, and `Operation` fields into an exact
+target filename, category, key, and operation type. Missing, duplicate,
+malformed, or unsupported bindings abort publication. These verified binding
+strings are written to `provenance.csv`; each artistic rationale is explicitly
+classified as `INTENDED_OUTCOME` and is not treated as proof of shader-runtime
+semantics.
+
+When the two external legacy roots are configured, the real-corpus integration
+test emits ignored build artifacts under
+`out/build/vs2026-x64/artifacts/task-04/first-five-bundles/`:
+
+- five complete paired profile directories;
+- `bundle-index.csv` with hashes, byte sizes, repair/change counts, and debt;
+- `provenance.csv` with every guarded transform and repair;
+- `report.txt` with deterministic aggregate and per-profile results.
+
+The tracked manifest intentionally preserves suspicious duplicate export names
+as debt instead of conflating them with duplicate record identities. The five
+current bundles carry 65 such filenames (13 each); the complete 37-profile
+legacy corpus retains the previously audited total of 481.
+
 ## License Status
 
 No license has been selected. See [LICENSE](LICENSE) for the explicit placeholder notice.

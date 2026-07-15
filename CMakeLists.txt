@@ -26,6 +26,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 add_library(elder_profiles STATIC
     src/audit/LegacyPresetAudit.cpp
     src/bindings/LegacyKreateBindings.cpp
+    src/improvement/ProfileBundleCompiler.cpp
     src/profiles/TransactionalProfile.cpp
 )
 
@@ -58,6 +59,19 @@ target_link_libraries(elder_preset_auditor PRIVATE elder_profiles)
 
 if(MSVC)
     target_compile_options(elder_preset_auditor PRIVATE /W4 /WX /permissive- /utf-8)
+endif()
+
+add_executable(elder_profile_bundle_compiler
+    src/tools/ProfileBundleCompilerMain.cpp
+)
+
+target_link_libraries(elder_profile_bundle_compiler PRIVATE elder_profiles)
+
+if(MSVC)
+    target_compile_options(
+        elder_profile_bundle_compiler
+        PRIVATE /W4 /WX /permissive- /utf-8
+    )
 endif()
 
 include(CTest)
@@ -101,6 +115,19 @@ if(BUILD_TESTING)
 
     add_test(NAME legacy_kreate_preset_audit_tests COMMAND elder_preset_audit_tests)
     set_tests_properties(legacy_kreate_preset_audit_tests PROPERTIES TIMEOUT 30)
+
+    add_executable(elder_profile_bundle_tests
+        tests/ProfileBundleCompilerTests.cpp
+    )
+
+    target_link_libraries(elder_profile_bundle_tests PRIVATE elder_profiles)
+
+    if(MSVC)
+        target_compile_options(elder_profile_bundle_tests PRIVATE /W4 /WX /permissive- /utf-8)
+    endif()
+
+    add_test(NAME elder_profile_bundle_tests COMMAND elder_profile_bundle_tests)
+    set_tests_properties(elder_profile_bundle_tests PROPERTIES TIMEOUT 60)
 
     if(
         (ELDER_LEGACY_OVERLAY_ROOT STREQUAL ""
@@ -155,7 +182,26 @@ if(BUILD_TESTING)
         set_tests_properties(
             legacy_kreate_record_audit_integration
             PROPERTIES
-                TIMEOUT 300
+                TIMEOUT 600
+        )
+
+        add_test(
+            NAME elder_first_five_bundle_integration
+            COMMAND elder_profile_bundle_compiler
+                --overlay-root "${ELDER_LEGACY_OVERLAY_ROOT}"
+                --preset-root "${ELDER_LEGACY_PRESET_ROOT}"
+                --catalog "${CMAKE_CURRENT_SOURCE_DIR}/config/legacy-kreate-bindings.csv"
+                --improvement-manifest
+                    "${CMAKE_CURRENT_SOURCE_DIR}/config/first-five-improvements.csv"
+                --output-root
+                    "${CMAKE_CURRENT_BINARY_DIR}/artifacts/task-04/first-five-bundles"
+                --expect-profiles 5
+                --expect-repairs 1077
+        )
+        set_tests_properties(
+            elder_first_five_bundle_integration
+            PROPERTIES
+                TIMEOUT 600
         )
     endif()
 endif()
