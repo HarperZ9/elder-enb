@@ -432,3 +432,6 @@ if(BUILD_TESTING)
     )
   endif()
 endif()
+
+# The ENB-facing Elder runtime, built on the pinned neutral enb-runtime-core.
+add_subdirectory(runtime)
