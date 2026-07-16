@@ -128,6 +128,48 @@ if(MSVC)
   )
 endif()
 
+# The loadable Elder ENB runtime plugin: ENBSeries loads this .dllplugin from
+# the game-root enbseries\ folder. Its object graph includes the neutral core,
+# so the core's compiler outputs are part of the reproducibility boundary.
+if(WIN32)
+  add_library(elder_enb_runtime_plugin SHARED
+    src/windows/PluginMain.cpp
+  )
+  target_compile_features(elder_enb_runtime_plugin PRIVATE cxx_std_23)
+  target_include_directories(
+    elder_enb_runtime_plugin
+    PRIVATE
+      include
+      "${ELDER_ENB_RUNTIME_CORE_ROOT}/include"
+  )
+  target_link_libraries(
+    elder_enb_runtime_plugin
+    PRIVATE
+      elder_runtime
+      enb_runtime_core
+      Psapi
+      Version
+  )
+  set_target_properties(
+    elder_enb_runtime_plugin
+    PROPERTIES
+      OUTPUT_NAME "ElderENBRuntime"
+      PREFIX ""
+      SUFFIX ".dllplugin"
+      WINDOWS_EXPORT_ALL_SYMBOLS OFF
+  )
+  if(MSVC)
+    target_compile_options(
+      elder_enb_runtime_plugin
+      PRIVATE /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8 /guard:cf /Brepro
+    )
+    target_link_options(
+      elder_enb_runtime_plugin
+      PRIVATE /DYNAMICBASE /NXCOMPAT /GUARD:CF /CETCOMPAT /Brepro
+    )
+  endif()
+endif()
+
 if(BUILD_TESTING)
   add_executable(elder_runtime_pulse_publication_tests
     tests/PulsePublicationTests.cpp
