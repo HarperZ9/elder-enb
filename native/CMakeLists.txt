@@ -384,6 +384,31 @@ if(BUILD_TESTING)
       LABELS "shader;fxc;room-light;release"
     )
 
+    add_executable(elder_native_room_light_warp_tests
+      tests/RoomLightWarpTests.cpp
+    )
+    target_compile_features(
+      elder_native_room_light_warp_tests PRIVATE cxx_std_23
+    )
+    target_link_libraries(elder_native_room_light_warp_tests PRIVATE
+      elder_native_room_light
+      d3d11
+      d3dcompiler
+    )
+    if(MSVC)
+      target_compile_options(elder_native_room_light_warp_tests PRIVATE
+        /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
+      )
+    endif()
+    add_test(
+      NAME elder_native_room_light_warp
+      COMMAND elder_native_room_light_warp_tests
+        "${CMAKE_CURRENT_SOURCE_DIR}/shaders/ElderRoomLightWarpProbe.hlsl"
+    )
+    set_tests_properties(elder_native_room_light_warp PROPERTIES
+      LABELS "shader;warp;room-light;parity;release"
+    )
+
     add_test(
       NAME elder_native_release_package_manifest
       COMMAND "${CMAKE_COMMAND}"
