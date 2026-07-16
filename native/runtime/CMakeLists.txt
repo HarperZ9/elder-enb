@@ -13,7 +13,7 @@ set(
 
 set(
   ELDER_ENB_RUNTIME_CORE_REVISION
-  "ffe8586f4730fca4a66e49d804565cb11c86c3d3"
+  "5da6a3e72b47333ee474b8ddba3bb7fe2825e0f5"
 )
 
 file(STRINGS
