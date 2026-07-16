@@ -90,6 +90,12 @@ add_custom_target(elder_native_generated_artifacts ALL
     "${ELDER_GENERATED_PROFILE}"
 )
 
+add_library(elder_native_room_light STATIC
+  src/RoomLight.cpp
+)
+target_compile_features(elder_native_room_light PUBLIC cxx_std_23)
+target_include_directories(elder_native_room_light PUBLIC include)
+
 add_library(elder_native_color_core STATIC
   src/ColorCore.cpp
   src/ColorProfileBinding.cpp
@@ -231,15 +237,26 @@ if(BUILD_TESTING)
     elder_native_color_core
   )
 
+  add_executable(elder_native_room_light_tests
+    tests/RoomLightTests.cpp
+  )
+  target_compile_features(elder_native_room_light_tests PRIVATE cxx_std_23)
+  target_link_libraries(elder_native_room_light_tests PRIVATE
+    elder_native_room_light
+  )
+
   if(MSVC)
     foreach(target IN ITEMS
         elder_native_shader_schema_tests
-        elder_native_color_core_tests)
+        elder_native_color_core_tests
+        elder_native_room_light_tests)
       target_compile_options(${target} PRIVATE
         /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
       )
     endforeach()
   endif()
+
+  add_test(NAME elder_native_room_light COMMAND elder_native_room_light_tests)
 
   add_test(
     NAME elder_native_shader_schema
@@ -348,6 +365,23 @@ if(BUILD_TESTING)
     set_tests_properties(elder_native_color_core_fxc PROPERTIES
       DEPENDS elder_native_shader_schema
       LABELS "shader;fxc;color-core;release"
+    )
+
+    add_test(
+      NAME elder_native_room_light_fxc
+      COMMAND "${CMAKE_COMMAND}"
+        "-DELDER_FXC=${ELDER_FXC_EXECUTABLE}"
+        "-DELDER_SHADER=${CMAKE_CURRENT_SOURCE_DIR}/shaders/ElderRoomLightReference.hlsl"
+        "-DELDER_REQUIRED_SOURCE=${CMAKE_CURRENT_SOURCE_DIR}/shaders/ElderRoomLight.fxh"
+        "-DELDER_INCLUDE=${CMAKE_CURRENT_SOURCE_DIR}/shaders"
+        "-DELDER_TARGET=ps_5_0"
+        "-DELDER_ENTRY=ElderRoomLightReferencePixelMain"
+        "-DELDER_OUTPUT=${CMAKE_CURRENT_BINARY_DIR}/shaders/$<CONFIG>/ElderRoomLight.cso"
+        "-DELDER_LISTING=${CMAKE_CURRENT_BINARY_DIR}/shaders/$<CONFIG>/ElderRoomLight.asm"
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompileElderShader.cmake"
+    )
+    set_tests_properties(elder_native_room_light_fxc PROPERTIES
+      LABELS "shader;fxc;room-light;release"
     )
 
     add_test(
