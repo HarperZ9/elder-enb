@@ -50,7 +50,7 @@ set_tests_properties(elder_quality_presets PROPERTIES
 
 - [ ] **Step 2: Run and confirm failure**
 
-Run: `ctest --preset vs18-x64-static-debug -R "^elder_quality_presets$" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "^elder_quality_presets$" --output-on-failure`
 
 Expected: FAIL because the manifest/generator is absent.
 
@@ -85,7 +85,7 @@ Each tier writes all nine `.fx.ini` files plus `elder-quality.ini`, begins with 
 
 - [ ] **Step 6: Re-run**
 
-Run: `ctest --preset vs18-x64-static-debug -R "^elder_quality_presets$" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "^elder_quality_presets$" --output-on-failure`
 
 Expected: PASS.
 
@@ -134,7 +134,7 @@ set_tests_properties(elder_stage_compile_matrix PROPERTIES
 
 - [ ] **Step 2: Run and confirm missing-stage failure**
 
-Run: `ctest --preset vs18-x64-static-debug -R "^elder_stage_compile_matrix$" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "^elder_stage_compile_matrix$" --output-on-failure`
 
 Expected: FAIL naming `shaders/enbeffectprepass.fx`.
 
@@ -174,7 +174,7 @@ All stages compile with their official ENB technique names and preserve input un
 
 Compile nine stages × five tiers using `/Ges /WX /O3`, with listings below `out/build/.../shader-matrix/<tier>/`.
 
-Run: `ctest --preset vs18-x64-static-debug -R "^elder_stage_compile_matrix$" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "^elder_stage_compile_matrix$" --output-on-failure`
 
 Expected: PASS, 45 stage/tier compilations.
 
@@ -214,7 +214,7 @@ interior-transition-is-continuous
 
 - [ ] **Step 2: Run focused tests**
 
-Run: `ctest --preset vs18-x64-static-debug -R "elder_room_light_(cpp|warp)" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "elder_room_light_(cpp|warp)" --output-on-failure`
 
 Expected: FAIL on missing published-payload integration cases.
 
@@ -250,7 +250,7 @@ Invalid runtime returns finite scene exactly. Exterior never consumes room light
 
 - [ ] **Step 5: Run focused tests and matrix**
 
-Run: `ctest --preset vs18-x64-static-debug -R "elder_(room_light_.*|stage_compile_matrix)" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "elder_(room_light_.*|stage_compile_matrix)" --output-on-failure`
 
 Expected: PASS.
 
@@ -285,7 +285,7 @@ Require the exact tier budgets from `config/quality-tiers.csv`, zero-strength id
 
 - [ ] **Step 2: Run and confirm failure**
 
-Run: `ctest --preset vs18-x64-static-debug -R "^elder_optical_contracts$" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "^elder_optical_contracts$" --output-on-failure`
 
 Expected: FAIL before optical modules exist.
 
@@ -302,7 +302,7 @@ Performance defaults DOF off. Adaptation validates history and clamps transition
 
 - [ ] **Step 4: Run optical, color, and matrix tests**
 
-Run: `ctest --preset vs18-x64-static-debug -R "elder_(optical_contracts|color_.*|stage_compile_matrix)" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "elder_(optical_contracts|color_.*|stage_compile_matrix)" --output-on-failure`
 
 Expected: PASS.
 
@@ -336,7 +336,7 @@ Require `ElderEvaluateColorCore` exactly once in `enbeffect.fx`; require ditheri
 
 - [ ] **Step 2: Run and confirm failure**
 
-Run: `ctest --preset vs18-x64-static-debug -R "^elder_composition_contracts$" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "^elder_composition_contracts$" --output-on-failure`
 
 Expected: FAIL before completed stage ownership.
 
@@ -352,7 +352,7 @@ Finish order is vignette, fine grain, triangular dither. Alpha is always `1.0`. 
 
 - [ ] **Step 4: Run composition, color parity, and matrix tests**
 
-Run: `ctest --preset vs18-x64-static-debug -R "elder_(composition_contracts|color_.*|stage_compile_matrix)" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "elder_(composition_contracts|color_.*|stage_compile_matrix)" --output-on-failure`
 
 Expected: PASS.
 
@@ -385,7 +385,7 @@ Test baseline capture, invalid status first, payload values second, valid status
 
 - [ ] **Step 2: Run focused runtime tests**
 
-Run: `ctest --test-dir out/build/vs18-x64-static -C Debug -R "elder_runtime_render_payload" --output-on-failure`
+Run: `ctest --test-dir out/build/vs2026-x64 -C Debug -R "elder_runtime_render_payload" --output-on-failure`
 
 Expected: FAIL because the bridge/controller do not exist.
 
@@ -407,7 +407,7 @@ Replace the no-op callback with lifecycle dispatch that only enters ENB callback
 
 - [ ] **Step 5: Run runtime and shader tests**
 
-Run: `ctest --preset vs18-x64-static-debug -R "elder_(runtime_.*|stage_compile_matrix|room_light_.*|color_.*)" --output-on-failure`
+Run: `ctest --preset vs2026-debug -R "elder_(runtime_.*|stage_compile_matrix|room_light_.*|color_.*)" --output-on-failure`
 
 Expected: PASS.
 
@@ -441,7 +441,7 @@ Require nine `.fx` files, Elder includes, five complete presets, runtime plugin,
 
 - [ ] **Step 2: Run and confirm failure**
 
-Run: `ctest --preset vs18-x64-static-release -R "^elder_public_release_package$" --output-on-failure`
+Run: `ctest --preset vs2026-release -R "^elder_public_release_package$" --output-on-failure`
 
 Expected: FAIL because only the native RC package exists.
 
@@ -464,8 +464,8 @@ Replace stale “no license selected” text with the repository's MIT status. C
 Run:
 
 ```powershell
-ctest --preset vs18-x64-static-release -R "elder_(quality_presets|stage_compile_matrix|optical_contracts|composition_contracts|color_.*|room_light_.*|runtime_.*|public_release_package)" --output-on-failure
-cmake --build --preset vs18-x64-static-release --target elder_public_release_package
+ctest --preset vs2026-release -R "elder_(quality_presets|stage_compile_matrix|optical_contracts|composition_contracts|color_.*|room_light_.*|runtime_.*|public_release_package)" --output-on-failure
+cmake --build --preset vs2026-release --target elder_public_release_package
 ```
 
 Expected: selected tests PASS and deterministic ZIP/checksum are produced.
