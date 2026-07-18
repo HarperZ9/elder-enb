@@ -104,6 +104,18 @@ endif()
 include(CTest)
 
 if(BUILD_TESTING)
+    add_test(
+        NAME elder_quality_presets
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            "-DELDER_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderQualityPresets.cmake"
+    )
+    set_tests_properties(
+        elder_quality_presets
+        PROPERTIES LABELS "shader;quality;presets;determinism"
+    )
+
     add_executable(elder_profile_tests
         tests/TransactionalProfileTests.cpp
     )
