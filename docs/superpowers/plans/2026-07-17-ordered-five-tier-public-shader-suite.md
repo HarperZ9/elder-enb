@@ -100,6 +100,7 @@ git commit -m "feat: add five Elder quality presets"
 
 **Files:**
 - Create: `shaders/elder/ElderPipelineCommon.fxh`
+- Create: `shaders/elder/ElderHostCapabilities.fxh`
 - Create: `shaders/elder/ElderStageParameters.fxh`
 - Create: `shaders/enbeffectprepass.fx`
 - Create: `shaders/enbdepthoffield.fx`
@@ -116,7 +117,7 @@ git commit -m "feat: add five Elder quality presets"
 
 **Interfaces:**
 - Consumes: ENB stage inputs, `ElderQuality.fxh`, generated/native parameter include.
-- Produces: shared finite/depth helpers and nine host-correct stages for five tiers.
+- Produces: shared finite/depth helpers, an explicit native/Bridge/spatial/identity capability ladder, current-frame scratch ownership, and nine host-correct stages for five tiers.
 
 - [ ] **Step 1: Register the failing compile matrix**
 
@@ -164,6 +165,22 @@ float ElderDepthMask(float raw_depth, float threshold, float feather)
 
 - [ ] **Step 4: Add restrained ordered UI parameters**
 
+Before declaring UI, add `ElderHostCapabilities.fxh` with four ordered levels:
+
+```hlsl
+#define ELDER_CAPABILITY_IDENTITY 0
+#define ELDER_CAPABILITY_SPATIAL  1
+#define ELDER_CAPABILITY_BRIDGE   2
+#define ELDER_CAPABILITY_NATIVE   3
+```
+
+Each stage declares whether it owns color, depth, normal, mask, native
+celestial/view data, previous scalar adaptation, and named current-frame
+scratch. Full-frame history and object motion vectors remain unavailable in the
+initial public release. Reject invalid capability values, undeclared scratch
+reads, cross-effect alpha packing, and any path that treats a current-frame
+target as persistent history.
+
 Use `[Elder 00]` through `[Elder 90]`; expose master, tier/reset guidance, stage enable/intensity, then advanced shape. Defaults match Balanced. Every intensity zero is identity.
 
 - [ ] **Step 5: Add nine identity stages**
@@ -173,6 +190,10 @@ All stages compile with their official ENB technique names and preserve input un
 - [ ] **Step 6: Implement and run the matrix**
 
 Compile nine stages × five tiers using `/Ges /WX /O3`, with listings below `out/build/.../shader-matrix/<tier>/`.
+
+The checker requires every stage capability declaration and proves that native,
+Bridge-assisted, spatial-fallback, and identity helpers preserve one interface.
+It rejects full-frame temporal claims in this release.
 
 Run: `ctest --preset vs2026-debug -R "^elder_stage_compile_matrix$" --output-on-failure`
 
@@ -199,6 +220,15 @@ git commit -m "feat: establish ordered Elder shader stages"
 **Interfaces:**
 - Consumes: scene/depth, interior factor, validated Elder room-light payload, tier constants.
 - Produces: one HDR prepass result with room light, weather atmosphere, and optional AO/SSR composed once.
+
+Modern scene effects use the declared capability ladder. GTAO/contact shadows,
+short SSR, SSS, weather atmosphere, and fog use native inputs first,
+SkyrimBridge reconstruction second, bounded world-stable spatial
+approximations third, and exact identity last. Without full-frame history they
+may not use frame-random jitter, label luma change as a motion vector, or rely
+on unverified target persistence. Atmosphere adapts bounded optical-depth and
+Rayleigh/Mie/ozone concepts from Hillaire/Heckel; it does not transplant a
+full-resolution nested view/light march.
 
 - [ ] **Step 1: Add failing room-light integration cases**
 

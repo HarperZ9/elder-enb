@@ -46,6 +46,46 @@ It publishes validated Elder state through ENB's parameter API; the nine normal
 ENB shader files own rendering. This avoids an unsupported draw-injection path
 and makes the visual payload inspectable and user-configurable.
 
+## Modern-technique compatibility renderer
+
+Elder treats ENB's fixed stages, ordered sub-techniques, and named render
+targets as a small compatibility framegraph. Modern effects are backported
+inside that graph when Skyrim does not expose their ideal engine pipeline;
+missing compute, arbitrary history, or object motion does not automatically
+remove an effect.
+
+The verified installed host surface includes HDR color and depth, engine
+normals and material mask in prepass, celestial/view data, a multiresolution
+bloom chain, one-pixel adaptation history, and current-frame scratch targets.
+Each stage declares its inputs, scratch owner, lifetime, resolution, and
+fallback level. A render target is current-frame-only unless live validation
+proves persistence. Alpha or spare color channels cannot be shared by effects
+without an explicit packing contract and round-trip test.
+
+Every modern technique follows the same capability ladder:
+
+1. use a valid native ENB input;
+2. use a versioned SkyrimBridge value or reconstruction;
+3. use a stable, bounded spatial approximation;
+4. return the exact Elder-authored identity when confidence is insufficient.
+
+The public suite may backport depth/normal horizon AO and contact shadows,
+short confidence-weighted SSR, material-aware separable SSS, bounded
+Rayleigh/Mie/ozone weather atmosphere, signed-circle-of-confusion DOF,
+multiresolution bloom, robust adaptation, and luminance-preserving tone/gamut
+mapping. Camera-only reprojection is never presented as object motion, a luma
+delta is not a motion vector, and a current-frame target is not persistent
+history. Temporal upscaling, temporal SSGI/SSR denoising, frame generation, and
+reservoir reuse remain Bridge-assisted upgrade paths; the initial release uses
+documented spatial fallbacks.
+
+Atmosphere guidance is adapted to ENB's budget and stage order from Sébastien
+Hillaire's production atmosphere technique
+(https://sebh.github.io/publications/egsr2020.pdf) and Maxime Heckel's
+explanatory implementation
+(https://blog.maximeheckel.com/posts/on-rendering-the-sky-sunsets-and-planets/).
+It does not transplant a full-resolution nested view/light march.
+
 ## ENB render order and ownership
 
 The fixed host order is treated as an API:
@@ -99,6 +139,10 @@ restores its complete baseline.
   depth-aware module.
 - World-stable sampling replaces uncontrolled frame-random jitter when no
   temporal resolve exists.
+- Missing history or velocity selects the documented spatial fallback; it does
+  not enable guessed reprojection or unverified target persistence.
+- Scratch-target and packed-channel ownership is statically checked so one
+  modern effect cannot consume another effect's transient data.
 - Room light, fog, bloom, lens, vignette, grain, and underwater response each
   compose exactly once.
 - The room-light input is validated and bounded before publication. Sealed
@@ -142,6 +186,10 @@ Implementation is accepted when:
 - reference cases cover daylight, night, exterior/interior transitions, sealed
   room, high-contrast edges, underwater, and missing-runtime fallback;
 - exact identity controls and single-application composition are checked;
+- native, Bridge-assisted, spatial-fallback, and identity capability paths are
+  exercised without changing stage order;
+- scratch lifetimes and packed-channel ownership match the declared
+  compatibility framegraph;
 - generated presets match the tier manifest and shader symbols;
 - two package runs produce byte-identical archives and checksums;
 - the archive contains no protected input, private reversal material, legacy
