@@ -246,6 +246,10 @@ Generated bundles and their index, per-record provenance, and validation report
 are written only under
 `out/build/.../artifacts/task-05/<configuration>/weather-theme-bundles/`.
 
-## License Status
+## License
 
-No license has been selected. See [LICENSE](LICENSE) for the explicit placeholder notice.
+Elder ENB is licensed under the MIT License. See [LICENSE](LICENSE).
+
+Prior shader-author attribution is a hard constraint and is not waived by the
+license: every credit in the shader headers and `native/NOTICE.md` stays in
+place, in this repository and on any public surface.

@@ -10,6 +10,6 @@ The packaged `.cso` is an Elder build artifact. The accompanying `.asm` is a
 human-readable release-audit artifact produced from the same Elder shader
 entry point; it is not a third-party runtime component.
 
-No public distribution license has been selected for this project yet. This
-notice is not a license. The project owner must select the release license
-before publishing the package.
+Elder ENB is licensed under the MIT License; see `LICENSE` at the repository
+root. This notice is not a license. It records provenance: no third-party
+shader source, decompilation output, or ENB binary is redistributed here.
