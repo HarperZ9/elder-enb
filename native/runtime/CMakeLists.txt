@@ -11,9 +11,16 @@ set(
   "Absolute build-time path to the enb-runtime-core sibling"
 )
 
+#  Pinned to enb-runtime-core's live head. The previous pin,
+#  cfe7c0810adc0c34028a3d727b85dd1e6e51d407, was a pre-rewrite hash for
+#  "fix: correct capability descriptors to real 1.6.1170 AE relocation ids" and
+#  now survives only on that repository's preserve/pre-replay-chore-bootstrap-runtime
+#  branch, so configure failed with a revision mismatch. The trees differ only
+#  in .gitignore and the LICENSE text adopted on 2026-07-16. No source change,
+#  so the capability descriptors this pin was taken for are unaffected.
 set(
   ELDER_ENB_RUNTIME_CORE_REVISION
-  "cfe7c0810adc0c34028a3d727b85dd1e6e51d407"
+  "543392f02ff3506d54590193f64a892ead523970"
 )
 
 file(STRINGS
