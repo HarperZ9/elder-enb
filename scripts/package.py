@@ -42,6 +42,42 @@ DOCS = (
 )
 
 
+EOTE_READ_ME = """Optional: the EotE HDR compositor, wired to the Elder frame pulse.
+
+WHAT THIS IS
+
+enbeffect.fx from the "ENB of the Elders" preset, with two Elder changes:
+the runtime frame pulse is declared, and the dither it already had is
+advanced by the frame counter so the pattern moves instead of sitting
+still. That removes the fixed grain you can otherwise see over smooth
+gradients in night skies and fog.
+
+WHO SHOULD INSTALL IT
+
+Only install this if you already run the EotE preset.
+
+The EotE stack is nine .fx files and this is one of them. Copying it over a
+different preset replaces that preset's main compositor, which changes your
+whole look rather than just its dithering. If you use any other preset, do
+not copy this: read Docs/PRESET-INTEGRATION.md and make the same two edits
+to your own enbeffect.fx instead. It is about ten lines.
+
+HOW TO INSTALL
+
+Copy enbeffect.fx, enbglobals.fxh, Helper/ and Addons/ into your game-root
+enbseries folder, over the EotE files already there. Back up your existing
+enbeffect.fx first.
+
+The Elder runtime plugin is what publishes the pulse. Without it these
+shaders still work and the dither is simply static, exactly as it was.
+
+ATTRIBUTION
+
+These are not Elder's shaders. Read PROVENANCE.md in this folder before
+redistributing any of them.
+"""
+
+
 def copy(src: Path, dst: Path) -> None:
     dst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(src, dst)
@@ -97,6 +133,28 @@ def main() -> int:
         for produced in sorted(NATIVE_BUILD.rglob(name))[:1]:
             copy(produced, STAGE / "Native" / produced.name)
     del schema
+
+    # The EotE compositor that reads the frame pulse.
+    #
+    # Deliberately NOT placed under Root/enbseries. The full EotE stack is nine
+    # .fx files and this is one of them, so copying it blindly into a user's
+    # enbseries folder replaces whatever main compositor they already have.
+    # For a non-EotE preset that is not a dither improvement, it is a silent
+    # preset swap. It ships as an opt-in folder with instructions instead.
+    #
+    # PROVENANCE.md travels with the shaders. These are not Elder's files and
+    # the attribution has to be in the same folder as the thing it attributes,
+    # not left behind in the repository.
+    for name in ("enbeffect.fx", "enbglobals.fxh", "PROVENANCE.md"):
+        copy(ROOT / "presets" / "eote" / name,
+             STAGE / "Optional-EotE-Compositor" / name)
+    for sub in ("Helper", "Addons"):
+        source_dir = ROOT / "presets" / "eote" / sub
+        for produced in sorted(source_dir.glob("*.fxh")):
+            copy(produced, STAGE / "Optional-EotE-Compositor" / sub / produced.name)
+    (STAGE / "Optional-EotE-Compositor" / "READ-ME.txt").write_text(
+        EOTE_READ_ME.replace("\n", "\r\n"), encoding="ascii"
+    )
 
     for source, destination in DOCS:
         path = ROOT / source

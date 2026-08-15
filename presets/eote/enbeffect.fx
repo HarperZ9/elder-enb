@@ -15,9 +15,9 @@
 //                                                                                              //
 //  All new features default to OFF — backward-compatible with previous output.                 //
 //                                                                                              //
-//  Base: the "ENB of the Elders" (EotE) preset shader stack. The stages marked                 //
-//  (existing) above are its work; the FILM and GRADE stages, the tonemapper                    //
-//  selector and the AgX look are additions.                                                    //
+//  Part of the "ENB of the Elders" (EotE) preset, by Zain Dana Harper. The                     //
+//  stages marked (existing) above are earlier EotE work; FILM, GRADE, the                      //
+//  tonemapper selector and the AgX look are later additions to it.                             //
 //  Framework: Boris Vorontsov / ENBSeries. TextureColor and TextureDepth are                   //
 //  his host inputs, and the pass contract is his.                                              //
 //                                                                                              //
