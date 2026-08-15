@@ -96,6 +96,12 @@ add_library(elder_native_room_light STATIC
 target_compile_features(elder_native_room_light PUBLIC cxx_std_23)
 target_include_directories(elder_native_room_light PUBLIC include)
 
+add_library(elder_native_temporal_dither STATIC
+  src/TemporalDither.cpp
+)
+target_compile_features(elder_native_temporal_dither PUBLIC cxx_std_23)
+target_include_directories(elder_native_temporal_dither PUBLIC include)
+
 add_library(elder_native_color_core STATIC
   src/ColorCore.cpp
   src/ColorProfileBinding.cpp
@@ -235,6 +241,18 @@ if(BUILD_TESTING)
   target_compile_features(elder_native_color_core_tests PRIVATE cxx_std_23)
   target_link_libraries(elder_native_color_core_tests PRIVATE
     elder_native_color_core
+  )
+
+  add_executable(elder_native_temporal_dither_tests
+    tests/TemporalDitherTests.cpp
+  )
+  target_compile_features(elder_native_temporal_dither_tests PRIVATE cxx_std_23)
+  target_link_libraries(elder_native_temporal_dither_tests PRIVATE
+    elder_native_temporal_dither
+  )
+  add_test(
+    NAME elder_native_temporal_dither
+    COMMAND elder_native_temporal_dither_tests
   )
 
   add_executable(elder_native_room_light_tests
@@ -428,6 +446,31 @@ if(BUILD_TESTING)
   endif()
 
   if(WIN32)
+    add_executable(elder_native_temporal_dither_warp_tests
+      tests/TemporalDitherWarpTests.cpp
+    )
+    target_compile_features(
+      elder_native_temporal_dither_warp_tests PRIVATE cxx_std_23
+    )
+    target_link_libraries(elder_native_temporal_dither_warp_tests PRIVATE
+      elder_native_temporal_dither
+      d3d11
+      d3dcompiler
+    )
+    if(MSVC)
+      target_compile_options(elder_native_temporal_dither_warp_tests PRIVATE
+        /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
+      )
+    endif()
+    add_test(
+      NAME elder_native_temporal_dither_warp
+      COMMAND elder_native_temporal_dither_warp_tests
+        "${CMAKE_CURRENT_SOURCE_DIR}/shaders/ElderTemporalDitherWarpProbe.hlsl"
+    )
+    set_tests_properties(elder_native_temporal_dither_warp PROPERTIES
+      LABELS "shader;warp;dither;parity;release"
+    )
+
     add_executable(elder_native_color_core_warp_tests
       tests/ColorCoreWarpTests.cpp
     )

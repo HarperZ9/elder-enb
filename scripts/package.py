@@ -72,10 +72,8 @@ def main() -> int:
     # Five quality-tier preset trees: nine .fx.ini plus elder-quality.ini each.
     generate_presets(STAGE / "Presets")
 
-    # The runtime plugin. Its render callback is a deliberate no-op today, which
-    # the release notes and Docs/NOTICE.md both state; it attaches to ENB and
-    # reports host-resolution status so a diagnostics reader can confirm it is
-    # live and bound.
+    # The runtime plugin. It publishes the frame pulse each BeginFrame, which
+    # ElderTemporalDither.fxh consumes to advance the dither pattern.
     copy(RUNTIME_PLUGIN, STAGE / "Root" / "enbseries" / RUNTIME_PLUGIN.name)
 
     # Native shader schema: generated HLSL, the compiled reference object, the
@@ -87,7 +85,8 @@ def main() -> int:
     # Hand-written shader headers. ElderRuntimeParameters.fxh declares the
     # symbol the runtime plugin writes each frame, so the plugin and this header
     # have to ship together: without it the parameter has nowhere to land.
-    for name in ("ElderRuntimeParameters.fxh", "ElderColorCore.fxh",
+    for name in ("ElderRuntimeParameters.fxh", "ElderTemporalDither.fxh",
+                 "ElderDisplayOutput.fxh", "ElderColorCore.fxh",
                  "ElderRoomLight.fxh"):
         source = ROOT / "native" / "shaders" / name
         if source.is_file():

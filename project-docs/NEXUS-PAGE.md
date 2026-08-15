@@ -3,10 +3,10 @@
 Everything needed for the Nexus upload form. The description is BBCode, ready
 to paste into the mod-page description field.
 
-**Read this before uploading.** The runtime payload is wired now: the plugin
-publishes a per-frame pulse the shader stack can read. What it does not yet do
-is change the image, because no shipped shader consumes the pulse to alter
-output. The page below says that plainly rather than implying a visual upgrade.
+**Read this before uploading.** The payload is wired and a shader consumes it:
+the plugin publishes a per-frame pulse and the dither stage uses it to break
+eight-bit banding. That is a real but narrow visual change, and the page below
+describes it as such rather than implying a full preset.
 
 ## Form fields
 
@@ -33,12 +33,15 @@ frame publishes a pulse the shader stack can read: a frame counter, the frame
 delta, and the output dimensions, written as
 [font=Courier New]ElderRuntimeFramePulse[/font].
 
-What it does [b]not[/b] do yet is change the image. No shipped shader consumes
-that pulse to alter output, so installing this will not make your game look
-different. The bridge is built and running; what sits on top of it is next.
+One shader consumes it. [font=Courier New]ElderTemporalDither.fxh[/font] adds a
+sub-quantum offset before ENB writes eight bits per channel, which breaks the
+banding that shows up in night skies, fog, and the shadow rolloff. The pulse
+advances the dither pattern every frame, so it averages out instead of sitting
+there as a fixed dot texture.
 
-If you are looking for a preset that changes your visuals today, this is not
-that yet. Nothing below oversells it.
+That is the whole visual change so far, and it is a narrow one: it removes an
+artefact rather than adding a look. Elder is not yet a preset that regrades your
+game. If that is what you are after, this is not that yet.
 
 [size=4]What is here and is real[/size]
 
@@ -77,9 +80,18 @@ info publishes inactive without advancing, and an out-of-range or non-finite
 delta is rejected. The inactive payload is written rather than skipped, so a
 stale live value can never sit in front of shaders after the bridge goes away.
 
-What is not verified is anything visual, because nothing consumes the pulse to
-change output yet. The live SE, AE, and ENB 0.504 acceptance gates are also ahead
-of this release.
+The dither has its own suite plus a parity test: the shipped HLSL runs on a
+software device and is compared value by value against a C++ reference, because
+the Bayer table exists in both languages and duplicated constants drift. Two
+design flaws were caught that way and fixed. The plain Bayer normalisation
+carried a DC bias of about 0.03 of a quantum, darkening the whole image
+fractionally. And rotating the pattern by offsetting screen coordinates left
+many pixels visiting four values on the same side of the threshold, so they
+never dithered at all; the rotation is in value space now, which is position
+independent.
+
+The live SE, AE, and ENB 0.504 acceptance gates are still ahead of this release,
+and no one has yet confirmed the banding improvement on a real monitor.
 
 [size=4]Who this is for right now[/size]
 
