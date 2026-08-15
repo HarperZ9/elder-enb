@@ -37,9 +37,10 @@ at the code that uses it. None of that changes:
 Of the six files here, none is derived from another preset. `enbeffect.fx` is the
 compositor; the five headers are its libraries.
 
-Three files carry no author line: `Helper/EotE_Tonemappers.fxh`,
-`Helper/EotE_ThemeSystem.fxh`, and `enbglobals.fxh`. That is a gap in the files,
-not a gap in the authorship, and worth closing next time they are edited.
+All six files now carry an author line. Three of them did not until 2026-08-15:
+`Helper/EotE_Tonemappers.fxh`, `Helper/EotE_ThemeSystem.fxh`, and
+`enbglobals.fxh` were silent about authorship while sitting beside files that
+were not, which reads as third-party code when it is not.
 
 ## What Elder changed in enbeffect.fx
 

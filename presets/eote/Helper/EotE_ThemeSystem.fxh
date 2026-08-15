@@ -10,6 +10,8 @@
 //    int   idx = TI(ui_IntParam,  GetTheme().intField);
 //
 //  Requires: ui_EotE_Theme declared in enbglobals.fxh before this include.
+//
+//  Zain Dana Harper - March 2026
 //----------------------------------------------------------------------------------------------//
 
 #ifndef EOTE_THEME_SYSTEM_FXH

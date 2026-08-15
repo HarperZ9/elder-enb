@@ -4,6 +4,8 @@
 //  Included by all 9 .fx shader files. Declares the theme selector UI and
 //  pulls in the theme system. Does NOT redeclare ENB native variables
 //  (Timer, ScreenSize, etc.) — each shader declares its own.
+//
+//  Zain Dana Harper - March 2026
 //----------------------------------------------------------------------------------------------//
 
 #ifndef ENBGLOBALS_FXH
