@@ -118,6 +118,7 @@ endif()
 
 add_library(elder_runtime STATIC
   src/PulsePublication.cpp
+  src/FrameDriver.cpp
 )
 target_compile_features(elder_runtime PUBLIC cxx_std_23)
 target_include_directories(
@@ -198,5 +199,25 @@ if(BUILD_TESTING)
   add_test(
     NAME elder_runtime_pulse_publication
     COMMAND elder_runtime_pulse_publication_tests
+  )
+
+  add_executable(elder_runtime_frame_driver_tests
+    tests/FrameDriverTests.cpp
+  )
+  target_compile_features(elder_runtime_frame_driver_tests PRIVATE cxx_std_23)
+  target_link_libraries(elder_runtime_frame_driver_tests PRIVATE
+    elder_runtime
+    enb_runtime_core
+  )
+
+  if(MSVC)
+    target_compile_options(elder_runtime_frame_driver_tests PRIVATE
+      /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
+    )
+  endif()
+
+  add_test(
+    NAME elder_runtime_frame_driver
+    COMMAND elder_runtime_frame_driver_tests
   )
 endif()

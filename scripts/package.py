@@ -83,6 +83,15 @@ def main() -> int:
     schema = NATIVE_BUILD / "packages" / "_CPack_Packages"
     for produced in sorted(NATIVE_BUILD.rglob("ElderNativeParameters.fxh"))[:1]:
         copy(produced, STAGE / "Native" / "Shaders" / produced.name)
+
+    # Hand-written shader headers. ElderRuntimeParameters.fxh declares the
+    # symbol the runtime plugin writes each frame, so the plugin and this header
+    # have to ship together: without it the parameter has nowhere to land.
+    for name in ("ElderRuntimeParameters.fxh", "ElderColorCore.fxh",
+                 "ElderRoomLight.fxh"):
+        source = ROOT / "native" / "shaders" / name
+        if source.is_file():
+            copy(source, STAGE / "Native" / "Shaders" / name)
     for name in ("ElderColorReference.cso", "elder-native-parameters.json",
                  "elder-native-default.profile"):
         for produced in sorted(NATIVE_BUILD.rglob(name))[:1]:

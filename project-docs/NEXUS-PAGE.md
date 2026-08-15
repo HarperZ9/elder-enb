@@ -3,19 +3,17 @@
 Everything needed for the Nexus upload form. The description is BBCode, ready
 to paste into the mod-page description field.
 
-**Read this before uploading.** Elder's rendering payload is not wired: the
-runtime plugin's render callback is a deliberate no-op. This page is written to
-say so in the first paragraph, because a visuals mod that does not change
-visuals will otherwise generate bug reports and lost goodwill. If you would
-rather not publish in that state, hold this page until the payload lands. The
-preset trees and the quality contract are real and are what this release is for.
+**Read this before uploading.** The runtime payload is wired now: the plugin
+publishes a per-frame pulse the shader stack can read. What it does not yet do
+is change the image, because no shipped shader consumes the pulse to alter
+output. The page below says that plainly rather than implying a visual upgrade.
 
 ## Form fields
 
 - **Name**: Elder ENB
 - **Summary** (one line): A five-tier ENB quality contract with complete,
-  deterministically generated preset trees, plus a native colour pipeline and a
-  runtime shell. The rendering payload is not wired yet.
+  deterministically generated preset trees, a native colour pipeline, and a
+  runtime plugin that publishes live frame state to the shader stack.
 - **Category**: Visuals and Graphics
 - **Version**: 1.0.0
 
@@ -30,14 +28,17 @@ preset trees and the quality contract are real and are what this release is for.
 
 [size=4]Read this first[/size]
 
-Elder's rendering payload is [b]not wired yet[/b]. The runtime plugin attaches to
-ENB, resolves the host, and reports status so you can confirm it is live and
-bound. Its render callback is a deliberate no-op, so it will never destabilise a
-live frame, and it will not change how your game looks.
+The runtime plugin is live. It attaches to ENB, resolves the host, and on every
+frame publishes a pulse the shader stack can read: a frame counter, the frame
+delta, and the output dimensions, written as
+[font=Courier New]ElderRuntimeFramePulse[/font].
 
-This release exists so the quality contract, the preset trees, and the native
-shader schema can be used and reviewed. If you are looking for a preset that
-changes your visuals today, this is not that yet. Nothing below oversells it.
+What it does [b]not[/b] do yet is change the image. No shipped shader consumes
+that pulse to alter output, so installing this will not make your game look
+different. The bridge is built and running; what sits on top of it is next.
+
+If you are looking for a preset that changes your visuals today, this is not
+that yet. Nothing below oversells it.
 
 [size=4]What is here and is real[/size]
 
@@ -70,9 +71,15 @@ five tier directories, exactly fifty INI files, and byte-identical output across
 two generations. The release archive is deterministic, with fixed timestamps and
 a SHA-256 sidecar, verified byte-identical across two runs.
 
-What is not verified is anything visual, because there is no rendering payload to
-validate. The live SE, AE, and ENB 0.504 acceptance gates are also ahead of this
-release.
+The frame driver has its own suite: a first frame publishes inactive rather than
+guessing a delta, a steady frame advances the counter exactly once, a lost render
+info publishes inactive without advancing, and an out-of-range or non-finite
+delta is rejected. The inactive payload is written rather than skipped, so a
+stale live value can never sit in front of shaders after the bridge goes away.
+
+What is not verified is anything visual, because nothing consumes the pulse to
+change output yet. The live SE, AE, and ENB 0.504 acceptance gates are also ahead
+of this release.
 
 [size=4]Who this is for right now[/size]
 
@@ -94,8 +101,8 @@ here.
 [*]Install this mod with a mod manager.
 [*]Pick a tier from [font=Courier New]Presets[/font] and copy its contents into
 your enbseries folder.
-[*]The runtime plugin in [font=Courier New]Root/enbseries[/font] is optional and
-currently only reports host status.
+[*]Copy the runtime plugin from [font=Courier New]Root/enbseries[/font] into
+your game-root enbseries folder if you want the frame pulse published.
 [/list]
 
 [size=4]Source and license[/size]

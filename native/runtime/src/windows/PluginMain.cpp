@@ -1,13 +1,23 @@
 // The loadable Elder ENB runtime. ENBSeries LoadLibrary's this .dllplugin from
 // the game-root enbseries\ folder; on attach it resolves the already-running
-// ENB host through the neutral core and registers Elder's callback. The
-// rendering payload wires in as Elder's own shader stack matures; today this is
-// the runtime shell that attaches to ENB and reports host-resolution status, so
-// a diagnostics reader can confirm the plugin is live and bound.
+// ENB host through the neutral core and registers Elder's callback.
+//
+// On every BeginFrame the callback measures the frame, publishes the pulse
+// through the neutral core, applies Elder's publication policy, and writes the
+// result to the shader stack as ElderRuntimeFramePulse. A shader reads that to
+// know the native bridge is live this frame.
+//
+// Everything decidable is in FrameDriver, which is pure and tested. What stays
+// here is the clock, the host pointers, and the write. The callback runs on the
+// render thread inside a live frame, so it allocates nothing, locks nothing,
+// and cannot throw.
 
+#include <elder/runtime/FrameDriver.hpp>
 #include <elder/runtime/PulsePublication.hpp>
 
 #include <enbcore/enb/LoadedHostResolver.hpp>
+#include <enbcore/enb/SdkContract.hpp>
+#include <enbcore/runtime/FramePulse.hpp>
 
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
@@ -23,14 +33,82 @@ std::atomic<std::uint32_t> g_host_resolution_code{
 std::atomic<bool> g_exports_resolved{false};
 std::atomic<bool> g_callback_registered{false};
 
+// Published frame count, exposed through the diagnostics export so a reader can
+// tell a bound-but-idle plugin from one that is actually driving frames.
+std::atomic<std::uint64_t> g_published_frames{0U};
+
+// Host exports captured at attach. Only ever written before the callback is
+// registered, and only ever read afterwards.
+enbcore::enb::SdkExports g_exports{};
+
+// Frame state. Touched exclusively by the callback, which ENB calls on one
+// render thread, so no synchronisation is needed here and none is implied.
+enbcore::runtime::FramePulseState g_pulse_state{};
+std::int64_t g_previous_ticks = 0;
+bool g_has_previous_frame = false;
+
+[[nodiscard]] float TicksToSeconds(const std::int64_t delta_ticks) noexcept
+{
+    LARGE_INTEGER frequency{};
+    if (!QueryPerformanceFrequency(&frequency) || frequency.QuadPart <= 0) {
+        return 0.0F;
+    }
+    return static_cast<float>(static_cast<double>(delta_ticks)
+                              / static_cast<double>(frequency.QuadPart));
+}
+
+// Measures the frame, then reports it. A first frame has no previous timestamp,
+// so it is deliberately reported as unmeasured rather than assigned a guess.
+[[nodiscard]] elder::runtime::FrameTiming MeasureFrame() noexcept
+{
+    LARGE_INTEGER now{};
+    if (!QueryPerformanceCounter(&now)) {
+        return elder::runtime::FrameTiming{0.0F, false};
+    }
+
+    const bool had_previous = g_has_previous_frame;
+    const std::int64_t previous = g_previous_ticks;
+    g_previous_ticks = now.QuadPart;
+    g_has_previous_frame = true;
+
+    if (!had_previous) {
+        return elder::runtime::FrameTiming{0.0F, false};
+    }
+    return elder::runtime::FrameTiming{TicksToSeconds(now.QuadPart - previous), true};
+}
+
 #if defined(_MSC_VER)
-void __stdcall ElderEnbCallback(const enbcore::enb::CallbackId) noexcept
+void __stdcall ElderEnbCallback(const enbcore::enb::CallbackId callback) noexcept
 #else
-void ElderEnbCallback(const enbcore::enb::CallbackId) noexcept
+void ElderEnbCallback(const enbcore::enb::CallbackId callback) noexcept
 #endif
 {
-    // Elder's rendering payload is not wired yet; the callback is a safe no-op
-    // so the plugin never destabilises a live ENB frame while attached.
+    if (callback != enbcore::enb::CallbackId::BeginFrame) {
+        return;
+    }
+    if (g_exports.set_parameter == nullptr) {
+        return;
+    }
+
+    const enbcore::enb::RenderInfo* render_info =
+        g_exports.get_render_info != nullptr ? g_exports.get_render_info() : nullptr;
+
+    const elder::runtime::FrameOutcome outcome =
+        elder::runtime::DriveFrame(g_pulse_state, render_info, MeasureFrame());
+
+    g_published_frames.store(g_pulse_state.published_frames,
+                             std::memory_order_relaxed);
+
+    // Written on every frame, including the inactive payload. Skipping the
+    // write when a pulse is withheld would leave the last live value in front
+    // of shaders, which is the one failure this whole path exists to prevent.
+    enbcore::enb::Parameter parameter = outcome.parameter;
+    for (const char* const shader : elder::runtime::kElderTargetShaders) {
+        g_exports.set_parameter(nullptr,
+                                const_cast<char*>(shader),
+                                const_cast<char*>(elder::runtime::kElderFramePulseSymbol),
+                                &parameter);
+    }
 }
 
 void ResolveAndRegisterHost() noexcept
@@ -47,6 +125,7 @@ void ResolveAndRegisterHost() noexcept
         && (host.code == enbcore::enb::HostResolutionCode::Ready
             || host.code == enbcore::enb::HostResolutionCode::NotReady)
         && host.exports.set_callback_function != nullptr) {
+        g_exports = host.exports;
         host.exports.set_callback_function(&ElderEnbCallback);
         g_callback_registered.store(true, std::memory_order_relaxed);
     }
@@ -66,6 +145,20 @@ ElderEnbRuntimeProbeV1(std::uint32_t* const host_code_out,
     *host_code_out = g_host_resolution_code.load(std::memory_order_relaxed);
     *registered_out = g_callback_registered.load(std::memory_order_relaxed) ? TRUE : FALSE;
     return g_exports_resolved.load(std::memory_order_relaxed) ? TRUE : FALSE;
+}
+
+// Frame diagnostics. Added alongside the V1 probe rather than folded into it,
+// because changing that signature would break any reader already built against
+// it. Reports how many pulses have been published, which is what distinguishes
+// a plugin that is merely bound from one that is driving frames.
+extern "C" __declspec(dllexport) BOOL WINAPI
+ElderEnbRuntimeFrameProbeV1(std::uint64_t* const published_frames_out) noexcept
+{
+    if (published_frames_out == nullptr) {
+        return FALSE;
+    }
+    *published_frames_out = g_published_frames.load(std::memory_order_relaxed);
+    return g_callback_registered.load(std::memory_order_relaxed) ? TRUE : FALSE;
 }
 
 BOOL WINAPI DllMain(HINSTANCE instance, const DWORD reason, LPVOID) noexcept
