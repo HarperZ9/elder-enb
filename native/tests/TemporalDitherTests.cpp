@@ -29,6 +29,8 @@ using elder::shaders::DitherPulse;
 using elder::shaders::PhaseRotation;
 using elder::shaders::kDitherFramePeriod;
 using elder::shaders::kDitherQuantum;
+using elder::shaders::IgnOffset;
+using elder::shaders::kIgnCycle;
 using elder::shaders::QuantiseToByte;
 
 [[nodiscard]] DitherPulse LivePulse(const float frame)
@@ -207,6 +209,27 @@ void BayerCellIsAPermutation()
   EXPECT(scaled.size() == 16U);
 }
 
+// The preset's own dither is interleaved gradient noise, per channel, which
+// decorrelates better than a single luma offset. The pulse animates it in place
+// rather than replacing it, so the offset must be zero without the bridge and
+// must visit distinct positions with it.
+void IgnOffsetAnimatesOnlyWhenLive()
+{
+  EXPECT(IgnOffset(InactivePulse()) == 0.0F);
+
+  std::set<float> seen;
+  for (std::uint32_t frame = 1U; frame <= kIgnCycle; ++frame) {
+    seen.insert(IgnOffset(LivePulse(static_cast<float>(frame))));
+  }
+  // A full cycle must not collapse onto a handful of positions.
+  EXPECT(seen.size() == kIgnCycle);
+
+  // And it wraps rather than growing without bound, which is what keeps the
+  // value exactly representable however long the session runs.
+  EXPECT(IgnOffset(LivePulse(1.0F))
+         == IgnOffset(LivePulse(1.0F + static_cast<float>(kIgnCycle))));
+}
+
 }  // namespace
 
 int main()
@@ -219,6 +242,7 @@ int main()
   StaticDitherStillRecoversTheValueOverACell();
   EndpointsAreNotDisturbed();
   BayerCellIsAPermutation();
+  IgnOffsetAnimatesOnlyWhenLive();
 
   if (failures != 0) {
     std::cerr << failures << " temporal-dither expectation(s) failed\n";

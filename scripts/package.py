@@ -37,6 +37,7 @@ DOCS = (
     ("LICENSE", "Docs/LICENSE"),
     ("native/NOTICE.md", "Docs/NOTICE.md"),
     ("docs/ARCHITECTURE.md", "Docs/ARCHITECTURE.md"),
+    ("docs/PRESET-INTEGRATION.md", "Docs/PRESET-INTEGRATION.md"),
     ("config/quality-tiers.csv", "Docs/quality-tiers.csv"),
 )
 

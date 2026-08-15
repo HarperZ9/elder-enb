@@ -52,6 +52,13 @@ struct DitherPulse {
                                 DitherPixel pixel,
                                 const DitherPulse& pulse) noexcept;
 
+// Temporal sample-position offset for an interleaved-gradient-noise dither,
+// which is what the shipped preset uses. Zero when the bridge is absent, so the
+// preset keeps its original static dither.
+inline constexpr std::uint32_t kIgnCycle = 64U;
+inline constexpr float kIgnAdvance = 5.588238F;
+[[nodiscard]] float IgnOffset(const DitherPulse& pulse) noexcept;
+
 // Quantises to eight bits, the step the dither exists to survive.
 [[nodiscard]] std::uint8_t QuantiseToByte(float value) noexcept;
 

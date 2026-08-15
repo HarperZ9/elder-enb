@@ -119,4 +119,26 @@ float3 ElderApplyTemporalDither(float3 color, float2 texcoord)
     return saturate(color + offset.xxx);
 }
 
+
+// Temporal offset for an interleaved-gradient-noise dither.
+//
+// The shipped Elder preset already dithers with IGN, and its noise is
+// per-channel, which decorrelates better than a single luma offset. Replacing
+// it with the Bayer path above would be a regression, so the pulse animates it
+// in place instead.
+//
+// IGN is animated by advancing the sample position, not the value: the
+// published constant is 5.588238 per frame over a 64-frame cycle, chosen so
+// successive frames land far apart in the noise field. Returns zero when the
+// bridge is absent, leaving the preset's original static dither exactly as it
+// was.
+float2 ElderDitherIgnOffset()
+{
+    if (!ElderRuntimeBridgeLive()) {
+        return float2(0.0, 0.0);
+    }
+    const float cycle = fmod(ElderRuntimeFramePulse.x, 64.0);
+    return (5.588238 * cycle).xx;
+}
+
 #endif  // ELDER_TEMPORAL_DITHER_FXH

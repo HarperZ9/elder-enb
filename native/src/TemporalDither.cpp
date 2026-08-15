@@ -56,6 +56,15 @@ float ApplyDither(const float value,
   return std::clamp(value + DitherOffset(pixel, pulse), 0.0F, 1.0F);
 }
 
+float IgnOffset(const DitherPulse& pulse) noexcept
+{
+  if (!BridgeLive(pulse)) {
+    return 0.0F;
+  }
+  return kIgnAdvance
+      * std::fmod(pulse.frame, static_cast<float>(kIgnCycle));
+}
+
 std::uint8_t QuantiseToByte(const float value) noexcept
 {
   const float clamped = std::clamp(value, 0.0F, 1.0F);
