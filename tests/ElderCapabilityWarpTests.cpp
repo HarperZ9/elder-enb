@@ -47,13 +47,16 @@ struct ProbeInput {
 struct ProbeOutput {
   Float4 wrapper_color;
   Float4 direct_color;
+  Float4 zero_intensity_color;
+  Float4 disabled_color;
+  Float4 active_full_color;
   std::uint32_t route;
   float padding[3];
 };
 
 static_assert(sizeof(Float4) == 16U);
 static_assert(sizeof(ProbeInput) == 80U);
-static_assert(sizeof(ProbeOutput) == 48U);
+static_assert(sizeof(ProbeOutput) == 96U);
 
 [[noreturn]] void fail(const std::string& message) {
   throw std::runtime_error(message);
@@ -251,6 +254,21 @@ bool same_color(const Float4& actual, const Float4& expected) {
       && near_equal(actual.z, expected.z) && near_equal(actual.w, expected.w);
 }
 
+bool same_float_bits(const float actual, const float expected) {
+  std::uint32_t actual_bits{};
+  std::uint32_t expected_bits{};
+  std::memcpy(&actual_bits, &actual, sizeof(actual_bits));
+  std::memcpy(&expected_bits, &expected, sizeof(expected_bits));
+  return actual_bits == expected_bits;
+}
+
+bool same_color_bits(const Float4& actual, const Float4& expected) {
+  return same_float_bits(actual.x, expected.x)
+      && same_float_bits(actual.y, expected.y)
+      && same_float_bits(actual.z, expected.z)
+      && same_float_bits(actual.w, expected.w);
+}
+
 void expect_color(
     const ProbeOutput& output,
     const std::uint32_t route,
@@ -264,6 +282,30 @@ void expect_color(
   }
   if (!same_color(output.direct_color, color)) {
     fail(std::string{label} + " direct color did not match selected route");
+  }
+}
+
+void expect_exact_color(
+    const Float4& actual,
+    const Float4& expected,
+    const std::string_view label) {
+  if (!same_color_bits(actual, expected)) {
+    fail(std::string{label} + " did not preserve the exact original source");
+  }
+}
+
+void expect_bridge_retain_load_bearing(
+    const ProbeOutput& output,
+    const Float4& bridge,
+    const Float4& identity,
+    const std::string_view label) {
+  if (same_color(output.active_full_color, identity)) {
+    fail(std::string{label}
+         + " did not switch away from the original source when active");
+  }
+  if (same_color(output.active_full_color, bridge)) {
+    fail(std::string{label}
+         + " did not include the non-zero SB_Retain Bridge candidate");
   }
 }
 
@@ -294,6 +336,15 @@ int main(int argc, char** argv) {
     expect_color(
         ordered_results[1], kRouteBridge, bridge,
         "no native selects Bridge");
+    expect_exact_color(
+        ordered_results[1].zero_intensity_color, identity,
+        "Bridge zero intensity");
+    expect_exact_color(
+        ordered_results[1].disabled_color, identity,
+        "Bridge disabled stage");
+    expect_bridge_retain_load_bearing(
+        ordered_results[1], bridge, identity,
+        "Bridge active identity blend");
     expect_color(
         ordered_results[2], kRouteSpatial, spatial,
         "no native or Bridge selects spatial");

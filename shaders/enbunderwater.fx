@@ -40,7 +40,8 @@ float4 ElderUnderwaterMain(ElderStageVSOutput input) : SV_Target
         0.0,
         0.0,
         ElderFinite1(raw_depth) ? 1.0 : 0.0);
-    return ElderStageIdentity(selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+    return ElderStageIdentity(
+        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }
 
 technique11 Draw <string UIName = "Elder [90] Underwater";>

@@ -36,7 +36,8 @@ float4 ElderPostpassMain(ElderStageVSOutput input) : SV_Target
     float4 source = TextureColor.Sample(Sampler0, input.texcoord);
     float screen_witness = ElderFinite1(ScreenSize.y) ? 0.0 : 0.0;
     float4 selected = float4(source.rgb + screen_witness.xxx, source.a);
-    return ElderStageIdentity(selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+    return ElderStageIdentity(
+        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }
 
 technique11 Draw <string UIName = "Elder [70] Postpass";>

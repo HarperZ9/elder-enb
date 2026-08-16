@@ -99,7 +99,8 @@ float4 ElderPrepassMain(ElderStageVSOutput input) : SV_Target
         ElderPrepassNativeAvailable() ? 1.0 : 0.0,
         ElderPrepassBridgeAvailable() ? 1.0 : 0.0,
         spatial_available);
-    return ElderStageIdentity(selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+    return ElderStageIdentity(
+        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }
 
 technique11 Draw <string UIName = "Elder [10] Prepass";>

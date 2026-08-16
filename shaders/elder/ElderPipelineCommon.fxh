@@ -175,17 +175,25 @@ float3 SB_Retain(float2 uv)
 }
 #endif
 
-float4 ElderStageIdentity(float4 source, bool stage_enabled, float intensity)
+float4 ElderStageIdentity(
+    float4 identity_input,
+    float4 candidate_output,
+    bool stage_enabled,
+    float intensity)
 {
-    float4 selected = ElderResolveCapabilityColor(source, 0.0, 0.0, 0.0);
     if (!stage_enabled || intensity <= 0.0)
     {
-        return ElderIdentityColor(source);
+        return ElderIdentityColor(identity_input);
+    }
+
+    if (intensity >= 1.0)
+    {
+        return ElderIdentityColor(candidate_output);
     }
 
     // Task 2 stages are intentionally inert. Later tasks add owned behavior
     // behind this same identity-preserving interface.
-    return ElderIdentityColor(selected);
+    return ElderIdentityColor(lerp(identity_input, candidate_output, saturate(intensity)));
 }
 
 #endif

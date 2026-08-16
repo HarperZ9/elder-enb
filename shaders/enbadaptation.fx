@@ -41,7 +41,8 @@ float4 ElderAdaptationMain(ElderStageVSOutput input) : SV_Target
         ElderFinite1(previous_scalar) ? 1.0 : 0.0,
         0.0,
         0.0);
-    return ElderStageIdentity(selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+    return ElderStageIdentity(
+        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }
 
 technique11 Draw <string UIName = "Elder [40] Adaptation";>

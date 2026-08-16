@@ -41,7 +41,8 @@ float4 ElderDepthOfFieldMain(ElderStageVSOutput input) : SV_Target
         && ElderFinite3(ScreenSize.xyz)
         && ElderFinite1(FocusInfo.x) ? 1.0 : 0.0;
     float4 selected = ElderResolveCapabilityColor(source, 0.0, 0.0, spatial_available);
-    return ElderStageIdentity(selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+    return ElderStageIdentity(
+        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }
 
 technique11 Draw <string UIName = "Elder [20] Depth of Field";>
