@@ -68,6 +68,34 @@ SamplerState Sampler0
     AddressV = Clamp;
 };
 
+ElderScreenSpaceSample ElderReadPrepassSample(float2 uv)
+{
+    return ElderMakeScreenSpaceSample(
+        TextureColor.SampleLevel(Sampler0, uv, 0.0).rgb,
+        TextureDepth.SampleLevel(Sampler0, uv, 0.0).x,
+        TextureNormal.SampleLevel(Sampler0, uv, 0.0).xyz,
+        TextureMask.SampleLevel(Sampler0, uv, 0.0).x);
+}
+
+ElderScreenSpaceNeighborhood ElderReadPrepassNeighborhood(
+    float2 uv,
+    float3 selected_center,
+    float raw_depth,
+    float3 normal_value,
+    float mask_value)
+{
+    float2 safe_size = max(ScreenSize.xy, float2(1.0, 1.0));
+    float2 texel = 1.0 / safe_size;
+    ElderScreenSpaceSample center = ElderMakeScreenSpaceSample(
+        selected_center, raw_depth, normal_value, mask_value);
+    return ElderGatherScreenNeighborhood(
+        center,
+        ElderReadPrepassSample(saturate(uv - float2(texel.x, 0.0))),
+        ElderReadPrepassSample(saturate(uv + float2(texel.x, 0.0))),
+        ElderReadPrepassSample(saturate(uv - float2(0.0, texel.y))),
+        ElderReadPrepassSample(saturate(uv + float2(0.0, texel.y))));
+}
+
 bool ElderPrepassNativeAvailable()
 {
     return ElderFinite1(ENightDayFactor)
@@ -85,40 +113,60 @@ bool ElderPrepassBridgeAvailable()
 float4 ElderPrepassMain(ElderStageVSOutput input) : SV_Target
 {
     float4 source = TextureColor.Sample(Sampler0, input.texcoord);
+    if (!ElderStageIsActive())
+    {
+        return source;
+    }
+
     float raw_depth = TextureDepth.SampleLevel(Sampler0, input.texcoord, 0.0).x;
     float3 finite_source = ElderPrepassFiniteSceneOrBlack(source.rgb);
 
-    if (!ElderPrepassRuntimeAvailable(ElderRuntimeRoomLight, ElderRuntimeStatus))
+    bool runtime_available =
+        ElderPrepassRuntimeAvailable(ElderRuntimeRoomLight, ElderRuntimeStatus);
+    if (!runtime_available)
     {
         return float4(finite_source, source.a);
     }
 
+    float4 selected = float4(finite_source, source.a);
     float3 normal_value =
         TextureNormal.SampleLevel(Sampler0, input.texcoord, 0.0).xyz;
     float mask_value = TextureMask.SampleLevel(Sampler0, input.texcoord, 0.0).x;
     float spatial_available = ElderFinite1(raw_depth)
         && ElderFinite3(normal_value)
         && ElderFinite1(mask_value) ? 1.0 : 0.0;
-    float3 native_scene = ElderComposePrepass(
-        input.texcoord, finite_source, raw_depth, EInteriorFactor);
-    float3 bridge_scene = ElderComposePrepassWithRuntime(
-        input.texcoord,
-        finite_source + SB_Retain(input.texcoord),
-        raw_depth,
-        EInteriorFactor,
-        ElderRuntimeRoomLight,
-        ElderRuntimeStatus);
-    float3 spatial_scene = ElderComposeSpatialPrepassFallback(
-        input.texcoord, finite_source, raw_depth, EInteriorFactor);
-    float4 selected = ElderResolveCapabilityColor(
-        float4(native_scene, source.a),
-        float4(bridge_scene, source.a),
-        float4(spatial_scene, source.a),
-        float4(finite_source, source.a),
-        ElderPrepassNativeAvailable()
-            && ElderPrepassRuntimeAvailable(ElderRuntimeRoomLight, ElderRuntimeStatus) ? 1.0 : 0.0,
-        ElderPrepassBridgeAvailable() ? 1.0 : 0.0,
-        spatial_available);
+
+    if (ElderPrepassNativeAvailable())
+    {
+        ElderScreenSpaceNeighborhood neighborhood = ElderReadPrepassNeighborhood(
+            input.texcoord, finite_source, raw_depth, normal_value, mask_value);
+        selected.rgb = ElderComposePrepassWithRuntimeAndNeighborhood(
+            finite_source,
+            EInteriorFactor,
+            ElderRuntimeRoomLight,
+            ElderRuntimeStatus,
+            neighborhood);
+    }
+    else if (ElderPrepassBridgeAvailable())
+    {
+        float3 bridge_source = finite_source + SB_Retain(input.texcoord);
+        ElderScreenSpaceNeighborhood neighborhood = ElderReadPrepassNeighborhood(
+            input.texcoord, bridge_source, raw_depth, normal_value, mask_value);
+        selected.rgb = ElderComposePrepassWithRuntimeAndNeighborhood(
+            bridge_source,
+            EInteriorFactor,
+            ElderRuntimeRoomLight,
+            ElderRuntimeStatus,
+            neighborhood);
+    }
+    else if (spatial_available > 0.0)
+    {
+        ElderScreenSpaceNeighborhood neighborhood = ElderReadPrepassNeighborhood(
+            input.texcoord, finite_source, raw_depth, normal_value, mask_value);
+        selected.rgb = ElderComposeSpatialPrepassFallback(
+            finite_source, neighborhood, EInteriorFactor);
+    }
+
     return ElderStageIdentity(
         float4(finite_source, source.a), selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }

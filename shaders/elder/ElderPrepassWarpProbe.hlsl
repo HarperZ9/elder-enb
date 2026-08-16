@@ -30,7 +30,7 @@
 
 RWStructuredBuffer<float4> ElderPrepassResults : register(u0);
 
-static const uint kElderPrepassCaseCount = 5;
+static const uint kElderPrepassCaseCount = 8;
 
 float4 ElderPrepassValidStatus()
 {
@@ -93,16 +93,57 @@ void ElderPrepassWarpProbeMain(uint3 dispatch_thread_id : SV_DispatchThreadID)
     else
     {
         // interior-transition-is-continuous
-        float3 scene = float3(0.2, 0.2, 0.2);
-        float4 room_light = float4(32.0, 30.0, 0.4, 0.0);
-        float low = ElderComposePrepassWithRuntime(
-            uv, scene, raw_depth, 0.25, room_light, ElderPrepassValidStatus()).x;
-        float mid = ElderComposePrepassWithRuntime(
-            uv, scene, raw_depth, 0.50, room_light, ElderPrepassValidStatus()).x;
-        float high = ElderComposePrepassWithRuntime(
-            uv, scene, raw_depth, 0.75, room_light, ElderPrepassValidStatus()).x;
-        float full = ElderComposePrepassWithRuntime(
-            uv, scene, raw_depth, 1.00, room_light, ElderPrepassValidStatus()).x;
-        ElderPrepassResults[index] = float4(low, mid, high, full);
+        if (index == 4)
+        {
+            float3 scene = float3(0.2, 0.2, 0.2);
+            float4 room_light = float4(32.0, 30.0, 0.4, 0.0);
+            float low = ElderComposePrepassWithRuntime(
+                uv, scene, raw_depth, 0.25, room_light, ElderPrepassValidStatus()).x;
+            float mid = ElderComposePrepassWithRuntime(
+                uv, scene, raw_depth, 0.50, room_light, ElderPrepassValidStatus()).x;
+            float high = ElderComposePrepassWithRuntime(
+                uv, scene, raw_depth, 0.75, room_light, ElderPrepassValidStatus()).x;
+            float full = ElderComposePrepassWithRuntime(
+                uv, scene, raw_depth, 1.00, room_light, ElderPrepassValidStatus()).x;
+            ElderPrepassResults[index] = float4(low, mid, high, full);
+        }
+        else if (index == 5)
+        {
+            // sealed-interior-contact-attenuates-without-crushing
+            ElderScreenSpaceNeighborhood neighborhood =
+                ElderSyntheticContactNeighborhood(float3(0.5, 0.5, 0.5), 0.42);
+            float3 output = ElderComposePrepassWithRuntimeAndNeighborhood(
+                float3(0.5, 0.5, 0.5),
+                1.0,
+                float4(0.0, 0.0, 0.0, 1.0),
+                ElderPrepassValidStatus(),
+                neighborhood);
+            ElderPrepassResults[index] = float4(output, 1.0);
+        }
+        else if (index == 6)
+        {
+            // route-selection-prefers-native-then-bridge-then-spatial
+            float native_route = float(ElderSelectPrepassRoute(true, true, true, true, true));
+            float bridge_route = float(ElderSelectPrepassRoute(true, true, false, true, true));
+            float spatial_route = float(ElderSelectPrepassRoute(true, true, false, false, true));
+            float identity_route = float(ElderSelectPrepassRoute(true, false, true, true, true));
+            ElderPrepassResults[index] = float4(native_route, bridge_route, spatial_route, identity_route);
+        }
+        else
+        {
+            // unsupported-reflection-and-subsurface-are-identity
+            float3 scene = float3(0.3, 0.4, 0.5);
+            ElderScreenSpaceNeighborhood neighborhood =
+                ElderSyntheticContactNeighborhood(scene, 0.42);
+            float3 reflection = ElderApplyUnsupportedReflectionIdentity(
+                scene, neighborhood);
+            float3 subsurface = ElderApplyUnsupportedSubsurfaceIdentity(
+                scene, neighborhood);
+            ElderPrepassResults[index] = float4(
+                all(reflection == scene) ? 1.0 : 0.0,
+                all(subsurface == scene) ? 1.0 : 0.0,
+                0.0,
+                1.0);
+        }
     }
 }

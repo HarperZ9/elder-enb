@@ -53,14 +53,17 @@ void check_hr(const HRESULT hr, const char* what)
 }
 
 constexpr std::uint32_t kCaseCount = 5U;
-constexpr std::uint32_t kPrepassCaseCount = 5U;
+constexpr std::uint32_t kPrepassCaseCount = 8U;
 
 constexpr std::array<std::string_view, kPrepassCaseCount> kPrepassCaseNames{
     "exterior-preserves-room-payload",
     "sealed-room-keeps-ambient-floor",
     "partial-aperture-is-bounded",
     "invalid-runtime-preserves-scene",
-    "interior-transition-is-continuous"};
+    "interior-transition-is-continuous",
+    "sealed-interior-contact-attenuates-without-crushing",
+    "route-selection-prefers-native-then-bridge-then-spatial",
+    "unsupported-reflection-and-subsurface-are-identity"};
 
 struct Float4 {
   float x;
@@ -274,6 +277,31 @@ void run_prepass_integration(const wchar_t* probe_path)
     expect(g.w <= 0.28F, tag + " remains bounded at full interior");
     expect((g.y - g.x) <= 0.03F && (g.z - g.y) <= 0.03F && (g.w - g.z) <= 0.03F,
            tag + " changes continuously without steps");
+  }
+
+  {
+    const Float4& g = gpu[5U];
+    const std::string tag(kPrepassCaseNames[5U]);
+    expect(g.x < 0.5F && g.y < 0.5F && g.z < 0.5F,
+           tag + " permits bounded contact attenuation");
+    expect(g.x >= 0.47F && g.y >= 0.47F && g.z >= 0.47F,
+           tag + " preserves an explicit ambient floor");
+  }
+
+  {
+    const Float4& g = gpu[6U];
+    const std::string tag(kPrepassCaseNames[6U]);
+    expect(near_value(g.x, 3.0F), tag + " native route");
+    expect(near_value(g.y, 2.0F), tag + " bridge route");
+    expect(near_value(g.z, 1.0F), tag + " spatial route");
+    expect(near_value(g.w, 0.0F), tag + " identity route on invalid runtime");
+  }
+
+  {
+    const Float4& g = gpu[7U];
+    const std::string tag(kPrepassCaseNames[7U]);
+    expect(near_value(g.x, 1.0F), tag + " reflection identity");
+    expect(near_value(g.y, 1.0F), tag + " subsurface identity");
   }
 }
 

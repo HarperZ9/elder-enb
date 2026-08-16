@@ -7,7 +7,6 @@
 
 #include "ElderRuntimeParameters.fxh"
 #include "ElderScreenSpace.fxh"
-#include "../../native/shaders/ElderRoomLight.fxh"
 
 float3 ElderPrepassFiniteSceneOrBlack(float3 scene)
 {
@@ -52,25 +51,63 @@ float3 ElderApplyRuntimeRoomLight(
     return max(scene, candidate);
 }
 
+uint ElderSelectPrepassRoute(
+    bool stage_active,
+    bool runtime_valid,
+    bool native_available,
+    bool bridge_available,
+    bool spatial_available)
+{
+    if (!stage_active || !runtime_valid)
+    {
+        return ELDER_CAPABILITY_IDENTITY;
+    }
+
+#if ELDER_STAGE_CAPABILITY >= ELDER_CAPABILITY_NATIVE
+#if ELDER_STAGE_NATIVE_CAPABILITY_AVAILABLE
+    if (native_available)
+    {
+        return ELDER_CAPABILITY_NATIVE;
+    }
+#endif
+#endif
+#if ELDER_STAGE_CAPABILITY >= ELDER_CAPABILITY_BRIDGE
+#if ELDER_STAGE_BRIDGE_CAPABILITY_AVAILABLE
+    if (bridge_available)
+    {
+        return ELDER_CAPABILITY_BRIDGE;
+    }
+#endif
+#endif
+#if ELDER_STAGE_CAPABILITY >= ELDER_CAPABILITY_SPATIAL
+#if ELDER_STAGE_SPATIAL_CAPABILITY_AVAILABLE
+    if (spatial_available)
+    {
+        return ELDER_CAPABILITY_SPATIAL;
+    }
+#endif
+#endif
+
+    return ELDER_CAPABILITY_IDENTITY;
+}
+
 float3 ElderComposeSpatialPrepassFallback(
-    float2 uv,
     float3 scene,
-    float raw_depth,
+    ElderScreenSpaceNeighborhood neighborhood,
     float interior_factor)
 {
     float3 finite_scene = ElderPrepassFiniteSceneOrBlack(scene);
     float3 candidate =
-        ElderApplyBoundedScreenSpace(uv, finite_scene, raw_depth, interior_factor);
-    return max(finite_scene, candidate);
+        ElderApplyBoundedScreenSpace(finite_scene, neighborhood, interior_factor);
+    return ElderFinite3(candidate) ? candidate : finite_scene;
 }
 
-float3 ElderComposePrepassWithRuntime(
-    float2 uv,
+float3 ElderComposePrepassWithRuntimeAndNeighborhood(
     float3 scene,
-    float raw_depth,
     float interior_factor,
     float4 room_light_payload,
-    float4 runtime_status)
+    float4 runtime_status,
+    ElderScreenSpaceNeighborhood neighborhood)
 {
     float3 finite_scene = ElderPrepassFiniteSceneOrBlack(scene);
     if (!ElderPrepassRuntimeAvailable(room_light_payload, runtime_status))
@@ -81,13 +118,24 @@ float3 ElderComposePrepassWithRuntime(
     float interior = ElderFinite1(interior_factor) ? saturate(interior_factor) : 0.0;
     float3 candidate = finite_scene;
     candidate = ElderApplyRuntimeRoomLight(candidate, room_light_payload, interior);
-    candidate = ElderApplyBoundedScreenSpace(uv, candidate, raw_depth, interior);
-
-    // Contact/SSS/fog approximations are allowed only when bounded; for the
-    // room-light path, retain at least the finite scene so sealed interiors keep
-    // their ambient floor and invalid paths cannot introduce artifacts.
-    candidate = max(finite_scene, candidate);
+    candidate = ElderApplyBoundedScreenSpace(candidate, neighborhood, interior);
     return ElderFinite3(candidate) ? candidate : finite_scene;
+}
+
+float3 ElderComposePrepassWithRuntime(
+    float2 uv,
+    float3 scene,
+    float raw_depth,
+    float interior_factor,
+    float4 room_light_payload,
+    float4 runtime_status)
+{
+    return ElderComposePrepassWithRuntimeAndNeighborhood(
+        scene,
+        interior_factor,
+        room_light_payload,
+        runtime_status,
+        ElderNeutralScreenNeighborhood(scene, raw_depth));
 }
 
 float3 ElderComposePrepass(

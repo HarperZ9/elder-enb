@@ -132,6 +132,17 @@ if(BUILD_TESTING)
     )
 
     add_test(
+        NAME elder_prepass_contract
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderPrepassContracts.cmake"
+    )
+    set_tests_properties(
+        elder_prepass_contract
+        PROPERTIES LABELS "shader;prepass;contract"
+    )
+
+    add_test(
         NAME elder_quality_presets
         COMMAND "${CMAKE_COMMAND}"
             "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"

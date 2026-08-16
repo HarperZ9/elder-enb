@@ -5,9 +5,111 @@
 #error Include ElderPipelineCommon.fxh before ElderScreenSpace.fxh
 #endif
 
-// Elder-owned current-frame spatial approximations. These helpers deliberately
-// use stable screen/depth inputs only: no per-frame stochastic offsets,
-// inferred velocity, or carried-state claims.
+// Elder-owned current-frame spatial approximations. The prepass builds this
+// from current color/depth/normal/mask samples around the pixel selected by the
+// active capability route; there is no carried state or inferred velocity.
+
+struct ElderScreenSpaceSample
+{
+    float3 color;
+    float raw_depth;
+    float3 normal;
+    float mask;
+};
+
+struct ElderScreenSpaceNeighborhood
+{
+    ElderScreenSpaceSample center;
+    ElderScreenSpaceSample left;
+    ElderScreenSpaceSample right;
+    ElderScreenSpaceSample up;
+    ElderScreenSpaceSample down;
+};
+
+ElderScreenSpaceSample ElderMakeScreenSpaceSample(
+    float3 color,
+    float raw_depth,
+    float3 normal,
+    float mask)
+{
+    ElderScreenSpaceSample sample_value;
+    sample_value.color = ElderFinite3(color) ? max(color, 0.0.xxx) : 0.0.xxx;
+    sample_value.raw_depth = ElderFinite1(raw_depth) ? raw_depth : 1.0;
+    sample_value.normal = ElderFinite3(normal) ? normal : float3(0.5, 0.5, 1.0);
+    sample_value.mask = ElderFinite1(mask) ? saturate(mask) : 0.0;
+    return sample_value;
+}
+
+ElderScreenSpaceNeighborhood ElderGatherScreenNeighborhood(
+    ElderScreenSpaceSample center,
+    ElderScreenSpaceSample left,
+    ElderScreenSpaceSample right,
+    ElderScreenSpaceSample up,
+    ElderScreenSpaceSample down)
+{
+    ElderScreenSpaceNeighborhood neighborhood;
+    neighborhood.center = center;
+    neighborhood.left = left;
+    neighborhood.right = right;
+    neighborhood.up = up;
+    neighborhood.down = down;
+    return neighborhood;
+}
+
+ElderScreenSpaceNeighborhood ElderNeutralScreenNeighborhood(
+    float3 scene,
+    float raw_depth)
+{
+    ElderScreenSpaceSample center = ElderMakeScreenSpaceSample(
+        scene, raw_depth, float3(0.5, 0.5, 1.0), 0.0);
+    return ElderGatherScreenNeighborhood(center, center, center, center, center);
+}
+
+ElderScreenSpaceNeighborhood ElderSyntheticContactNeighborhood(
+    float3 scene,
+    float raw_depth)
+{
+    ElderScreenSpaceSample center = ElderMakeScreenSpaceSample(
+        scene, raw_depth, float3(0.5, 0.5, 1.0), 0.0);
+    ElderScreenSpaceSample near_depth = ElderMakeScreenSpaceSample(
+        scene, raw_depth + 0.08, float3(0.5, 0.35, 0.92), 0.15);
+    ElderScreenSpaceSample far_depth = ElderMakeScreenSpaceSample(
+        scene, raw_depth - 0.04, float3(0.5, 0.65, 0.92), 0.20);
+    return ElderGatherScreenNeighborhood(
+        center, near_depth, far_depth, near_depth, far_depth);
+}
+
+float3 ElderScreenNormalUnit(float3 encoded_normal)
+{
+    float3 normal_value = encoded_normal * 2.0 - 1.0;
+    float normal_length = max(dot(normal_value, normal_value), 0.000001);
+    return normal_value * rsqrt(normal_length);
+}
+
+float ElderScreenDepthDelta(float a, float b)
+{
+    return ElderFinite1(a) && ElderFinite1(b) ? abs(a - b) : 0.0;
+}
+
+float ElderScreenNormalDelta(float3 a, float3 b)
+{
+    return 1.0 - saturate(dot(ElderScreenNormalUnit(a), ElderScreenNormalUnit(b)));
+}
+
+float ElderScreenMaskDelta(float a, float b)
+{
+    return abs(saturate(a) - saturate(b));
+}
+
+float ElderScreenLuma(float3 color)
+{
+    return dot(max(color, 0.0.xxx), float3(0.2126, 0.7152, 0.0722));
+}
+
+float ElderScreenColorDelta(float3 a, float3 b)
+{
+    return abs(ElderScreenLuma(a) - ElderScreenLuma(b));
+}
 
 float ElderScreenGeometryConfidence(float raw_depth)
 {
@@ -18,73 +120,75 @@ float ElderScreenGeometryConfidence(float raw_depth)
     return 1.0 - ElderDepthMask(raw_depth, 0.995, 0.002);
 }
 
-float3 ElderApplyGtaoContactShadows(float2 uv, float3 scene, float raw_depth)
+float ElderNeighborhoodContactSignal(ElderScreenSpaceNeighborhood neighborhood)
+{
+    float depth_edge = max(
+        max(ElderScreenDepthDelta(neighborhood.center.raw_depth, neighborhood.left.raw_depth),
+            ElderScreenDepthDelta(neighborhood.center.raw_depth, neighborhood.right.raw_depth)),
+        max(ElderScreenDepthDelta(neighborhood.center.raw_depth, neighborhood.up.raw_depth),
+            ElderScreenDepthDelta(neighborhood.center.raw_depth, neighborhood.down.raw_depth)));
+    float normal_edge = max(
+        max(ElderScreenNormalDelta(neighborhood.center.normal, neighborhood.left.normal),
+            ElderScreenNormalDelta(neighborhood.center.normal, neighborhood.right.normal)),
+        max(ElderScreenNormalDelta(neighborhood.center.normal, neighborhood.up.normal),
+            ElderScreenNormalDelta(neighborhood.center.normal, neighborhood.down.normal)));
+    float material_edge = max(
+        max(ElderScreenMaskDelta(neighborhood.center.mask, neighborhood.left.mask),
+            ElderScreenMaskDelta(neighborhood.center.mask, neighborhood.right.mask)),
+        max(ElderScreenMaskDelta(neighborhood.center.mask, neighborhood.up.mask),
+            ElderScreenMaskDelta(neighborhood.center.mask, neighborhood.down.mask)));
+    float color_edge = max(
+        max(ElderScreenColorDelta(neighborhood.center.color, neighborhood.left.color),
+            ElderScreenColorDelta(neighborhood.center.color, neighborhood.right.color)),
+        max(ElderScreenColorDelta(neighborhood.center.color, neighborhood.up.color),
+            ElderScreenColorDelta(neighborhood.center.color, neighborhood.down.color)));
+
+    float geometry = ElderScreenGeometryConfidence(neighborhood.center.raw_depth);
+    return saturate(
+        geometry
+        * (depth_edge * 6.0 + normal_edge * 0.45 + material_edge * 0.25
+           + color_edge * 0.10));
+}
+
+float3 ElderApplyDepthNormalContactOcclusion(
+    float3 scene,
+    ElderScreenSpaceNeighborhood neighborhood)
 {
     if (ElderAODirections == 0u || ElderAOSteps == 0u)
     {
         return scene;
     }
 
-    float geometry = ElderScreenGeometryConfidence(raw_depth);
-    float accumulator = 0.0;
-    [loop]
-    for (uint direction = 0u; direction < ElderAODirections; ++direction)
-    {
-        [loop]
-        for (uint step_index = 0u; step_index < ElderAOSteps; ++step_index)
-        {
-            float direction_phase =
-                (float(direction) + 0.5) / max(1.0, float(ElderAODirections));
-            float step_phase =
-                (float(step_index) + 1.0) / max(1.0, float(ElderAOSteps));
-            float stable_weight = frac(
-                uv.x * 0.754877666 + uv.y * 0.569840296
-                + direction_phase + step_phase);
-            accumulator += geometry * lerp(0.35, 1.0, stable_weight) * step_phase;
-        }
-    }
-
-    float normalizer = max(1.0, float(ElderAODirections * ElderAOSteps));
-    float occlusion = saturate(accumulator / normalizer) * 0.018;
-    return max(0.0.xxx, scene * (1.0 - occlusion));
+    float tier_budget = saturate(
+        min(float(ElderAODirections), 4.0) * 0.25
+        * min(float(ElderAOSteps), 2.0) * 0.5);
+    float contact = ElderNeighborhoodContactSignal(neighborhood);
+    float attenuation = min(contact * tier_budget * 0.035, 0.04);
+    float3 attenuated = scene * (1.0 - attenuation);
+    float3 floor_value = scene * 0.94;
+    return max(floor_value, attenuated);
 }
 
-float3 ElderApplyShortSsr(float2 uv, float3 scene, float raw_depth)
+float3 ElderApplyUnsupportedReflectionIdentity(
+    float3 scene,
+    ElderScreenSpaceNeighborhood neighborhood)
 {
-#if ELDER_QUALITY_TIER <= 1
     return scene;
-#else
-    if (ElderSSRSteps == 0u)
-    {
-        return scene;
-    }
-
-    float geometry = ElderScreenGeometryConfidence(raw_depth);
-    float trace_confidence = 0.0;
-    [loop]
-    for (uint step_index = 0u; step_index < ElderSSRSteps; ++step_index)
-    {
-        float step_phase =
-            (float(step_index) + 1.0) / max(1.0, float(ElderSSRSteps));
-        float edge_fade = saturate(min(min(uv.x, uv.y), min(1.0 - uv.x, 1.0 - uv.y)) * 8.0);
-        trace_confidence += geometry * edge_fade * (1.0 - step_phase * 0.35);
-    }
-
-    trace_confidence = saturate(trace_confidence / max(1.0, float(ElderSSRSteps)));
-    return scene + scene * (0.018 * trace_confidence);
-#endif
 }
 
-float3 ElderApplyMaterialAwareSss(float3 scene, float raw_depth, float interior_factor)
+float3 ElderApplyUnsupportedSubsurfaceIdentity(
+    float3 scene,
+    ElderScreenSpaceNeighborhood neighborhood)
 {
-    float geometry = ElderScreenGeometryConfidence(raw_depth);
-    float interior = saturate(interior_factor);
-    float scatter = geometry * interior * saturate(float(ElderRoomLightRefinement)) * 0.012;
-    return scene + float3(1.0, 0.72, 0.48) * scatter * max(scene, 0.02.xxx);
+    return scene;
 }
 
-float3 ElderApplyWeatherAtmosphere(float3 scene, float raw_depth, float interior_factor)
+float3 ElderApplyWeatherAtmosphere(
+    float3 scene,
+    ElderScreenSpaceNeighborhood neighborhood,
+    float interior_factor)
 {
+    float raw_depth = neighborhood.center.raw_depth;
     if (!ElderFinite1(raw_depth))
     {
         return scene;
@@ -110,16 +214,15 @@ float3 ElderApplyWeatherAtmosphere(float3 scene, float raw_depth, float interior
 }
 
 float3 ElderApplyBoundedScreenSpace(
-    float2 uv,
     float3 scene,
-    float raw_depth,
+    ElderScreenSpaceNeighborhood neighborhood,
     float interior_factor)
 {
     float3 candidate = scene;
-    candidate = ElderApplyGtaoContactShadows(uv, candidate, raw_depth);
-    candidate = ElderApplyShortSsr(uv, candidate, raw_depth);
-    candidate = ElderApplyMaterialAwareSss(candidate, raw_depth, interior_factor);
-    candidate = ElderApplyWeatherAtmosphere(candidate, raw_depth, interior_factor);
+    candidate = ElderApplyDepthNormalContactOcclusion(candidate, neighborhood);
+    candidate = ElderApplyUnsupportedReflectionIdentity(candidate, neighborhood);
+    candidate = ElderApplyUnsupportedSubsurfaceIdentity(candidate, neighborhood);
+    candidate = ElderApplyWeatherAtmosphere(candidate, neighborhood, interior_factor);
     return ElderFinite3(candidate) ? candidate : scene;
 }
 
