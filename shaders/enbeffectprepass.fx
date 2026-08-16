@@ -21,6 +21,8 @@
 #include "elder/ElderHostCapabilities.fxh"
 #include "elder/ElderStageParameters.fxh"
 #include "elder/ElderPipelineCommon.fxh"
+#include "elder/ElderRuntimeParameters.fxh"
+#include "elder/ElderPrepassCore.fxh"
 
 // ENBSeries 0.504 HDR prepass interface. These resources are current-frame
 // inputs only; the prepass owns no full-frame history and no object velocity.
@@ -84,23 +86,41 @@ float4 ElderPrepassMain(ElderStageVSOutput input) : SV_Target
 {
     float4 source = TextureColor.Sample(Sampler0, input.texcoord);
     float raw_depth = TextureDepth.SampleLevel(Sampler0, input.texcoord, 0.0).x;
+    float3 finite_source = ElderPrepassFiniteSceneOrBlack(source.rgb);
+
+    if (!ElderPrepassRuntimeAvailable(ElderRuntimeRoomLight, ElderRuntimeStatus))
+    {
+        return float4(finite_source, source.a);
+    }
+
     float3 normal_value =
         TextureNormal.SampleLevel(Sampler0, input.texcoord, 0.0).xyz;
     float mask_value = TextureMask.SampleLevel(Sampler0, input.texcoord, 0.0).x;
     float spatial_available = ElderFinite1(raw_depth)
         && ElderFinite3(normal_value)
         && ElderFinite1(mask_value) ? 1.0 : 0.0;
-    float4 bridge_source = float4(source.rgb + SB_Retain(input.texcoord), source.a);
+    float3 native_scene = ElderComposePrepass(
+        input.texcoord, finite_source, raw_depth, EInteriorFactor);
+    float3 bridge_scene = ElderComposePrepassWithRuntime(
+        input.texcoord,
+        finite_source + SB_Retain(input.texcoord),
+        raw_depth,
+        EInteriorFactor,
+        ElderRuntimeRoomLight,
+        ElderRuntimeStatus);
+    float3 spatial_scene = ElderComposeSpatialPrepassFallback(
+        input.texcoord, finite_source, raw_depth, EInteriorFactor);
     float4 selected = ElderResolveCapabilityColor(
-        source,
-        bridge_source,
-        source,
-        source,
-        ElderPrepassNativeAvailable() ? 1.0 : 0.0,
+        float4(native_scene, source.a),
+        float4(bridge_scene, source.a),
+        float4(spatial_scene, source.a),
+        float4(finite_source, source.a),
+        ElderPrepassNativeAvailable()
+            && ElderPrepassRuntimeAvailable(ElderRuntimeRoomLight, ElderRuntimeStatus) ? 1.0 : 0.0,
         ElderPrepassBridgeAvailable() ? 1.0 : 0.0,
         spatial_available);
     return ElderStageIdentity(
-        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+        float4(finite_source, source.a), selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }
 
 technique11 Draw <string UIName = "Elder [10] Prepass";>

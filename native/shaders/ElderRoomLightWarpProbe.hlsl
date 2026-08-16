@@ -58,9 +58,5 @@ void ElderRoomLightWarpProbeMain(uint3 dispatch_thread_id : SV_DispatchThreadID)
     }
 
     ElderRoomLightOutput output = ElderEvaluateRoomLight(ElderRoomLightCase(index));
-    ElderRoomLightResults[index] = float4(
-        output.room_light,
-        output.exterior_daylight,
-        output.open_fraction,
-        output.daylight_sealed);
+    ElderRoomLightResults[index] = ElderRoomLightRuntimePayload(output);
 }

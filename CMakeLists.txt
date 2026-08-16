@@ -214,6 +214,58 @@ if(BUILD_TESTING)
     set_tests_properties(elder_weather_theme_tests PROPERTIES TIMEOUT 90)
 
     if(WIN32)
+        add_executable(elder_room_light_cpp_tests
+            native/tests/RoomLightTests.cpp
+            native/src/RoomLight.cpp
+        )
+        target_compile_features(elder_room_light_cpp_tests PRIVATE cxx_std_23)
+        target_include_directories(elder_room_light_cpp_tests PRIVATE
+            "${CMAKE_CURRENT_SOURCE_DIR}/native/include"
+        )
+        if(MSVC)
+            target_compile_options(
+                elder_room_light_cpp_tests
+                PRIVATE /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
+            )
+        endif()
+        add_test(
+            NAME elder_room_light_cpp
+            COMMAND elder_room_light_cpp_tests
+        )
+        set_tests_properties(
+            elder_room_light_cpp
+            PROPERTIES LABELS "shader;room-light;prepass;cpp"
+        )
+
+        add_executable(elder_room_light_warp_tests
+            native/tests/RoomLightWarpTests.cpp
+            native/src/RoomLight.cpp
+        )
+        target_compile_features(elder_room_light_warp_tests PRIVATE cxx_std_23)
+        target_include_directories(elder_room_light_warp_tests PRIVATE
+            "${CMAKE_CURRENT_SOURCE_DIR}/native/include"
+        )
+        target_link_libraries(elder_room_light_warp_tests PRIVATE
+            d3d11
+            d3dcompiler
+        )
+        if(MSVC)
+            target_compile_options(
+                elder_room_light_warp_tests
+                PRIVATE /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
+            )
+        endif()
+        add_test(
+            NAME elder_room_light_warp
+            COMMAND elder_room_light_warp_tests
+                "${CMAKE_CURRENT_SOURCE_DIR}/native/shaders/ElderRoomLightWarpProbe.hlsl"
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/elder/ElderPrepassWarpProbe.hlsl"
+        )
+        set_tests_properties(
+            elder_room_light_warp
+            PROPERTIES LABELS "shader;warp;room-light;prepass"
+        )
+
         add_executable(elder_capability_warp_tests
             tests/ElderCapabilityWarpTests.cpp
         )

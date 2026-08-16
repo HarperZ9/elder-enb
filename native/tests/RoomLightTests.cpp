@@ -41,6 +41,22 @@ using elder::shaders::RoomLightStatus;
   return std::bit_cast<std::uint32_t>(a) == std::bit_cast<std::uint32_t>(b);
 }
 
+struct RuntimeRoomLightPayload {
+  float bounded_luminance;
+  float exterior_daylight;
+  float open_fraction;
+  float sealed;
+};
+
+[[nodiscard]] RuntimeRoomLightPayload runtime_payload_from(const RoomLightOutput& output)
+{
+  return RuntimeRoomLightPayload{
+      output.room_light,
+      output.exterior_daylight,
+      output.open_fraction,
+      output.daylight_sealed ? 1.0F : 0.0F};
+}
+
 [[nodiscard]] RoomLightInput open_room()
 {
   RoomLightInput input{};
@@ -132,6 +148,38 @@ void partial_aperture_and_occlusion_compose()
   EXPECT(!output.daylight_sealed);
 }
 
+void runtime_payload_matches_hidden_shader_layout()
+{
+  RoomLightInput partial{};
+  partial.exterior_sky_luminance = 100.0F;
+  partial.ambient_floor = 1.0F;
+  partial.occlusion = 0.25F;
+  partial.aperture_count = 1U;
+  partial.apertures[0] = RoomAperture{0.5F, 0.8F};
+
+  RoomLightOutput partial_output{};
+  const auto partial_result = EvaluateRoomLight(partial_output, partial);
+  const RuntimeRoomLightPayload partial_payload = runtime_payload_from(partial_output);
+
+  EXPECT(partial_result.status == RoomLightStatus::evaluated);
+  EXPECT(near_value(partial_payload.bounded_luminance, 31.0F));
+  EXPECT(near_value(partial_payload.exterior_daylight, 30.0F));
+  EXPECT(near_value(partial_payload.open_fraction, 0.40F));
+  EXPECT(same_bits(partial_payload.sealed, 0.0F));
+
+  RoomLightInput sealed = open_room();
+  sealed.occlusion = 1.0F;
+  RoomLightOutput sealed_output{};
+  const auto sealed_result = EvaluateRoomLight(sealed_output, sealed);
+  const RuntimeRoomLightPayload sealed_payload = runtime_payload_from(sealed_output);
+
+  EXPECT(sealed_result.status == RoomLightStatus::evaluated);
+  EXPECT(near_value(sealed_payload.bounded_luminance, 2.0F));
+  EXPECT(same_bits(sealed_payload.exterior_daylight, 0.0F));
+  EXPECT(near_value(sealed_payload.open_fraction, 1.0F));
+  EXPECT(same_bits(sealed_payload.sealed, 1.0F));
+}
+
 void room_light_clamps_at_ceiling()
 {
   RoomLightInput input = open_room();
@@ -193,6 +241,7 @@ int main()
   full_occlusion_seals_a_windowed_room();
   aperture_sum_clamps_to_unity();
   partial_aperture_and_occlusion_compose();
+  runtime_payload_matches_hidden_shader_layout();
   room_light_clamps_at_ceiling();
   invalid_input_preserves_output_bit_for_bit();
   out_of_range_occlusion_rejects();
