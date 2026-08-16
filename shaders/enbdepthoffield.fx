@@ -33,14 +33,12 @@ SamplerState Sampler0
     AddressV = Clamp;
 };
 
+#include "elder/ElderDepthOfField.fxh"
+
 float4 ElderDepthOfFieldMain(ElderStageVSOutput input) : SV_Target
 {
     float4 source = TextureColor.Sample(Sampler0, input.texcoord);
-    float raw_depth = TextureDepth.SampleLevel(Sampler0, input.texcoord, 0.0).x;
-    float spatial_available = ElderFinite1(raw_depth)
-        && ElderFinite3(ScreenSize.xyz)
-        && ElderFinite1(FocusInfo.x) ? 1.0 : 0.0;
-    float4 selected = ElderResolveCapabilityColor(source, 0.0, 0.0, spatial_available);
+    float4 selected = ElderApplyDepthOfField(input.texcoord, source);
     return ElderStageIdentity(
         source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }

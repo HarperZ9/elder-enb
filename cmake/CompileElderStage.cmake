@@ -29,6 +29,14 @@ endif()
 if(NOT "${ELDER_QUALITY_TIER}" MATCHES "^[0-4]$")
   message(FATAL_ERROR "ELDER_QUALITY_TIER must be an integer in [0,4]")
 endif()
+set(elder_tier_include_args "")
+if(DEFINED ELDER_TIER_INCLUDE_ROOT AND NOT "${ELDER_TIER_INCLUDE_ROOT}" STREQUAL "")
+  if(NOT IS_DIRECTORY "${ELDER_TIER_INCLUDE_ROOT}")
+    message(FATAL_ERROR
+      "Generated Elder tier include root is absent: ${ELDER_TIER_INCLUDE_ROOT}")
+  endif()
+  list(APPEND elder_tier_include_args /I "${ELDER_TIER_INCLUDE_ROOT}")
+endif()
 
 function(elder_fxc_diagnostics_allowed diagnostics result_variable)
   string(REPLACE "\r\n" "\n" normalized_diagnostics "${diagnostics}")
@@ -218,6 +226,27 @@ elseif(elder_stage_name STREQUAL "enbdepthoffield.fx"
       message(FATAL_ERROR "${elder_stage_name} is missing required texture: ${required_texture}")
     endif()
   endforeach()
+elseif(elder_stage_name STREQUAL "enblens.fx")
+  list(LENGTH elder_texture_declarations elder_texture_count)
+  if(NOT elder_texture_count EQUAL 1
+      OR NOT "${elder_texture_declarations}" STREQUAL "Texture2D TextureBloom")
+    message(FATAL_ERROR
+      "Lens stage must declare only the TextureBloom source supplied by ENB")
+  endif()
+  string(FIND "${elder_stage_contents}" "Texture2D TextureColor" elder_lens_texture_color_position)
+  if(NOT elder_lens_texture_color_position EQUAL -1)
+    message(FATAL_ERROR "Lens stage must not consume raw TextureColor")
+  endif()
+  string(FIND "${elder_stage_contents}" "TexturePrevious" elder_previous_position)
+  if(NOT elder_previous_position EQUAL -1)
+    message(FATAL_ERROR "Only adaptation may declare TexturePrevious scalar history")
+  endif()
+  string(FIND "${elder_stage_contents}"
+    "#define ELDER_STAGE_OWNS_PREVIOUS_SCALAR_ADAPTATION 1"
+    elder_lens_history_owner_position)
+  if(NOT elder_lens_history_owner_position EQUAL -1)
+    message(FATAL_ERROR "Only adaptation may own scalar history")
+  endif()
 elseif(elder_stage_name STREQUAL "enbeffect.fx")
   list(LENGTH elder_texture_declarations elder_texture_count)
   if(NOT elder_texture_count EQUAL 4)
@@ -270,10 +299,10 @@ execute_process(
     /WX
     /Ges
     /O3
+    ${elder_tier_include_args}
     /I "${ELDER_SOURCE_DIR}/shaders"
     /I "${ELDER_SOURCE_DIR}/native/shaders"
     /I "${ELDER_GENERATED_INCLUDE}"
-    "/DELDER_QUALITY_TIER=${ELDER_QUALITY_TIER}"
     /Fo "${ELDER_OUTPUT}"
     /Fc "${ELDER_LISTING}"
     "${ELDER_STAGE_SOURCE}"

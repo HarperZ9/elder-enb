@@ -154,6 +154,18 @@ if(BUILD_TESTING)
         PROPERTIES LABELS "shader;quality;presets;determinism"
     )
 
+    add_test(
+        NAME elder_optical_contracts
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            "-DELDER_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderOpticalContracts.cmake"
+    )
+    set_tests_properties(
+        elder_optical_contracts
+        PROPERTIES LABELS "shader;optical;contract"
+    )
+
     add_executable(elder_profile_tests
         tests/TransactionalProfileTests.cpp
     )

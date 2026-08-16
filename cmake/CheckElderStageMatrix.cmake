@@ -43,8 +43,10 @@ set(elder_common "${elder_source_dir}/shaders/elder/ElderPipelineCommon.fxh")
 set(elder_capabilities "${elder_source_dir}/shaders/elder/ElderHostCapabilities.fxh")
 set(elder_parameters "${elder_source_dir}/shaders/elder/ElderStageParameters.fxh")
 set(elder_quality "${elder_source_dir}/shaders/elder/ElderQuality.fxh")
+set(elder_tier "${elder_source_dir}/shaders/elder/ElderTier.fxh")
 set(elder_native_schema "${elder_source_dir}/native/schema/elder-native-parameters.csv")
 set(elder_color_core "${elder_source_dir}/native/shaders/ElderColorCore.fxh")
+set(elder_preset_generator "${elder_source_dir}/cmake/GenerateElderQualityPresets.cmake")
 
 foreach(required_file IN ITEMS
     "${elder_compile_script}"
@@ -52,8 +54,10 @@ foreach(required_file IN ITEMS
     "${elder_capabilities}"
     "${elder_parameters}"
     "${elder_quality}"
+    "${elder_tier}"
     "${elder_native_schema}"
-    "${elder_color_core}")
+    "${elder_color_core}"
+    "${elder_preset_generator}")
   if(NOT EXISTS "${required_file}")
     message(FATAL_ERROR "Elder stage matrix requires source: ${required_file}")
   endif()
@@ -159,6 +163,13 @@ foreach(forbidden_main_parameter IN ITEMS
       "Stage parameters must not redefine native ABI control: ${forbidden_main_parameter}")
   endif()
 endforeach()
+
+file(READ "${elder_compile_script}" elder_compile_script_source)
+string(FIND "${elder_compile_script_source}" "/DELDER_QUALITY_TIER" elder_compile_defines_tier_position)
+if(NOT elder_compile_defines_tier_position EQUAL -1)
+  message(FATAL_ERROR
+    "Stage compiler must consume generated ElderTier.fxh overlays, not /D ELDER_QUALITY_TIER")
+endif()
 
 set(elder_stage_rows
   "enbeffectprepass.fx|Draw"
@@ -356,7 +367,140 @@ run_elder_capability_probe("capability-bridge" 0 1 1 2)
 run_elder_capability_probe("capability-spatial" 0 0 1 1)
 run_elder_capability_probe("capability-identity" 0 0 0 0)
 
+set(elder_matrix_preset_root "${elder_matrix_root}/quality-presets")
+execute_process(
+  COMMAND "${CMAKE_COMMAND}"
+    "-DELDER_SOURCE_DIR=${elder_source_dir}"
+    "-DELDER_OUTPUT_DIR=${elder_matrix_preset_root}"
+    -P "${elder_preset_generator}"
+  RESULT_VARIABLE elder_matrix_preset_result
+  OUTPUT_VARIABLE elder_matrix_preset_stdout
+  ERROR_VARIABLE elder_matrix_preset_stderr)
+if(NOT elder_matrix_preset_result EQUAL 0)
+  message(FATAL_ERROR
+    "Stage matrix could not generate tier overlays.\n"
+    "stdout:\n${elder_matrix_preset_stdout}\n"
+    "stderr:\n${elder_matrix_preset_stderr}")
+endif()
+
+set(elder_expected_tier_names performance balanced quality ultra cinematic)
+set(elder_expected_tier_budgets
+  "4|2|0|0|2|0|0"
+  "6|3|0|2|3|1|1"
+  "8|4|8|3|4|2|1"
+  "12|5|12|4|5|2|2"
+  "16|6|16|5|6|3|2")
+
+set(elder_tier_budget_probe "${elder_matrix_root}/ElderTierBudgetProbe.hlsl")
+file(WRITE "${elder_tier_budget_probe}" [=[
+#define ELDER_STAGE_CAPABILITY ELDER_CAPABILITY_IDENTITY
+#define ELDER_STAGE_OWNS_COLOR 0
+#define ELDER_STAGE_OWNS_DEPTH 0
+#define ELDER_STAGE_OWNS_NORMAL 0
+#define ELDER_STAGE_OWNS_MASK 0
+#define ELDER_STAGE_OWNS_NATIVE_CELESTIAL_VIEW 0
+#define ELDER_STAGE_OWNS_PREVIOUS_SCALAR_ADAPTATION 0
+#define ELDER_STAGE_OWNS_BRIDGE_VALUE 0
+#define ELDER_STAGE_NATIVE_CAPABILITY_AVAILABLE 0
+#define ELDER_STAGE_BRIDGE_CAPABILITY_AVAILABLE 0
+#define ELDER_STAGE_SPATIAL_CAPABILITY_AVAILABLE 0
+#define ELDER_STAGE_SCRATCH_OWNER ELDER_SCRATCH_NONE
+#define ELDER_STAGE_SCRATCH_READ ELDER_SCRATCH_NONE
+#define ELDER_STAGE_OWNS_FULL_FRAME_HISTORY 0
+#define ELDER_STAGE_OWNS_OBJECT_MOTION 0
+#define ELDER_STAGE_TREATS_SCRATCH_AS_HISTORY 0
+#define ELDER_STAGE_CROSS_EFFECT_ALPHA_PACKING 0
+#include "elder/ElderHostCapabilities.fxh"
+#include "elder/ElderPipelineCommon.fxh"
+
+#if ELDER_QUALITY_TIER != ELDER_PROBE_QUALITY_TIER
+#error Generated ElderTier.fxh overlay did not select the expected quality tier
+#endif
+#if ELDER_AO_DIRECTIONS_VALUE != ELDER_PROBE_AO_DIRECTIONS
+#error Generated tier overlay did not select the expected AO direction budget
+#endif
+#if ELDER_AO_STEPS_VALUE != ELDER_PROBE_AO_STEPS
+#error Generated tier overlay did not select the expected AO step budget
+#endif
+#if ELDER_SSR_STEPS_VALUE != ELDER_PROBE_SSR_STEPS
+#error Generated tier overlay did not select the expected SSR budget
+#endif
+#if ELDER_DOF_RINGS_VALUE != ELDER_PROBE_DOF_RINGS
+#error Generated tier overlay did not select the expected DOF budget
+#endif
+#if ELDER_BLOOM_RADIUS_VALUE != ELDER_PROBE_BLOOM_RADIUS
+#error Generated tier overlay did not select the expected bloom budget
+#endif
+#if ELDER_LENS_GHOSTS_VALUE != ELDER_PROBE_LENS_GHOSTS
+#error Generated tier overlay did not select the expected lens budget
+#endif
+#if ELDER_ROOM_LIGHT_REFINEMENT_VALUE != ELDER_PROBE_ROOM_LIGHT_REFINEMENT
+#error Generated tier overlay did not select the expected room-light budget
+#endif
+
+float4 ElderTierBudgetProbeMain() : SV_Target
+{
+    return float4(
+        float(ElderDOFRings),
+        float(ElderBloomRadius),
+        float(ElderLensGhosts),
+        float(ElderQualityTier));
+}
+]=])
+
+function(run_elder_tier_budget_probe tier_index tier_name budget_row)
+  string(REPLACE "|" ";" budget_values "${budget_row}")
+  list(GET budget_values 0 ao_directions)
+  list(GET budget_values 1 ao_steps)
+  list(GET budget_values 2 ssr_steps)
+  list(GET budget_values 3 dof_rings)
+  list(GET budget_values 4 bloom_radius)
+  list(GET budget_values 5 lens_ghosts)
+  list(GET budget_values 6 room_light_refinement)
+  set(tier_include_root "${elder_matrix_preset_root}/${tier_name}/enbseries")
+  if(NOT IS_DIRECTORY "${tier_include_root}")
+    message(FATAL_ERROR "Generated tier include root is absent: ${tier_include_root}")
+  endif()
+  execute_process(
+    COMMAND "${ELDER_FXC}"
+      /nologo
+      /T ps_5_0
+      /E ElderTierBudgetProbeMain
+      /WX
+      /Ges
+      /O3
+      /I "${tier_include_root}"
+      /I "${elder_source_dir}/shaders"
+      "/DELDER_PROBE_QUALITY_TIER=${tier_index}"
+      "/DELDER_PROBE_AO_DIRECTIONS=${ao_directions}"
+      "/DELDER_PROBE_AO_STEPS=${ao_steps}"
+      "/DELDER_PROBE_SSR_STEPS=${ssr_steps}"
+      "/DELDER_PROBE_DOF_RINGS=${dof_rings}"
+      "/DELDER_PROBE_BLOOM_RADIUS=${bloom_radius}"
+      "/DELDER_PROBE_LENS_GHOSTS=${lens_ghosts}"
+      "/DELDER_PROBE_ROOM_LIGHT_REFINEMENT=${room_light_refinement}"
+      /Fo "${elder_matrix_root}/tier-budget-${tier_name}.cso"
+      "${elder_tier_budget_probe}"
+    RESULT_VARIABLE tier_probe_result
+    OUTPUT_VARIABLE tier_probe_stdout
+    ERROR_VARIABLE tier_probe_stderr)
+  if(NOT tier_probe_result EQUAL 0)
+    message(FATAL_ERROR
+      "Generated tier budget probe failed for ${tier_name}.\n"
+      "stdout:\n${tier_probe_stdout}\n"
+      "stderr:\n${tier_probe_stderr}")
+  endif()
+endfunction()
+
 foreach(tier RANGE 0 4)
+  list(GET elder_expected_tier_names ${tier} tier_name)
+  list(GET elder_expected_tier_budgets ${tier} tier_budget_row)
+  run_elder_tier_budget_probe(${tier} "${tier_name}" "${tier_budget_row}")
+endforeach()
+
+foreach(tier RANGE 0 4)
+  list(GET elder_expected_tier_names ${tier} tier_name)
+  set(elder_tier_include_root "${elder_matrix_preset_root}/${tier_name}/enbseries")
   set(elder_tier_root "${elder_matrix_root}/${tier}")
   file(MAKE_DIRECTORY "${elder_tier_root}")
   foreach(stage_row IN LISTS elder_stage_rows)
@@ -372,6 +516,7 @@ foreach(tier RANGE 0 4)
         "-DELDER_STAGE_SOURCE=${stage_source}"
         "-DELDER_STAGE_TECHNIQUE=${stage_technique}"
         "-DELDER_QUALITY_TIER=${tier}"
+        "-DELDER_TIER_INCLUDE_ROOT=${elder_tier_include_root}"
         "-DELDER_GENERATED_INCLUDE=${elder_generated_native_root}"
         "-DELDER_OUTPUT=${elder_tier_root}/${stage_stem}.fxo"
         "-DELDER_LISTING=${elder_tier_root}/${stage_stem}.asm"

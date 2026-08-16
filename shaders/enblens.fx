@@ -21,7 +21,8 @@
 #include "elder/ElderStageParameters.fxh"
 #include "elder/ElderPipelineCommon.fxh"
 
-Texture2D TextureColor;
+Texture2D TextureBloom;
+float4 ScreenSize;
 
 SamplerState Sampler0
 {
@@ -30,11 +31,14 @@ SamplerState Sampler0
     AddressV = Clamp;
 };
 
+#include "elder/ElderLens.fxh"
+
 float4 ElderLensMain(ElderStageVSOutput input) : SV_Target
 {
-    float4 source = TextureColor.Sample(Sampler0, input.texcoord);
+    float4 source = TextureBloom.Sample(Sampler0, input.texcoord);
+    float4 selected = ElderApplyLens(input.texcoord, source);
     return ElderStageIdentity(
-        source, source, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }
 
 technique11 Draw <string UIName = "Elder [50] Lens";>

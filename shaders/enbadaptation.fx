@@ -23,6 +23,7 @@
 
 Texture2D TextureCurrent;
 Texture2D TexturePrevious;
+float4 Timer;
 
 SamplerState Sampler0
 {
@@ -31,14 +32,32 @@ SamplerState Sampler0
     AddressV = Clamp;
 };
 
+#include "elder/ElderAdaptation.fxh"
+
 float4 ElderAdaptationMain(ElderStageVSOutput input) : SV_Target
 {
     float4 source = TextureCurrent.Sample(Sampler0, input.texcoord);
     float previous_scalar =
         TexturePrevious.SampleLevel(Sampler0, float2(0.5, 0.5), 0.0).x;
+    float measured_luminance = ElderAdaptationMeasuredLuminance(source.rgb);
+    float delta_seconds = ElderFinite1(Timer.x) ? clamp(Timer.x, 0.0, 0.25) : 0.0;
+    float native_available = ElderFinite3(source.rgb)
+        && ElderFinite1(source.a)
+        && ElderFinite1(measured_luminance)
+        && ElderFinite1(previous_scalar)
+        && measured_luminance > 0.0
+        && previous_scalar > 0.0 ? 1.0 : 0.0;
+    float adapted_luminance = ElderUpdateAdaptedLuminance(
+        measured_luminance, previous_scalar, delta_seconds);
+    float4 candidate = native_available > 0.0
+        ? float4(adapted_luminance.xxx, source.a)
+        : source;
     float4 selected = ElderResolveCapabilityColor(
+        candidate,
         source,
-        ElderFinite1(previous_scalar) ? 1.0 : 0.0,
+        source,
+        source,
+        native_available,
         0.0,
         0.0);
     return ElderStageIdentity(

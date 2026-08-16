@@ -31,11 +31,12 @@ SamplerState Sampler0
     AddressV = Clamp;
 };
 
+#include "elder/ElderBloom.fxh"
+
 float4 ElderBloomMain(ElderStageVSOutput input) : SV_Target
 {
     float4 source = TextureColor.Sample(Sampler0, input.texcoord);
-    float screen_witness = ElderFinite1(ScreenSize.x) ? 0.0 : 0.0;
-    float4 selected = float4(source.rgb + screen_witness.xxx, source.a);
+    float4 selected = ElderApplyBloom(input.texcoord, source);
     return ElderStageIdentity(
         source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }
