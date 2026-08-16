@@ -40,11 +40,11 @@ the applicable `enb-runtime-core` license/notice in the final package notices.
 
 The repository preserves attribution to prior shader authors and technique
 references, including Boris Vorontsov / ENBSeries, kingeric1992, Kitsuune /
-LonelyKitsuune / Skratzer, Marty McFly / Pascal Gilcher, TheSandvichMaker /
-ReforgedUI, TreyM, l00ping / L00ping, Adyss, AMON ENB / Reforged, Bjorn Ottosson, ASC,
-Stephen Hill, Troy Sobotka, Timothy Lottes, John Hable, Hejl-Burgess, Gran
-Turismo, Sébastien Hillaire, Maxime Heckel, Therrien, Levesque, Gilet, Jimenez,
-and Karis.
+LonelyKitsuune / Skratzer / T. Thanner, Marty McFly / Pascal Gilcher,
+TheSandvichMaker / ReforgedUI, TreyM, l00ping / L00ping, Adyss, AMON ENB /
+Reforged, Bjorn Ottosson, ASC, Stephen Hill, Troy Sobotka, Timothy Lottes, John
+Hable, Hejl-Burgess, Gran Turismo, Sébastien Hillaire, Maxime Heckel, Therrien,
+Levesque, Gilet, Jimenez, and Karis.
 
 These credits preserve provenance. They do not mean their proprietary,
 non-commercial, no-derivatives, binary, recovered, or otherwise restricted
@@ -58,8 +58,8 @@ Public Elder archives must not include:
 - protected evidence, private reverse-engineering notes, or recovered corpus
   material;
 - legacy adapted shader/Addons trees that are not owned by Elder;
-- proprietary Kitsuune/LonelyKitsuune implementations or permission-dependent
-  replacement plugins;
+- proprietary Kitsuune/LonelyKitsuune/Skratzer/T. Thanner implementations or
+  permission-dependent replacement plugins;
 - compiler/test binaries, `.pdb` files, build intermediates, or local RC
   artifacts;
 - third-party files whose redistribution rights have not been recorded here.

@@ -219,16 +219,18 @@ git commit -m "feat: establish ordered Elder shader stages"
 
 **Interfaces:**
 - Consumes: scene/depth, interior factor, validated Elder room-light payload, tier constants.
-- Produces: one HDR prepass result with room light, weather atmosphere, and optional AO/SSR composed once.
+- Produces: one HDR prepass result with room-light reach, bounded current-frame AO, and far-depth atmosphere fallback. SSR budget remains reserved/configured and identity/unshipped until implemented and accepted; no live fog behavior is claimed.
 
 Modern scene effects use the declared capability ladder. GTAO/contact shadows,
-short SSR, SSS, weather atmosphere, and fog use native inputs first,
-SkyrimBridge reconstruction second, bounded world-stable spatial
-approximations third, and exact identity last. Without full-frame history they
-may not use frame-random jitter, label luma change as a motion vector, or rely
-on unverified target persistence. Atmosphere adapts bounded optical-depth and
-Rayleigh/Mie/ozone concepts from Hillaire/Heckel; it does not transplant a
-full-resolution nested view/light march.
+SSS, bounded current-frame AO, and far-depth atmosphere fallback use native
+inputs first, SkyrimBridge reconstruction second, bounded world-stable spatial
+approximations third, and exact identity last. Reserved/configured SSR budgets
+stay identity/unshipped until implemented and accepted. Without full-frame
+history, effects may not use frame-random jitter, label luma change as a motion
+vector, or rely on unverified target persistence. Atmosphere adapts bounded
+optical-depth and Rayleigh/Mie/ozone concepts from Hillaire/Heckel; it does not
+transplant a full-resolution nested view/light march. No live fog behavior is
+claimed without final archive evidence.
 
 - [ ] **Step 1: Add failing room-light integration cases**
 
@@ -276,7 +278,7 @@ float3 ElderComposePrepass(
     float interior_factor);
 ```
 
-Invalid runtime returns finite scene exactly. Exterior never consumes room light. Interior blends a bounded luminance ratio without crushing the ambient floor. AO and SSR are disabled for tiers that specify zero loops.
+Invalid runtime returns finite scene exactly. Exterior never consumes room light. Interior blends a bounded luminance ratio without crushing the ambient floor. AO is disabled for tiers that specify zero loops. SSR remains identity/unshipped until a real implementation is integrated and accepted.
 
 - [ ] **Step 5: Run focused tests and matrix**
 
@@ -378,7 +380,7 @@ float3 ElderEvaluateSunSprite(float2 uv, float3 sun_direction, float visibility)
 float3 ElderEvaluateUnderwater(float2 uv, float3 scene, float linear_depth);
 ```
 
-Finish order is vignette, fine grain, triangular dither. Alpha is always `1.0`. Underwater uses one absorption/scattering model and disables air fog, lens dirt, and duplicate god rays.
+Finish order is vignette, fine grain, triangular dither. Alpha is always `1.0`. Underwater uses one absorption/scattering model and disables incompatible air, grading, and duplicate god rays. No dirt pass or dirt texture is part of accepted lens behavior.
 
 - [ ] **Step 4: Run composition, color parity, and matrix tests**
 

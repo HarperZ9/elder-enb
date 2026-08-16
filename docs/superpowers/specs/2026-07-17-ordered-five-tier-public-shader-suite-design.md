@@ -70,14 +70,14 @@ Every modern technique follows the same capability ladder:
 4. return the exact Elder-authored identity when confidence is insufficient.
 
 The public suite may backport depth/normal horizon AO and contact shadows,
-short confidence-weighted SSR, material-aware separable SSS, bounded
-Rayleigh/Mie/ozone weather atmosphere, signed-circle-of-confusion DOF,
-multiresolution bloom, robust adaptation, and luminance-preserving tone/gamut
-mapping. Camera-only reprojection is never presented as object motion, a luma
-delta is not a motion vector, and a current-frame target is not persistent
-history. Temporal upscaling, temporal SSGI/SSR denoising, frame generation, and
-reservoir reuse remain Bridge-assisted upgrade paths; the initial release uses
-documented spatial fallbacks.
+material-aware separable SSS, bounded far-depth atmosphere fallback,
+signed-circle-of-confusion DOF, multiresolution bloom, robust adaptation, and
+luminance-preserving tone/gamut mapping. Reserved/configured SSR budgets remain
+identity/unshipped until implemented and accepted. Camera-only reprojection is
+never presented as object motion, a luma delta is not a motion vector, and a
+current-frame target is not persistent history. Temporal upscaling, temporal
+SSGI/SSR denoising, frame generation, and reservoir reuse remain Bridge-assisted
+upgrade paths; the initial release uses documented spatial fallbacks.
 
 Atmosphere guidance is adapted to ENB's budget and stage order from Sébastien
 Hillaire's production atmosphere technique
@@ -91,24 +91,26 @@ It does not transplant a full-resolution nested view/light march.
 The fixed host order is treated as an API:
 
 1. **Prepass, HDR:** reconstruct depth once; create exterior/interior and
-   material-safe masks; compose room-light reach, restrained AO/SSR/SSS/snow,
-   weather atmosphere, and fog once.
+   material-safe masks; provide room-light reach, bounded current-frame AO, and
+   far-depth atmosphere fallback. No live fog behavior is claimed until final
+   integration and acceptance evidence records it.
 2. **Depth of field, HDR:** perform lens focus only. No grading, vignette,
    sharpening, or atmosphere is allowed here.
-3. **Bloom, HDR:** extract and filter radiance. No lens dirt, tone mapping, or
+3. **Bloom, HDR:** extract and filter radiance. No tone mapping, dirt pass, or
    unrelated blur.
 4. **Adaptation, HDR:** meter robust luminance and publish bounded exposure
    history with stable interior/exterior transitions.
-5. **Lens, HDR:** consume bloom for restrained glare, ghosts, and optional dirt.
-   Zero intensity is an exact identity.
+5. **Lens, HDR:** consume bloom for restrained glare, ghosts, and halo only
+   after accepted final integration. No dirt pass or dirt texture is part of the
+   accepted behavior. Zero intensity is an exact identity.
 6. **Main effect, HDR to display:** combine scene, bloom, and lens once; apply
    exposure, `ElderColorCore`, tone mapping, and gamut compression.
 7. **Postpass, LDR:** optional fine grain and vignette, then final triangular
    dithering. Sharpening is disabled by default and never follows dithering.
-8. **Sun sprite:** add a bounded optical response without duplicating bloom,
-   weather fog, or exposure.
+8. **Sun sprite:** add a bounded optical response without duplicating bloom or
+   exposure.
 9. **Underwater:** use one underwater medium model and suppress incompatible
-   air, lens-dirt, grading, and duplicate god-ray effects.
+   air, grading, and duplicate god-ray effects.
 
 ## Five quality tiers
 
@@ -118,16 +120,16 @@ granular but bounded.
 
 | Tier | Name | Baseline |
 |---:|---|---|
-| 0 | Performance | Essential color/room light, low-sample bloom, DOF disabled by default, no SSR |
-| 1 | Balanced | Restrained DOF, low-cost AO, simple lens response, stable weather atmosphere |
-| 2 | Quality | Standard DOF/bloom, stable SSR, refined room-light transitions |
+| 0 | Performance | Essential color/room light, low-sample bloom, DOF disabled by default, SSR identity/unshipped |
+| 1 | Balanced | Restrained DOF, low-cost AO budget, simple lens response, stable scene readability |
+| 2 | Quality | Standard DOF/bloom, reserved/configured SSR budget that remains identity/unshipped until implemented and accepted |
 | 3 | Ultra | Higher optical and scene-space sampling with improved depth refinement |
 | 4 | Cinematic | Highest bounded sampling and photographic refinement without effect stacking |
 
 Each tier has a complete preset containing shader flags, intensities, sample
 budgets, ENB configuration, and metadata. All tiers preserve the Elder look:
 the same exposure intent, neutral balance, black point, highlight behavior, and
-weather readability. The authored default is **Balanced**.
+scene readability. The authored default is **Balanced**.
 
 Granular controls are grouped by render stage and ordered by common use:
 master, tier/reset, intensity, advanced shape, diagnostics. Resetting a tier
@@ -143,8 +145,9 @@ restores its complete baseline.
   not enable guessed reprojection or unverified target persistence.
 - Scratch-target and packed-channel ownership is statically checked so one
   modern effect cannot consume another effect's transient data.
-- Room light, fog, bloom, lens, vignette, grain, and underwater response each
-  compose exactly once.
+- Room light, bloom, lens, vignette, grain, and underwater response each compose
+  exactly once when accepted; live fog behavior is not claimed without final
+  integration evidence.
 - The room-light input is validated and bounded before publication. Sealed
   rooms preserve only their authored ambient floor.
 - Every public control has an exact identity value and bounded maximum.

@@ -59,13 +59,15 @@ no-runtime fallback checks.
 [size=4]The nine-stage suite[/size]
 
 [list=1]
-[*][font=Courier New]enbeffectprepass.fx[/font] — depth convention, masks,
-room-light reach, restrained scene-space work, and weather/fog composition.
+[*][font=Courier New]enbeffectprepass.fx[/font] — stage contract: depth
+convention, masks, room-light reach, bounded current-frame AO, and far-depth
+atmosphere fallback. No live fog behavior is claimed here.
 [*][font=Courier New]enbdepthoffield.fx[/font] — lens focus only.
 [*][font=Courier New]enbbloom.fx[/font] — radiance extraction and filtering.
 [*][font=Courier New]enbadaptation.fx[/font] — bounded luminance metering.
-[*][font=Courier New]enblens.fx[/font] — restrained glare, ghosting, and
-optional dirt from bloom.
+[*][font=Courier New]enblens.fx[/font] — stage contract: restrained glare,
+ghost, and halo behavior when final integration is accepted. There is no dirt
+pass or dirt texture.
 [*][font=Courier New]enbeffect.fx[/font] — scene, bloom, lens, exposure, color
 core, tone mapping, and gamut compression.
 [*][font=Courier New]enbeffectpostpass.fx[/font] — final LDR finishing, with
@@ -74,18 +76,21 @@ dithering last and sharpening disabled by default.
 [*][font=Courier New]enbunderwater.fx[/font] — one underwater medium model.
 [/list]
 
-The target look is professional and cinematic without effect stacking. Elder is
-not advertised as a permission-gated preset-port or a bundle of third-party
-shader implementations.
+The list above describes stage responsibilities, not accepted live behavior.
+Unverified effects and runtime payloads remain conditional until the final
+archive and live ENB 0.504 evidence accept them. The target look is professional
+and cinematic without effect stacking. Elder is not advertised as a
+permission-gated preset-port or a bundle of third-party shader implementations.
 
 [size=4]Quality tiers[/size]
 
 [list]
-[*][b]Performance[/b] — essential color / room-light path and low sample
-budgets.
+[*][b]Performance[/b] — essential color / room-light path, low sample budgets,
+and SSR identity/unshipped.
 [*][b]Balanced[/b] — the default tier; restrained DOF, low-cost AO budget,
-simple lens response, and stable weather readability.
-[*][b]Quality[/b] — standard optical budgets and the first SSR budget.
+simple lens response, and stable scene readability.
+[*][b]Quality[/b] — standard optical budgets; SSR budget is reserved/configured
+only and remains identity/unshipped until implemented and accepted.
 [*][b]Ultra[/b] — higher optical and scene-space budgets.
 [*][b]Cinematic[/b] — highest bounded budgets and photographic refinement
 without effect stacking.
@@ -126,11 +131,11 @@ third-party implementations. The archive must include
 [font=Courier New]THIRD_PARTY_NOTICES.md[/font].
 
 Credited historical and technical sources include Boris Vorontsov / ENBSeries,
-kingeric1992, Kitsuune/LonelyKitsuune/Skratzer, Adyss, TreyM, l00ping / L00ping,
-TheSandvichMaker/ReforgedUI, Marty McFly / Pascal Gilcher, AMON ENB/Reforged,
-and the other technique references recorded in the repository notices. These
-credits are attribution and provenance, not evidence that proprietary
-implementations are shipped.
+kingeric1992, Kitsuune/LonelyKitsuune/Skratzer/T. Thanner, Adyss, TreyM,
+l00ping / L00ping, TheSandvichMaker/ReforgedUI, Marty McFly / Pascal Gilcher,
+AMON ENB/Reforged, and the other technique references recorded in the
+repository notices. These credits are attribution and provenance, not evidence
+that proprietary implementations are shipped.
 
 [size=4]Install[/size]
 
@@ -161,6 +166,7 @@ permission-dependent plugin replacements as part of Elder.
   exclusions/notices
 
 State on the page: the MIT license applies to Elder-owned code and
-documentation only. It does not grant rights to ENBSeries, Kitsuune/LonelyKitsuune
-implementations, ReforgedUI, ReShade/ADOF work, protected evidence, recovered
-legacy material, or any other third-party material.
+documentation only. It does not grant rights to ENBSeries,
+Kitsuune/LonelyKitsuune/Skratzer/T. Thanner implementations, ReforgedUI,
+ReShade/ADOF work, protected evidence, recovered legacy material, or any other
+third-party material.

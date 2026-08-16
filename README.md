@@ -18,17 +18,17 @@ media or visual claims are backed by labeled real in-game captures.
 The public shader suite is organized around ENB's fixed stage order. Elder
 treats that order as an API rather than as a loose pile of effects:
 
-| Order | Stage | File | Responsibility |
-|---:|---|---|---|
-| 1 | Prepass | `shaders/enbeffectprepass.fx` | Depth convention, masks, room-light reach, restrained scene-space work, and weather/fog composition. |
-| 2 | Depth of field | `shaders/enbdepthoffield.fx` | Lens focus only; no grading, vignette, sharpening, or atmosphere. |
-| 3 | Bloom | `shaders/enbbloom.fx` | Radiance extraction and filtering. |
-| 4 | Adaptation | `shaders/enbadaptation.fx` | Bounded luminance metering / exposure-history contract. |
-| 5 | Lens | `shaders/enblens.fx` | Restrained glare, ghosting, and optional dirt from bloom. |
-| 6 | Main effect | `shaders/enbeffect.fx` | Scene, bloom, lens, exposure, color core, tone mapping, and gamut compression. |
-| 7 | Postpass | `shaders/enbeffectpostpass.fx` | Final LDR finishing; dithering is last and sharpening is off by default. |
-| 8 | Sun sprite | `shaders/enbsunsprite.fx` | Bounded sun optical response without duplicating bloom/fog/exposure. |
-| 9 | Underwater | `shaders/enbunderwater.fx` | One underwater medium model while suppressing incompatible air/lens/grading effects. |
+| Order | Stage | File | Stage contract / responsibility | Accepted live behavior in this copy |
+|---:|---|---|---|---|
+| 1 | Prepass | `shaders/enbeffectprepass.fx` | Depth convention, masks, room-light reach, bounded current-frame AO, and far-depth atmosphere fallback. No live fog behavior is claimed here. | Pending final archive and live ENB 0.504 evidence; unaccepted paths stay identity. |
+| 2 | Depth of field | `shaders/enbdepthoffield.fx` | Lens focus only; no grading, vignette, sharpening, or atmosphere. | Pending final archive and live ENB 0.504 evidence; unaccepted paths stay identity. |
+| 3 | Bloom | `shaders/enbbloom.fx` | Radiance extraction and filtering. | Pending final archive and live ENB 0.504 evidence; unaccepted paths stay identity. |
+| 4 | Adaptation | `shaders/enbadaptation.fx` | Bounded luminance metering / exposure-history contract. | Pending final archive and live ENB 0.504 evidence; unaccepted paths stay identity. |
+| 5 | Lens | `shaders/enblens.fx` | Restrained glare, ghost, and halo behavior when final integration is accepted; no dirt pass or dirt texture. | Pending final archive and live ENB 0.504 evidence; no dirt behavior is accepted. |
+| 6 | Main effect | `shaders/enbeffect.fx` | Scene, bloom, lens, exposure, color core, tone mapping, and gamut compression. | Pending final archive and live ENB 0.504 evidence; unaccepted paths stay identity. |
+| 7 | Postpass | `shaders/enbeffectpostpass.fx` | Final LDR finishing; dithering is last and sharpening is off by default. | Pending final archive and live ENB 0.504 evidence; unaccepted paths stay identity. |
+| 8 | Sun sprite | `shaders/enbsunsprite.fx` | Bounded sun optical response without duplicating bloom or exposure. | Pending final archive and live ENB 0.504 evidence; unaccepted paths stay identity. |
+| 9 | Underwater | `shaders/enbunderwater.fx` | One underwater medium model while suppressing incompatible air, grading, and duplicate god-ray effects. | Pending final archive and live ENB 0.504 evidence; unaccepted paths stay identity. |
 
 The release target is broader than the earlier dither-focused slice. Temporal
 dither is one native helper and optional integration point; the public suite is
@@ -43,9 +43,9 @@ kept identity-preserving where a later visual payload has not yet been accepted.
 
 | Tier | Name | Role |
 |---:|---|---|
-| 0 | Performance | Essential color / room-light path, low sample budgets, DOF disabled by default, no SSR budget. |
-| 1 | Balanced | Default tier; restrained DOF, low-cost AO budget, simple lens response, stable weather readability. |
-| 2 | Quality | Standard optical budgets and the first SSR budget. |
+| 0 | Performance | Essential color / room-light path, low sample budgets, DOF disabled by default, SSR identity/unshipped. |
+| 1 | Balanced | Default tier; restrained DOF, low-cost AO budget, simple lens response, stable scene readability. |
+| 2 | Quality | Standard optical budgets; SSR budget is reserved/configured only. |
 | 3 | Ultra | Higher optical and scene-space budgets with improved depth refinement. |
 | 4 | Cinematic | Highest bounded budgets and photographic refinement without effect stacking. |
 
@@ -53,6 +53,10 @@ The public archive must contain complete tier outputs generated from this
 manifest, but this README intentionally does not claim a current release-archive
 file count. The final package manifest is a release gate, not a marketing
 sentence.
+
+Reserved/configured SSR budgets are not a live effect claim. SSR remains
+identity/unshipped until an implementation is integrated, accepted, and recorded
+in the final archive evidence.
 
 ## Capability ladder and fail-closed behavior
 
@@ -125,9 +129,9 @@ game validation.
 The Elder-owned source and documentation in this repository are licensed under
 the MIT License; see [LICENSE](LICENSE). MIT applies only to code and
 documentation the project owns. It does not grant rights to ENBSeries,
-SkyrimBridge, Kitsuune/LonelyKitsuune implementations, ReShade/ADOF work,
-ReforgedUI, recovered legacy material, protected evidence, proprietary plugin
-binaries, or any other third-party material.
+SkyrimBridge, Kitsuune/LonelyKitsuune/Skratzer/T. Thanner implementations,
+ReShade/ADOF work, ReforgedUI, recovered legacy material, protected evidence,
+proprietary plugin binaries, or any other third-party material.
 
 Preserve prior shader-author attribution in headers, notices, public pages, and
 archives. If the final archive adds any third-party file or linked component,
