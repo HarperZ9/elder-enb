@@ -4,9 +4,9 @@ foreach(required_variable IN ITEMS
     ELDER_PYTHON
     ELDER_SOURCE_DIR
     ELDER_BINARY_DIR
-    ELDER_REQUIRE_RUNTIME
     ELDER_NATIVE_PARAMETERS
     ELDER_RUNTIME_PLUGIN
+    ELDER_RUNTIME_RECEIPT
     ELDER_RUNTIME_CORE_ROOT)
     if(NOT DEFINED ${required_variable} OR "${${required_variable}}" STREQUAL "")
         message(FATAL_ERROR "Missing required variable: ${required_variable}")
@@ -76,18 +76,11 @@ if(NOT elder_source_result EQUAL 0)
         "stderr:\n${elder_source_stderr}")
 endif()
 
-if(NOT ELDER_REQUIRE_RUNTIME)
-    string(STRIP "${elder_source_stdout}" elder_source_summary)
-    message(STATUS "${elder_source_summary}")
-    message(STATUS
-        "Runtime-complete archive verification is deferred until "
-        "ELDER_PUBLIC_PACKAGE_REQUIRE_RUNTIME=ON and the Elder runtime is built")
-    return()
-endif()
-
 foreach(runtime_input IN ITEMS
     "${ELDER_NATIVE_PARAMETERS}"
     "${ELDER_RUNTIME_PLUGIN}"
+    "${ELDER_RUNTIME_RECEIPT}"
+    "${ELDER_RUNTIME_CORE_ROOT}/CMakeLists.txt"
     "${ELDER_RUNTIME_CORE_ROOT}/LICENSE")
     if(NOT EXISTS "${runtime_input}")
         message(FATAL_ERROR
@@ -109,6 +102,7 @@ foreach(elder_run IN ITEMS first second)
             --work-dir "${elder_run_root}/work"
             --native-parameters "${ELDER_NATIVE_PARAMETERS}"
             --runtime-plugin "${ELDER_RUNTIME_PLUGIN}"
+            --runtime-receipt "${ELDER_RUNTIME_RECEIPT}"
             --runtime-core-root "${ELDER_RUNTIME_CORE_ROOT}"
         WORKING_DIRECTORY "${elder_source_dir}"
         RESULT_VARIABLE elder_build_result
@@ -133,7 +127,7 @@ foreach(elder_run IN ITEMS first second)
     execute_process(
         COMMAND "${CMAKE_COMMAND}" -E env PYTHONDONTWRITEBYTECODE=1
             "${ELDER_PYTHON}" "${elder_package_script}"
-            verify "${elder_archive}" --require-runtime
+            verify "${elder_archive}"
         WORKING_DIRECTORY "${elder_source_dir}"
         RESULT_VARIABLE elder_verify_result
         OUTPUT_VARIABLE elder_verify_stdout

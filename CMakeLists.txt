@@ -131,6 +131,12 @@ set(
     CACHE FILEPATH
     "Elder-owned ElderENBRuntime.dllplugin admitted to the public archive"
 )
+set(
+    ELDER_PUBLIC_RUNTIME_RECEIPT
+    "${CMAKE_CURRENT_SOURCE_DIR}/out/native-schema/vs18-x64-static/runtime/Release/ElderENBRuntime.dllplugin.receipt"
+    CACHE FILEPATH
+    "Build receipt binding ElderENBRuntime.dllplugin to its source revisions"
+)
 set(elder_public_runtime_core_default "${CMAKE_CURRENT_SOURCE_DIR}/../enb-runtime-core")
 if(
     NOT EXISTS "${elder_public_runtime_core_default}/LICENSE"
@@ -150,12 +156,6 @@ set(
     CACHE PATH
     "Output directory for the strict Elder public archive"
 )
-option(
-    ELDER_PUBLIC_PACKAGE_REQUIRE_RUNTIME
-    "Require and verify the runtime-complete public archive in CTest"
-    OFF
-)
-
 add_custom_target(
     elder_public_release_package
     COMMAND "${CMAKE_COMMAND}" -E env PYTHONDONTWRITEBYTECODE=1
@@ -167,6 +167,7 @@ add_custom_target(
         --work-dir "${CMAKE_CURRENT_BINARY_DIR}/public-package/target"
         --native-parameters "${ELDER_PUBLIC_NATIVE_PARAMETERS}"
         --runtime-plugin "${ELDER_PUBLIC_RUNTIME_PLUGIN}"
+        --runtime-receipt "${ELDER_PUBLIC_RUNTIME_RECEIPT}"
         --runtime-core-root "${ELDER_PUBLIC_RUNTIME_CORE_ROOT}"
     BYPRODUCTS
         "${ELDER_PUBLIC_PACKAGE_OUTPUT_DIR}/Elder-ENB-1.0.0-win64.zip"
@@ -182,15 +183,16 @@ if(BUILD_TESTING)
             "-DELDER_PYTHON=${Python3_EXECUTABLE}"
             "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
             "-DELDER_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}"
-            "-DELDER_REQUIRE_RUNTIME=${ELDER_PUBLIC_PACKAGE_REQUIRE_RUNTIME}"
             "-DELDER_NATIVE_PARAMETERS=${ELDER_PUBLIC_NATIVE_PARAMETERS}"
             "-DELDER_RUNTIME_PLUGIN=${ELDER_PUBLIC_RUNTIME_PLUGIN}"
+            "-DELDER_RUNTIME_RECEIPT=${ELDER_PUBLIC_RUNTIME_RECEIPT}"
             "-DELDER_RUNTIME_CORE_ROOT=${ELDER_PUBLIC_RUNTIME_CORE_ROOT}"
             -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderPublicReleasePackage.cmake"
     )
     set_tests_properties(
         elder_public_release_package
         PROPERTIES
+            CONFIGURATIONS Release
             LABELS "release;package;manifest;determinism;security"
             TIMEOUT 180
     )

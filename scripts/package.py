@@ -7,12 +7,16 @@ Every archive member is selected explicitly, every selected byte is hashed in
 fixed. Source-only validation is available while the Elder runtime plugin is
 being integrated; it never emits a release-named archive.
 """
+
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
+import io
 import re
 import shutil
+import struct
 import subprocess
 import zipfile
 from pathlib import Path, PurePosixPath
@@ -93,6 +97,7 @@ MEDIA_FILES = (
 
 RUNTIME_MEMBER = "Root/enbseries/ElderENBRuntime.dllplugin"
 NATIVE_PARAMETERS_MEMBER = "Root/enbseries/ElderNativeParameters.fxh"
+RUNTIME_RECEIPT_MEMBER = "Docs/ElderENBRuntime.receipt"
 RUNTIME_CORE_LICENSE_MEMBER = "Docs/ThirdParty/enb-runtime-core-LICENSE"
 RUNTIME_CORE_NOTICE_MEMBER = "Docs/ThirdParty/enb-runtime-core-NOTICE.md"
 MANIFEST_MEMBER = "MANIFEST.sha256"
@@ -187,6 +192,12 @@ class VerificationResult(NamedTuple):
     file_count: int
 
 
+class RuntimeCoreIdentity(NamedTuple):
+    license: bytes
+    repository: str
+    revision: str
+
+
 def _read_required(path: Path, description: str) -> bytes:
     if not path.is_file():
         raise PackageError(f"missing {description}: {path}")
@@ -194,6 +205,30 @@ def _read_required(path: Path, description: str) -> bytes:
     if not data:
         raise PackageError(f"empty {description}: {path}")
     return data
+
+
+def read_public_source(
+    source_root: Path, relative_path: Path, description: str
+) -> bytes:
+    """Read one allowlisted source without following links outside the checkout."""
+    source_root = source_root.resolve()
+    if relative_path.is_absolute() or any(
+        part in {"", ".", ".."} for part in relative_path.parts
+    ):
+        raise PackageError(f"unsafe {description} source path: {relative_path}")
+
+    candidate = source_root / relative_path
+    cursor = source_root
+    for part in relative_path.parts:
+        cursor /= part
+        is_junction = getattr(cursor, "is_junction", lambda: False)
+        if cursor.is_symlink() or is_junction():
+            raise PackageError(f"linked {description} source is forbidden: {cursor}")
+
+    resolved = candidate.resolve()
+    if resolved == source_root or source_root not in resolved.parents:
+        raise PackageError(f"{description} source escapes the checkout: {candidate}")
+    return _read_required(resolved, description)
 
 
 def _reset_owned_directory(path: Path, owner: Path) -> None:
@@ -207,6 +242,18 @@ def _reset_owned_directory(path: Path, owner: Path) -> None:
 
 
 def _validate_source_inventory(source_root: Path) -> None:
+    for relative_dir, description in (
+        (Path("shaders"), "shader directory"),
+        (Path("shaders/elder"), "shader include directory"),
+    ):
+        directory = source_root / relative_dir
+        is_junction = getattr(directory, "is_junction", lambda: False)
+        if directory.is_symlink() or is_junction():
+            raise PackageError(f"linked {description} is forbidden: {directory}")
+        resolved = directory.resolve()
+        if source_root not in resolved.parents or not resolved.is_dir():
+            raise PackageError(f"invalid {description}: {directory}")
+
     actual_stages = {
         path.name for path in (source_root / "shaders").glob("*.fx") if path.is_file()
     }
@@ -217,6 +264,8 @@ def _validate_source_inventory(source_root: Path) -> None:
             f"missing={sorted(expected_stages - actual_stages)}, "
             f"unexpected={sorted(actual_stages - expected_stages)}"
         )
+    for stage in STAGE_FILES:
+        read_public_source(source_root, Path("shaders") / stage, f"Elder stage {stage}")
 
     actual_includes = {
         path.name
@@ -230,15 +279,23 @@ def _validate_source_inventory(source_root: Path) -> None:
             f"missing={sorted(expected_includes - actual_includes)}, "
             f"unexpected={sorted(actual_includes - expected_includes)}"
         )
+    for include_name in SUPPORT_INCLUDE_FILES:
+        read_public_source(
+            source_root,
+            Path("shaders/elder") / include_name,
+            f"Elder support include {include_name}",
+        )
 
 
 def _run_preset_generator(source_root: Path, output_dir: Path) -> None:
+    generator = Path("cmake/GenerateElderQualityPresets.cmake")
+    read_public_source(source_root, generator, "quality preset generator")
     command = (
         "cmake",
         f"-DELDER_SOURCE_DIR={source_root}",
         f"-DELDER_OUTPUT_DIR={output_dir}",
         "-P",
-        str(source_root / "cmake" / "GenerateElderQualityPresets.cmake"),
+        str(source_root / generator),
     )
     result = subprocess.run(
         command,
@@ -266,7 +323,9 @@ def _expected_raw_preset_paths() -> set[str]:
 
 def _parse_ini(path: Path, expected_section: str) -> dict[str, str]:
     lines = path.read_text(encoding="utf-8").splitlines()
-    section_lines = [line for line in lines if line.startswith("[") and line.endswith("]")]
+    section_lines = [
+        line for line in lines if line.startswith("[") and line.endswith("]")
+    ]
     if section_lines != [expected_section]:
         raise PackageError(
             f"preset {path} must contain exactly section {expected_section}; "
@@ -275,7 +334,11 @@ def _parse_ini(path: Path, expected_section: str) -> dict[str, str]:
 
     parsed: dict[str, str] = {}
     for line in lines:
-        if not line or line.startswith(";") or (line.startswith("[") and line.endswith("]")):
+        if (
+            not line
+            or line.startswith(";")
+            or (line.startswith("[") and line.endswith("]"))
+        ):
             continue
         if "=" not in line:
             raise PackageError(f"malformed preset line in {path}: {line}")
@@ -283,8 +346,7 @@ def _parse_ini(path: Path, expected_section: str) -> dict[str, str]:
         if key in parsed:
             raise PackageError(f"duplicate preset key in {path}: {key}")
         if not (
-            value in {"true", "false"}
-            or re.fullmatch(r"-?[0-9]+(?:\.[0-9]+)?", value)
+            value in {"true", "false"} or re.fullmatch(r"-?[0-9]+(?:\.[0-9]+)?", value)
         ):
             raise PackageError(f"invalid preset value in {path}: {key}={value}")
         parsed[key] = value
@@ -305,17 +367,23 @@ def validate_generated_presets(source_root: Path, generated_root: Path) -> None:
             f"unexpected={sorted(actual_paths - expected_paths)}"
         )
 
-    parameter_source = _read_required(
-        source_root / "shaders" / "elder" / "ElderStageParameters.fxh",
+    parameter_source = read_public_source(
+        source_root,
+        Path("shaders/elder/ElderStageParameters.fxh"),
         "Elder stage UI contract",
     ).decode("utf-8")
-    ui_names = set(re.findall(r'UIName\s*=\s*"(\[Elder \d{2}\][^"]+)"', parameter_source))
+    ui_names = set(
+        re.findall(r'UIName\s*=\s*"(\[Elder \d{2}\][^"]+)"', parameter_source)
+    )
 
     for tier_index, (tier, tier_label) in enumerate(zip(TIER_NAMES, TIER_LABELS)):
         tier_root = generated_root / tier
-        metadata = _read_required(
-            tier_root / PRESET_METADATA_FILE, f"{tier} quality metadata"
-        ).decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
+        metadata = (
+            _read_required(tier_root / PRESET_METADATA_FILE, f"{tier} quality metadata")
+            .decode("utf-8")
+            .replace("\r\n", "\n")
+            .replace("\r", "\n")
+        )
         for required_line in (
             "; Elder ENB quality preset",
             f"; Tier: {tier_label} ({tier_index})",
@@ -328,10 +396,15 @@ def validate_generated_presets(source_root: Path, generated_root: Path) -> None:
                     f"{tier}/{PRESET_METADATA_FILE} lacks exact metadata: {required_line}"
                 )
 
-        tier_override = _read_required(
-            tier_root / Path(TIER_OVERRIDE_PATH.as_posix()),
-            f"{tier} compile-time tier override",
-        ).decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
+        tier_override = (
+            _read_required(
+                tier_root / Path(TIER_OVERRIDE_PATH.as_posix()),
+                f"{tier} compile-time tier override",
+            )
+            .decode("utf-8")
+            .replace("\r\n", "\n")
+            .replace("\r", "\n")
+        )
         tier_defines = re.findall(
             r"^#define\s+ELDER_QUALITY_TIER\s+([0-4])$",
             tier_override,
@@ -344,9 +417,12 @@ def validate_generated_presets(source_root: Path, generated_root: Path) -> None:
 
         for stage in STAGE_FILES:
             preset_path = tier_root / f"{stage}.ini"
-            preset_source = _read_required(
-                preset_path, f"{tier} {stage} configuration"
-            ).decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
+            preset_source = (
+                _read_required(preset_path, f"{tier} {stage} configuration")
+                .decode("utf-8")
+                .replace("\r\n", "\n")
+                .replace("\r", "\n")
+            )
             if not preset_source.startswith(
                 f"; Elder ENB quality preset\n; Tier: {tier_label} ({tier_index})\n"
             ):
@@ -392,17 +468,19 @@ def build_source_payload(source_root: Path, work_dir: Path) -> dict[str, bytes]:
 
     members: dict[str, bytes] = {}
     for stage in STAGE_FILES:
-        members[f"Root/enbseries/{stage}"] = _read_required(
-            source_root / "shaders" / stage, f"Elder stage {stage}"
+        members[f"Root/enbseries/{stage}"] = read_public_source(
+            source_root, Path("shaders") / stage, f"Elder stage {stage}"
         )
     for include_name in SUPPORT_INCLUDE_FILES:
-        members[f"Root/enbseries/elder/{include_name}"] = _read_required(
-            source_root / "shaders" / "elder" / include_name,
+        members[f"Root/enbseries/elder/{include_name}"] = read_public_source(
+            source_root,
+            Path("shaders/elder") / include_name,
             f"Elder support include {include_name}",
         )
 
-    members["Root/enbseries/ElderColorCore.fxh"] = _read_required(
-        source_root / "native" / "shaders" / "ElderColorCore.fxh",
+    members["Root/enbseries/ElderColorCore.fxh"] = read_public_source(
+        source_root,
+        Path("native/shaders/ElderColorCore.fxh"),
         "Elder color-core include",
     )
     _copy_generated_presets(members, generated_root)
@@ -421,12 +499,13 @@ def build_source_payload(source_root: Path, work_dir: Path) -> dict[str, bytes]:
     )
 
     for source_relative, member_path in DOCUMENT_FILES:
-        members[member_path] = _read_required(
-            source_root / Path(source_relative), f"public document {source_relative}"
+        members[member_path] = read_public_source(
+            source_root, Path(source_relative), f"public document {source_relative}"
         )
     for media_name in MEDIA_FILES:
-        members[f"Media/Nexus/{media_name}"] = _read_required(
-            source_root / "media" / "nexus" / media_name,
+        members[f"Media/Nexus/{media_name}"] = read_public_source(
+            source_root,
+            Path("media/nexus") / media_name,
             f"Nexus media {media_name}",
         )
 
@@ -444,8 +523,7 @@ def build_source_payload(source_root: Path, work_dir: Path) -> dict[str, bytes]:
 def expected_source_members() -> set[str]:
     expected = {f"Root/enbseries/{stage}" for stage in STAGE_FILES}
     expected.update(
-        f"Root/enbseries/elder/{include_name}"
-        for include_name in SUPPORT_INCLUDE_FILES
+        f"Root/enbseries/elder/{include_name}" for include_name in SUPPORT_INCLUDE_FILES
     )
     expected.add("Root/enbseries/ElderColorCore.fxh")
     expected.update(f"Root/enbseries/{stage}.ini" for stage in STAGE_FILES)
@@ -461,21 +539,264 @@ def expected_source_members() -> set[str]:
     return expected
 
 
-def _runtime_core_notice(source_root: Path) -> bytes:
-    lock_source = _read_required(
-        source_root / "native" / "runtime" / "enb-runtime-core.lock",
-        "enb-runtime-core lock",
-    ).decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
+def _runtime_core_lock(source_root: Path) -> tuple[str, str]:
+    lock_source = (
+        read_public_source(
+            source_root,
+            Path("native/runtime/enb-runtime-core.lock"),
+            "enb-runtime-core lock",
+        )
+        .decode("utf-8")
+        .replace("\r\n", "\n")
+        .replace("\r", "\n")
+    )
     repository_match = re.search(r"^repository=(\S+)$", lock_source, re.MULTILINE)
     revision_match = re.search(r"^revision=([0-9a-f]{40})$", lock_source, re.MULTILINE)
     if repository_match is None or revision_match is None:
-        raise PackageError("enb-runtime-core.lock lacks canonical repository/revision fields")
+        raise PackageError(
+            "enb-runtime-core.lock lacks canonical repository/revision fields"
+        )
+    expected = (
+        f"repository={repository_match.group(1)}\nrevision={revision_match.group(1)}\n"
+    )
+    if lock_source != expected:
+        raise PackageError(
+            "enb-runtime-core.lock contains non-canonical or extra fields"
+        )
+    return repository_match.group(1), revision_match.group(1)
+
+
+def _git_text(root: Path, *arguments: str) -> str:
+    result = subprocess.run(
+        ("git", "-C", str(root), *arguments),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise PackageError(
+            f"git {' '.join(arguments)} failed for {root}: {result.stderr.strip()}"
+        )
+    return result.stdout.strip()
+
+
+def _normalized_repository(repository: str) -> str:
+    normalized = repository.strip().replace("\\", "/").rstrip("/")
+    if normalized.casefold().endswith(".git"):
+        normalized = normalized[:-4]
+    if normalized.startswith("git@") and ":" in normalized:
+        host, path = normalized[4:].split(":", 1)
+        normalized = f"https://{host}/{path}"
+    return normalized.casefold()
+
+
+def validate_runtime_core(
+    source_root: Path, runtime_core_root: Path
+) -> RuntimeCoreIdentity:
+    repository, revision = _runtime_core_lock(source_root)
+    runtime_core_root = runtime_core_root.resolve()
+    cmake_project = _read_required(
+        runtime_core_root / "CMakeLists.txt", "enb-runtime-core CMake project"
+    )
+    if b"project(" not in cmake_project:
+        raise PackageError("enb-runtime-core CMake project is not canonical")
+    license_data = _read_required(
+        runtime_core_root / "LICENSE", "enb-runtime-core license"
+    )
+    if not license_data.startswith(b"MIT License"):
+        raise PackageError("enb-runtime-core license is not the admitted MIT license")
+
+    actual_revision = _git_text(runtime_core_root, "rev-parse", "HEAD").casefold()
+    if actual_revision != revision:
+        raise PackageError(
+            "enb-runtime-core revision mismatch: "
+            f"expected {revision}, found {actual_revision}"
+        )
+    actual_repository = _git_text(runtime_core_root, "remote", "get-url", "origin")
+    if _normalized_repository(actual_repository) != _normalized_repository(repository):
+        raise PackageError(
+            "enb-runtime-core repository mismatch: "
+            f"expected {repository}, found {actual_repository}"
+        )
+    tracked_status = _git_text(
+        runtime_core_root, "status", "--porcelain", "--untracked-files=no"
+    )
+    if tracked_status:
+        raise PackageError("enb-runtime-core contains tracked local changes")
+    return RuntimeCoreIdentity(license_data, repository, revision)
+
+
+def validate_native_parameters(source_root: Path, data: bytes) -> None:
+    try:
+        source = data.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise PackageError(
+            "generated Elder native parameter include is not UTF-8"
+        ) from error
+    if not source.startswith(
+        "#ifndef ELDER_NATIVE_PARAMETERS_FXH\n#define ELDER_NATIVE_PARAMETERS_FXH\n"
+    ):
+        raise PackageError("generated Elder native parameter include is not canonical")
+
+    schema_source = read_public_source(
+        source_root,
+        Path("native/schema/elder-native-parameters.csv"),
+        "Elder native parameter schema",
+    ).decode("utf-8-sig")
+    rows = list(csv.DictReader(io.StringIO(schema_source)))
+    if not rows:
+        raise PackageError("Elder native parameter schema is empty")
+    hlsl_types = {"bool": "bool", "float": "float", "color3": "float3"}
+    symbols: list[str] = []
+    for row in rows:
+        symbol = row.get("symbol", "")
+        schema_type = row.get("type", "")
+        if (
+            not re.fullmatch(r"Elder[A-Za-z0-9]+", symbol)
+            or schema_type not in hlsl_types
+        ):
+            raise PackageError(f"unsupported Elder native schema row: {row}")
+        if symbol in symbols:
+            raise PackageError(f"duplicate Elder native schema symbol: {symbol}")
+        symbols.append(symbol)
+        hlsl_type = hlsl_types[schema_type]
+        required_patterns = (
+            rf"(?m)^\s*{hlsl_type}\s+{re.escape(symbol)}\b",
+            rf"(?m)^\s*{hlsl_type}\s+ElderNativeSanitize_{re.escape(symbol)}\s*\(",
+            rf"(?m)^\s*bool\s+ElderNativeActive_{re.escape(symbol)}\s*\(",
+        )
+        if any(re.search(pattern, source) is None for pattern in required_patterns):
+            raise PackageError(f"generated Elder native parameter ABI lacks {symbol}")
+
+    expected_symbols = set(symbols)
+    for prefix, return_type in (
+        ("Sanitize", r"(?:bool|float|float3)"),
+        ("Active", "bool"),
+    ):
+        actual_symbols = set(
+            re.findall(
+                rf"(?m)^\s*{return_type}\s+ElderNative{prefix}_(Elder[A-Za-z0-9]+)\s*\(",
+                source,
+            )
+        )
+        if actual_symbols != expected_symbols:
+            raise PackageError(
+                f"generated Elder native {prefix.lower()} ABI differs from schema: "
+                f"missing={sorted(expected_symbols - actual_symbols)}, "
+                f"unexpected={sorted(actual_symbols - expected_symbols)}"
+            )
+
+    main_effect = read_public_source(
+        source_root, Path("shaders/enbeffect.fx"), "Elder main effect"
+    ).decode("utf-8")
+    used_contracts = set(
+        re.findall(r"ElderNative(?:Sanitize|Active)_Elder[A-Za-z0-9]+", main_effect)
+    )
+    missing_contracts = sorted(
+        name for name in used_contracts if f"{name}(" not in source
+    )
+    if missing_contracts:
+        raise PackageError(
+            f"generated Elder native ABI omits main-effect contracts: {missing_contracts}"
+        )
+
+
+def validate_runtime_plugin(data: bytes) -> None:
+    if len(data) < 0x9A or data[:2] != b"MZ":
+        raise PackageError("Elder runtime plugin lacks a valid DOS header")
+    pe_offset = struct.unpack_from("<I", data, 0x3C)[0]
+    if pe_offset < 0x40 or pe_offset + 26 > len(data):
+        raise PackageError("Elder runtime plugin has an invalid PE header offset")
+    if data[pe_offset : pe_offset + 4] != b"PE\0\0":
+        raise PackageError("Elder runtime plugin lacks a PE signature")
+    machine = struct.unpack_from("<H", data, pe_offset + 4)[0]
+    optional_size = struct.unpack_from("<H", data, pe_offset + 20)[0]
+    characteristics = struct.unpack_from("<H", data, pe_offset + 22)[0]
+    if machine != 0x8664:
+        raise PackageError("Elder runtime plugin is not AMD64")
+    if optional_size < 2 or pe_offset + 24 + optional_size > len(data):
+        raise PackageError("Elder runtime plugin has an invalid optional header")
+    if struct.unpack_from("<H", data, pe_offset + 24)[0] != 0x20B:
+        raise PackageError("Elder runtime plugin is not PE32+")
+    if characteristics & 0x2000 == 0:
+        raise PackageError("Elder runtime plugin is not marked as a DLL")
+    for symbol in (
+        b"ElderRuntimeFramePulse",
+        b"ElderRuntimeRoomLight",
+        b"ElderRuntimeExposureColor",
+        b"ElderRuntimeStatus",
+    ):
+        if symbol not in data:
+            raise PackageError(f"Elder runtime plugin omits {symbol.decode('ascii')}")
+
+
+def validate_runtime_receipt(
+    source_root: Path,
+    receipt_data: bytes,
+    runtime_data: bytes,
+    runtime_core: RuntimeCoreIdentity,
+) -> None:
+    try:
+        receipt = receipt_data.decode("ascii")
+    except UnicodeDecodeError as error:
+        raise PackageError("Elder runtime receipt is not ASCII") from error
+    lines = receipt.splitlines(keepends=True)
+    if any(not line.endswith("\n") for line in lines):
+        raise PackageError("Elder runtime receipt must use canonical LF records")
+    parsed: dict[str, str] = {}
+    for line in lines:
+        key, separator, value = line[:-1].partition("=")
+        if not separator or not key or not value or key in parsed:
+            raise PackageError("Elder runtime receipt contains malformed records")
+        parsed[key] = value
+    expected_keys = (
+        "schema",
+        "runtime_file",
+        "runtime_sha256",
+        "elder_revision",
+        "elder_runtime_tree",
+        "runtime_core_repository",
+        "runtime_core_revision",
+    )
+    if tuple(parsed) != expected_keys:
+        raise PackageError("Elder runtime receipt fields are not canonical")
+    if parsed["schema"] != "ELDER_RUNTIME_RECEIPT_V1":
+        raise PackageError("Elder runtime receipt schema is unsupported")
+    if parsed["runtime_file"] != "ElderENBRuntime.dllplugin":
+        raise PackageError("Elder runtime receipt names a different binary")
+    runtime_digest = hashlib.sha256(runtime_data).hexdigest()
+    if parsed["runtime_sha256"] != runtime_digest:
+        raise PackageError("Elder runtime receipt hash does not match the plugin")
+    elder_revision = _git_text(source_root, "rev-parse", "HEAD").casefold()
+    elder_runtime_tree = _git_text(
+        source_root, "rev-parse", "HEAD:native/runtime"
+    ).casefold()
+    if parsed["elder_revision"] != elder_revision:
+        raise PackageError("Elder runtime receipt does not match the source revision")
+    if parsed["elder_runtime_tree"] != elder_runtime_tree:
+        raise PackageError(
+            "Elder runtime receipt does not match the runtime source tree"
+        )
+    if _normalized_repository(
+        parsed["runtime_core_repository"]
+    ) != _normalized_repository(runtime_core.repository):
+        raise PackageError(
+            "Elder runtime receipt names a different runtime-core repository"
+        )
+    if parsed["runtime_core_revision"] != runtime_core.revision:
+        raise PackageError(
+            "Elder runtime receipt names a different runtime-core revision"
+        )
+
+
+def _runtime_core_notice(source_root: Path) -> bytes:
+    repository, revision = _runtime_core_lock(source_root)
     return (
         "# enb-runtime-core notice\n\n"
         "ElderENBRuntime.dllplugin statically links the independently maintained "
         "enb-runtime-core library.\n\n"
-        f"- Source: {repository_match.group(1)}\n"
-        f"- Pinned revision: `{revision_match.group(1)}`\n"
+        f"- Source: {repository}\n"
+        f"- Pinned revision: `{revision}`\n"
         "- License: MIT; see `enb-runtime-core-LICENSE` in this directory.\n\n"
         "No enb-runtime-core test, compiler, or intermediate binary is included.\n"
     ).encode("utf-8")
@@ -507,14 +828,20 @@ def reject_forbidden_members(members: Mapping[str, bytes]) -> None:
             for part in lowered_parts
             for marker in FORBIDDEN_NAME_MARKERS + ("eote",)
         ):
-            raise PackageError(f"permission-dependent component is forbidden: {raw_path}")
+            raise PackageError(
+                f"permission-dependent component is forbidden: {raw_path}"
+            )
 
         suffix = PurePosixPath(basename).suffix
         if suffix == ".dllplugin":
             if path.as_posix() != RUNTIME_MEMBER:
-                raise PackageError(f"only the Elder-owned runtime plugin may ship: {raw_path}")
+                raise PackageError(
+                    f"only the Elder-owned runtime plugin may ship: {raw_path}"
+                )
         elif suffix in FORBIDDEN_BINARY_SUFFIXES:
-            raise PackageError(f"compiler, test, archive, or binary artifact is forbidden: {raw_path}")
+            raise PackageError(
+                f"compiler, test, archive, or binary artifact is forbidden: {raw_path}"
+            )
 
         for secret_pattern in SECRET_PATTERNS:
             if secret_pattern.search(data):
@@ -528,26 +855,24 @@ def _manifest_bytes(members: Mapping[str, bytes]) -> bytes:
     ).encode("ascii")
 
 
-def _expected_release_members(require_runtime: bool) -> set[str]:
+def _expected_release_members() -> set[str]:
     expected = expected_source_members()
-    expected.add(NATIVE_PARAMETERS_MEMBER)
-    if require_runtime:
-        expected.update(
-            {
-                RUNTIME_MEMBER,
-                RUNTIME_CORE_LICENSE_MEMBER,
-                RUNTIME_CORE_NOTICE_MEMBER,
-            }
-        )
+    expected.update(
+        {
+            NATIVE_PARAMETERS_MEMBER,
+            RUNTIME_MEMBER,
+            RUNTIME_RECEIPT_MEMBER,
+            RUNTIME_CORE_LICENSE_MEMBER,
+            RUNTIME_CORE_NOTICE_MEMBER,
+        }
+    )
     expected.add(MANIFEST_MEMBER)
     return expected
 
 
-def validate_release_members(
-    members: Mapping[str, bytes], *, require_runtime: bool
-) -> None:
+def validate_release_members(source_root: Path, members: Mapping[str, bytes]) -> None:
     reject_forbidden_members(members)
-    expected = _expected_release_members(require_runtime)
+    expected = _expected_release_members()
     actual = set(members)
     if actual != expected:
         raise PackageError(
@@ -555,14 +880,22 @@ def validate_release_members(
             f"missing={sorted(expected - actual)}, "
             f"unexpected={sorted(actual - expected)}"
         )
-    if not members[NATIVE_PARAMETERS_MEMBER].startswith(
-        b"#ifndef ELDER_NATIVE_PARAMETERS_FXH"
-    ):
-        raise PackageError("generated Elder native parameter include is not canonical")
-    if b"ElderNativeSanitize_ElderMasterEnabled" not in members[NATIVE_PARAMETERS_MEMBER]:
-        raise PackageError("generated Elder native parameter include lacks its sanitizer ABI")
-    if require_runtime and not members[RUNTIME_MEMBER].startswith(b"MZ"):
-        raise PackageError("Elder runtime plugin is not a Windows PE binary")
+    validate_native_parameters(source_root, members[NATIVE_PARAMETERS_MEMBER])
+    validate_runtime_plugin(members[RUNTIME_MEMBER])
+    repository, revision = _runtime_core_lock(source_root)
+    runtime_core = RuntimeCoreIdentity(
+        members[RUNTIME_CORE_LICENSE_MEMBER], repository, revision
+    )
+    if not runtime_core.license.startswith(b"MIT License"):
+        raise PackageError("packaged enb-runtime-core license is not MIT")
+    if members[RUNTIME_CORE_NOTICE_MEMBER] != _runtime_core_notice(source_root):
+        raise PackageError("packaged enb-runtime-core notice is not canonical")
+    validate_runtime_receipt(
+        source_root,
+        members[RUNTIME_RECEIPT_MEMBER],
+        members[RUNTIME_MEMBER],
+        runtime_core,
+    )
 
 
 def _write_archive(archive_path: Path, members: Mapping[str, bytes]) -> None:
@@ -591,6 +924,7 @@ def build_release(
     work_dir: Path,
     native_parameters: Path,
     runtime_plugin: Path,
+    runtime_receipt: Path,
     runtime_core_root: Path,
 ) -> ReleaseArtifacts:
     source_root = source_root.resolve()
@@ -599,27 +933,35 @@ def build_release(
     native_parameters_data = _read_required(
         native_parameters.resolve(), "generated Elder native parameter include"
     )
+    validate_native_parameters(source_root, native_parameters_data)
     runtime_plugin = runtime_plugin.resolve()
     if runtime_plugin.name != "ElderENBRuntime.dllplugin":
         raise PackageError(
             "runtime input must be the Elder-owned ElderENBRuntime.dllplugin"
         )
     runtime_data = _read_required(runtime_plugin, "Elder runtime plugin")
-    if not runtime_data.startswith(b"MZ"):
-        raise PackageError("Elder runtime plugin is not a Windows PE binary")
-
-    runtime_core_license = _read_required(
-        runtime_core_root.resolve() / "LICENSE", "enb-runtime-core license"
+    validate_runtime_plugin(runtime_data)
+    runtime_receipt = runtime_receipt.resolve()
+    if (
+        runtime_receipt.name != "ElderENBRuntime.dllplugin.receipt"
+        or runtime_receipt.parent != runtime_plugin.parent
+    ):
+        raise PackageError(
+            "runtime receipt must be adjacent to ElderENBRuntime.dllplugin"
+        )
+    runtime_receipt_data = _read_required(runtime_receipt, "Elder runtime receipt")
+    runtime_core = validate_runtime_core(source_root, runtime_core_root)
+    validate_runtime_receipt(
+        source_root, runtime_receipt_data, runtime_data, runtime_core
     )
-    if b"MIT License" not in runtime_core_license:
-        raise PackageError("enb-runtime-core license is not the admitted MIT license")
 
     members[NATIVE_PARAMETERS_MEMBER] = native_parameters_data
     members[RUNTIME_MEMBER] = runtime_data
-    members[RUNTIME_CORE_LICENSE_MEMBER] = runtime_core_license
+    members[RUNTIME_RECEIPT_MEMBER] = runtime_receipt_data
+    members[RUNTIME_CORE_LICENSE_MEMBER] = runtime_core.license
     members[RUNTIME_CORE_NOTICE_MEMBER] = _runtime_core_notice(source_root)
     members[MANIFEST_MEMBER] = _manifest_bytes(members)
-    validate_release_members(members, require_runtime=True)
+    validate_release_members(source_root, members)
 
     output_dir = output_dir.resolve()
     archive_path = output_dir / ARCHIVE_NAME
@@ -628,9 +970,11 @@ def build_release(
     digest = hashlib.sha256(archive_path.read_bytes()).hexdigest()
     output_dir.mkdir(parents=True, exist_ok=True)
     checksum_path.write_bytes(f"{digest}  {ARCHIVE_NAME}\n".encode("ascii"))
-    verified = verify_archive(archive_path, require_runtime=True)
+    verified = verify_archive(archive_path, source_root=source_root)
     if verified.sha256 != digest:
-        raise PackageError("post-write archive verification produced a different digest")
+        raise PackageError(
+            "post-write archive verification produced a different digest"
+        )
     return ReleaseArtifacts(archive_path, checksum_path, digest, verified.file_count)
 
 
@@ -647,7 +991,9 @@ def verify_checksum_sidecar(archive_path: Path) -> Path:
     return checksum_path
 
 
-def verify_archive(archive_path: Path, *, require_runtime: bool) -> VerificationResult:
+def verify_archive(
+    archive_path: Path, *, source_root: Path = ROOT
+) -> VerificationResult:
     archive_path = archive_path.resolve()
     if archive_path.name != ARCHIVE_NAME:
         raise PackageError(
@@ -667,12 +1013,16 @@ def verify_archive(archive_path: Path, *, require_runtime: bool) -> Verification
                         f"archive timestamp is not deterministic: {info.filename}"
                     )
                 if info.is_dir():
-                    raise PackageError(f"archive must not contain directory entries: {info.filename}")
+                    raise PackageError(
+                        f"archive must not contain directory entries: {info.filename}"
+                    )
             members = {name: archive.read(name) for name in names}
     except (OSError, zipfile.BadZipFile) as error:
-        raise PackageError(f"cannot read public archive {archive_path}: {error}") from error
+        raise PackageError(
+            f"cannot read public archive {archive_path}: {error}"
+        ) from error
 
-    validate_release_members(members, require_runtime=require_runtime)
+    validate_release_members(source_root.resolve(), members)
     expected_manifest = _manifest_bytes(
         {path: data for path, data in members.items() if path != MANIFEST_MEMBER}
     )
@@ -693,7 +1043,9 @@ def check_source_determinism(source_root: Path, work_dir: Path) -> tuple[str, in
         raise PackageError("source payload generation is not path deterministic")
     for path in sorted(first):
         if first[path] != second[path]:
-            raise PackageError(f"source payload generation is not byte deterministic: {path}")
+            raise PackageError(
+                f"source payload generation is not byte deterministic: {path}"
+            )
     digest = hashlib.sha256(_manifest_bytes(first)).hexdigest()
     return digest, len(first)
 
@@ -723,13 +1075,19 @@ def _default_runtime_plugin(source_root: Path) -> Path:
     )
 
 
+def _default_runtime_receipt(source_root: Path) -> Path:
+    return _default_runtime_plugin(source_root).with_suffix(".dllplugin.receipt")
+
+
 def default_runtime_core_root(source_root: Path) -> Path:
     source_root = source_root.resolve()
     candidates = [source_root.parent / "enb-runtime-core"]
     if len(source_root.parents) > 1:
         candidates.append(source_root.parents[1] / "enb-runtime-core")
     for candidate in candidates:
-        if (candidate / "LICENSE").is_file() and (candidate / "CMakeLists.txt").is_file():
+        if (candidate / "LICENSE").is_file() and (
+            candidate / "CMakeLists.txt"
+        ).is_file():
             return candidate.resolve()
     return candidates[0].resolve()
 
@@ -755,13 +1113,15 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     build_parser.add_argument("--native-parameters", type=Path)
     build_parser.add_argument("--runtime-plugin", type=Path)
+    build_parser.add_argument("--runtime-receipt", type=Path)
     build_parser.add_argument(
         "--runtime-core-root", type=Path, default=default_runtime_core_root(ROOT)
     )
 
-    verify_parser = subparsers.add_parser("verify", help="verify an existing public archive")
+    verify_parser = subparsers.add_parser(
+        "verify", help="verify an existing public archive"
+    )
     verify_parser.add_argument("archive", type=Path)
-    verify_parser.add_argument("--require-runtime", action="store_true")
     return parser
 
 
@@ -796,6 +1156,11 @@ def main(argv: Sequence[str] | None = None) -> int:
                     if arguments.runtime_plugin is not None
                     else _default_runtime_plugin(source_root)
                 ),
+                runtime_receipt=(
+                    arguments.runtime_receipt
+                    if arguments.runtime_receipt is not None
+                    else _default_runtime_receipt(source_root)
+                ),
                 runtime_core_root=arguments.runtime_core_root,
             )
             print(f"packaged {artifacts.archive}")
@@ -803,9 +1168,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"files   {artifacts.file_count}")
             return 0
 
-        verification = verify_archive(
-            arguments.archive, require_runtime=arguments.require_runtime
-        )
+        verification = verify_archive(arguments.archive)
         print(
             f"verified {arguments.archive}: {verification.file_count} files; "
             f"SHA-256 {verification.sha256}"

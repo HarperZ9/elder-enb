@@ -15,7 +15,8 @@ isolated Mod Organizer profile.
   stage configurations, `elder-quality.ini`, and the compile-time
   `elder/ElderTier.fxh` override.
 - `Docs/` contains the Elder MIT license, credits, provenance, third-party
-  notices, architecture, and the pinned `enb-runtime-core` license/notice.
+  notices, architecture, the runtime build receipt, and the pinned
+  `enb-runtime-core` license/notice.
 - `Media/Nexus/` contains generated promotional artwork. It is not an in-game
   screenshot and must not be used as rendering evidence.
 - `MANIFEST.sha256` hashes every other archive member. The adjacent archive
@@ -43,20 +44,21 @@ without producing a release archive:
 python scripts/package.py check-source --work-dir out/public-package/source-check
 ```
 
-The final build additionally requires the generated native-parameter include,
-the Elder-owned `ElderENBRuntime.dllplugin`, and the pinned
-`enb-runtime-core` checkout:
+The final build additionally requires the complete generated native-parameter
+ABI, the Elder-owned AMD64 PE32+ `ElderENBRuntime.dllplugin`, its adjacent build
+receipt, and the clean pinned `enb-runtime-core` checkout:
 
 ```powershell
 python scripts/package.py build
-python scripts/package.py verify dist/Elder-ENB-1.0.0-win64.zip --require-runtime
+python scripts/package.py verify dist/Elder-ENB-1.0.0-win64.zip
 ```
 
 The packager uses an exact allowlist, fixed ZIP timestamps, sorted entries,
 and a content manifest. It rejects ENB binaries, legacy Addons/EotE material,
 recovered or protected inputs, permission-dependent native replacements,
 compiler/debug outputs, nested archives, environment files, and secret-like
-material.
+material. Verification is always runtime-complete; `check-source` is the only
+source-only mode and never emits a release-named archive.
 
 ## Live acceptance record
 
