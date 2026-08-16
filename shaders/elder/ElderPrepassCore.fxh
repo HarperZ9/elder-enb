@@ -5,8 +5,8 @@
 #error Include ElderPipelineCommon.fxh before ElderPrepassCore.fxh
 #endif
 
-#include "ElderRuntimeParameters.fxh"
-#include "ElderScreenSpace.fxh"
+#include "elder/ElderRuntimeParameters.fxh"
+#include "elder/ElderScreenSpace.fxh"
 
 float3 ElderPrepassFiniteSceneOrBlack(float3 scene)
 {

@@ -21,6 +21,12 @@ file(REAL_PATH "${ELDER_BINARY_DIR}" elder_binary_dir)
 set(elder_matrix_root "${elder_binary_dir}/shader-matrix")
 set(elder_generated_native_root "${elder_matrix_root}/generated-native")
 
+# Stock FXC searches the including file's directory before /I roots, while
+# ENBSeries resolves nested public includes from the installed enbseries root.
+# Enforce the host layout before compiling so sibling-relative includes cannot
+# make the offline matrix greener than the installed shader tree.
+include("${elder_source_dir}/cmake/CheckElderHostIncludeLayout.cmake")
+
 set(elder_stage_sources
   shaders/enbeffectprepass.fx
   shaders/enbdepthoffield.fx

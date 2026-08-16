@@ -5,7 +5,7 @@
 #error Include ElderHostCapabilities.fxh after stage declarations and before ElderPipelineCommon.fxh
 #endif
 
-#include "ElderQuality.fxh"
+#include "elder/ElderQuality.fxh"
 
 // Elder uses device depth where sky is near one. Every depth-aware stage uses
 // this shared convention instead of local threshold drift.

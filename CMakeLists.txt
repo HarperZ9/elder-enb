@@ -211,6 +211,17 @@ if(BUILD_TESTING)
     )
 
     add_test(
+        NAME elder_host_include_layout_contract
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderHostIncludeLayout.cmake"
+    )
+    set_tests_properties(
+        elder_host_include_layout_contract
+        PROPERTIES LABELS "shader;host;include;package"
+    )
+
+    add_test(
         NAME elder_prepass_contract
         COMMAND "${CMAKE_COMMAND}"
             "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
