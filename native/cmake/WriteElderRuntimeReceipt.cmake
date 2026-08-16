@@ -49,7 +49,7 @@ endfunction()
 file(STRINGS "${ELDER_RUNTIME_CORE_LOCK}" lock_repository_lines
   REGEX "^repository=[^ ]+$")
 file(STRINGS "${ELDER_RUNTIME_CORE_LOCK}" lock_revision_lines
-  REGEX "^revision=[0-9a-f]{40}$")
+  REGEX "^revision=[0-9a-f]+$")
 list(LENGTH lock_repository_lines repository_count)
 list(LENGTH lock_revision_lines revision_count)
 if(NOT repository_count EQUAL 1 OR NOT revision_count EQUAL 1)
@@ -60,6 +60,10 @@ list(GET lock_repository_lines 0 lock_repository)
 list(GET lock_revision_lines 0 lock_revision)
 string(REGEX REPLACE "^repository=" "" lock_repository "${lock_repository}")
 string(REGEX REPLACE "^revision=" "" lock_revision "${lock_revision}")
+string(LENGTH "${lock_revision}" lock_revision_length)
+if(NOT lock_revision_length EQUAL 40)
+  message(FATAL_ERROR "enb-runtime-core.lock revision must contain 40 hex digits")
+endif()
 
 elder_git_output(elder_revision "${ELDER_SOURCE_ROOT}" rev-parse HEAD)
 elder_git_output(elder_runtime_tree "${ELDER_SOURCE_ROOT}"
