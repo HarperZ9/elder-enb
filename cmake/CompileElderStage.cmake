@@ -146,22 +146,57 @@ endif()
 string(FIND "${elder_stage_contents}" "#define ELDER_STAGE_OWNS_BRIDGE_VALUE 1"
   elder_bridge_stage_position)
 if(NOT elder_bridge_stage_position EQUAL -1)
-  string(FIND "${elder_stage_contents}" "SB_Retain" elder_retain_position)
-  if(elder_retain_position EQUAL -1)
-    message(FATAL_ERROR
-      "Bridge-consuming stage ${elder_stage_name} must preserve the SB_Retain call")
+  if(elder_stage_name STREQUAL "enbsunsprite.fx")
+    foreach(required_sun_bridge_token IN ITEMS
+        "ElderBridgeSunDirection"
+        "ElderBridgeRenderFrame"
+        "ElderSunSpriteBridgeAvailable")
+      string(FIND "${elder_stage_contents}" "${required_sun_bridge_token}"
+        elder_sun_bridge_token_position)
+      if(elder_sun_bridge_token_position EQUAL -1)
+        message(FATAL_ERROR
+          "Sun sprite Bridge path is missing required token: ${required_sun_bridge_token}")
+      endif()
+    endforeach()
+  else()
+    string(FIND "${elder_stage_contents}" "SB_Retain" elder_retain_position)
+    if(elder_retain_position EQUAL -1)
+      message(FATAL_ERROR
+        "Bridge-consuming stage ${elder_stage_name} must preserve the SB_Retain call")
+    endif()
   endif()
 endif()
 
-if(NOT elder_stage_name STREQUAL "enbeffect.fx"
-    AND NOT elder_stage_name STREQUAL "enbeffectprepass.fx"
-    AND NOT elder_stage_name STREQUAL "enbadaptation.fx"
-    AND NOT elder_stage_name STREQUAL "enbbloom.fx"
-    AND NOT elder_stage_name STREQUAL "enblens.fx")
+if(elder_stage_name STREQUAL "enbdepthoffield.fx")
   string(FIND "${elder_stage_contents}" "ElderStageIdentity" identity_position)
   if(identity_position EQUAL -1)
     message(FATAL_ERROR
       "Identity stage ${elder_stage_name} must use the exact ElderStageIdentity output")
+  endif()
+elseif(elder_stage_name STREQUAL "enbeffectpostpass.fx")
+  foreach(required_post_token IN ITEMS
+      "ElderFinishLdr"
+      "return float4(finished, 1.0)")
+    string(FIND "${elder_stage_contents}" "${required_post_token}"
+      post_token_position)
+    if(post_token_position EQUAL -1)
+      message(FATAL_ERROR
+        "Postpass display stage ${elder_stage_name} is missing required finish token: ${required_post_token}")
+    endif()
+  endforeach()
+elseif(elder_stage_name STREQUAL "enbsunsprite.fx")
+  string(FIND "${elder_stage_contents}" "ElderEvaluateSunSprite"
+    sun_token_position)
+  if(sun_token_position EQUAL -1)
+    message(FATAL_ERROR
+      "Sun sprite stage must call ElderEvaluateSunSprite")
+  endif()
+elseif(elder_stage_name STREQUAL "enbunderwater.fx")
+  string(FIND "${elder_stage_contents}" "ElderEvaluateUnderwater"
+    underwater_token_position)
+  if(underwater_token_position EQUAL -1)
+    message(FATAL_ERROR
+      "Underwater stage must call ElderEvaluateUnderwater")
   endif()
 endif()
 if(elder_stage_name STREQUAL "enbbloom.fx"

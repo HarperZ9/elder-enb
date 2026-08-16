@@ -31,13 +31,18 @@ SamplerState Sampler0
     AddressV = Clamp;
 };
 
+#include "elder/ElderPostFinish.fxh"
+
 float4 ElderPostpassMain(ElderStageVSOutput input) : SV_Target
 {
     float4 source = TextureColor.Sample(Sampler0, input.texcoord);
-    float screen_witness = ElderFinite1(ScreenSize.y) ? 0.0 : 0.0;
-    float4 selected = float4(source.rgb + screen_witness.xxx, source.a);
-    return ElderStageIdentity(
-        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+    float3 display_color = saturate(ElderFiniteOrBlack(source.rgb));
+    if (!ElderStageIsActive() || ELDER_STAGE_INTENSITY <= 0.0)
+    {
+        return float4(display_color, 1.0);
+    }
+    float3 finished = ElderFinishLdr(input.texcoord, display_color);
+    return float4(finished, 1.0);
 }
 
 technique11 Draw <string UIName = "Elder [70] Postpass";>

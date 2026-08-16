@@ -166,6 +166,17 @@ if(BUILD_TESTING)
         PROPERTIES LABELS "shader;optical;contract"
     )
 
+    add_test(
+        NAME elder_composition_contracts
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderCompositionContracts.cmake"
+    )
+    set_tests_properties(
+        elder_composition_contracts
+        PROPERTIES LABELS "shader;composition;contract"
+    )
+
     add_executable(elder_profile_tests
         tests/TransactionalProfileTests.cpp
     )

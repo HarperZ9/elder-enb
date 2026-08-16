@@ -73,24 +73,25 @@ float ElderLensEnergyCap <string UIName = "[Elder 50] Lens | Energy Cap"; string
 #elif ELDER_STAGE_PARAMETER_SLOT == 5
 bool ElderMainEffectEnabled <string UIName = "[Elder 60] Main Effect | Enabled";> = true;
 float ElderMainEffectIntensity <string UIName = "[Elder 60] Main Effect | Color-Core Intensity"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 1.0;
-float ElderMainEffectDisplayShape <string UIName = "[Elder 60] Main Effect | Display Shape"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 0.5;
+float ElderMainEffectOpticalShape <string UIName = "[Elder 60] Main Effect | Optical Shape"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 0.5;
 #define ELDER_STAGE_ENABLED ElderMainEffectEnabled
 #define ELDER_STAGE_INTENSITY ElderMainEffectIntensity
 #elif ELDER_STAGE_PARAMETER_SLOT == 6
 bool ElderPostpassEnabled <string UIName = "[Elder 70] Postpass | Enabled";> = true;
 float ElderPostpassIntensity <string UIName = "[Elder 70] Postpass | Intensity"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 1.0;
+float ElderPostpassVignetteStrength <string UIName = "[Elder 70] Postpass | Vignette Strength"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 0.35; float UIStep = 0.01;> = 0.18;
 float ElderPostpassGrainShape <string UIName = "[Elder 70] Postpass | Grain Shape"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 0.0;
 #define ELDER_STAGE_ENABLED ElderPostpassEnabled
 #define ELDER_STAGE_INTENSITY ElderPostpassIntensity
 #elif ELDER_STAGE_PARAMETER_SLOT == 7
 bool ElderSunSpriteEnabled <string UIName = "[Elder 80] Sun Sprite | Enabled";> = true;
-float ElderSunSpriteIntensity <string UIName = "[Elder 80] Sun Sprite | Intensity"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 1.0;
+float ElderSunSpriteIntensity <string UIName = "[Elder 80] Sun Sprite | Intensity"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 0.18;
 float ElderSunSpriteDiscShape <string UIName = "[Elder 80] Sun Sprite | Disc Shape"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 0.5;
 #define ELDER_STAGE_ENABLED ElderSunSpriteEnabled
 #define ELDER_STAGE_INTENSITY ElderSunSpriteIntensity
 #elif ELDER_STAGE_PARAMETER_SLOT == 8
 bool ElderUnderwaterEnabled <string UIName = "[Elder 90] Underwater | Enabled";> = true;
-float ElderUnderwaterIntensity <string UIName = "[Elder 90] Underwater | Intensity"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 1.0;
+float ElderUnderwaterIntensity <string UIName = "[Elder 90] Underwater | Intensity"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 0.55;
 float ElderUnderwaterDensityShape <string UIName = "[Elder 90] Underwater | Density Shape"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.0; float UIStep = 0.01;> = 0.25;
 #define ELDER_STAGE_ENABLED ElderUnderwaterEnabled
 #define ELDER_STAGE_INTENSITY ElderUnderwaterIntensity

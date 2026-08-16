@@ -31,17 +31,20 @@ SamplerState Sampler0
     AddressV = Clamp;
 };
 
+#include "elder/ElderUnderwater.fxh"
+
 float4 ElderUnderwaterMain(ElderStageVSOutput input) : SV_Target
 {
     float4 source = TextureColor.Sample(Sampler0, input.texcoord);
+    if (!ElderStageIsActive() || ELDER_STAGE_INTENSITY <= 0.0)
+    {
+        return float4(ElderFiniteOrBlack(source.rgb), source.a);
+    }
     float raw_depth = TextureDepth.SampleLevel(Sampler0, input.texcoord, 0.0).x;
-    float4 selected = ElderResolveCapabilityColor(
-        source,
-        0.0,
-        0.0,
-        ElderFinite1(raw_depth) ? 1.0 : 0.0);
-    return ElderStageIdentity(
-        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+    float3 medium = ElderFinite1(raw_depth)
+        ? ElderEvaluateUnderwater(input.texcoord, source.rgb, raw_depth)
+        : ElderFiniteOrBlack(source.rgb);
+    return float4(medium, source.a);
 }
 
 technique11 Draw <string UIName = "Elder [90] Underwater";>

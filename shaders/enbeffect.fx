@@ -76,13 +76,27 @@ ElderColorCoreParameters ElderBuildNativeColorCoreParameters()
     return parameters;
 }
 
+static const float ELDER_HDR_DISPLAY_MAX = 64.0;
+
+float3 ElderBoundHdrDisplay(float3 color)
+{
+    return min(ElderFiniteOrBlack(color), ELDER_HDR_DISPLAY_MAX.xxx);
+}
+
+float3 ElderBoundOpticalContribution(float3 contribution)
+{
+    float optical_cap = lerp(0.18, 0.45, saturate(ElderMainEffectOpticalShape));
+    return min(ElderFiniteOrBlack(contribution), optical_cap.xxx);
+}
+
 float3 ElderResolveMainSource(float2 texcoord)
 {
-    float3 color = TextureColor.Sample(Sampler0, texcoord).rgb;
-    float3 bloom = TextureBloom.Sample(Sampler1, texcoord).rgb;
-    float3 lens = TextureLens.Sample(Sampler1, texcoord).rgb;
-    float optical_witness = ElderFinite3(bloom) && ElderFinite3(lens) ? 0.0 : 0.0;
-    return ElderFiniteOrBlack(color + optical_witness.xxx);
+    float3 scene_color = ElderBoundHdrDisplay(
+        TextureColor.Sample(Sampler0, texcoord).rgb);
+    float3 bloom_add = ElderBoundOpticalContribution(TextureBloom.Sample(Sampler1, texcoord).rgb);
+    float3 lens_add = ElderBoundOpticalContribution(TextureLens.Sample(Sampler1, texcoord).rgb);
+    float3 optical_color = ElderBoundHdrDisplay(scene_color + bloom_add + lens_add);
+    return optical_color;
 }
 
 float3 ElderResolveMainCapability(float3 color, float adaptation_scalar)
@@ -107,7 +121,7 @@ float4 ElderMainEffectPixel(ElderStageVSOutput input) : SV_Target
         || !ElderNativeActive_ElderMasterEnabled()
         || !ElderNativeSanitize_ElderMasterEnabled())
     {
-        return float4(ElderFiniteOrBlack(linear_color), 1.0);
+        return float4(ElderBoundHdrDisplay(linear_color), 1.0);
     }
 
     float3 evaluated = ElderEvaluateColorCore(
@@ -117,13 +131,13 @@ float4 ElderMainEffectPixel(ElderStageVSOutput input) : SV_Target
         linear_color,
         evaluated,
         saturate(ElderMainEffectIntensity));
-    return float4(ElderFiniteOrBlack(mixed), 1.0);
+    return float4(ElderBoundHdrDisplay(mixed), 1.0);
 }
 
 float4 ElderMainEffectFallbackPixel(ElderStageVSOutput input) : SV_Target
 {
     return float4(
-        ElderFiniteOrBlack(TextureColor.Sample(Sampler0, input.texcoord).rgb),
+        ElderBoundHdrDisplay(TextureColor.Sample(Sampler0, input.texcoord).rgb),
         1.0);
 }
 

@@ -166,6 +166,33 @@ set(elder_optical_ini_files
     enbbloom.fx.ini
     enbadaptation.fx.ini
     enblens.fx.ini)
+set(elder_prepass_ui_keys
+    "[Elder 10] Prepass | Enabled"
+    "[Elder 10] Prepass | Intensity"
+    "[Elder 10] Prepass | Depth Shape")
+set(elder_main_ui_keys
+    "[Elder 60] Main Effect | Enabled"
+    "[Elder 60] Main Effect | Color-Core Intensity"
+    "[Elder 60] Main Effect | Optical Shape")
+set(elder_postpass_ui_keys
+    "[Elder 70] Postpass | Enabled"
+    "[Elder 70] Postpass | Intensity"
+    "[Elder 70] Postpass | Vignette Strength"
+    "[Elder 70] Postpass | Grain Shape")
+set(elder_sunsprite_ui_keys
+    "[Elder 80] Sun Sprite | Enabled"
+    "[Elder 80] Sun Sprite | Intensity"
+    "[Elder 80] Sun Sprite | Disc Shape")
+set(elder_underwater_ui_keys
+    "[Elder 90] Underwater | Enabled"
+    "[Elder 90] Underwater | Intensity"
+    "[Elder 90] Underwater | Density Shape")
+set(elder_non_optical_ini_files
+    enbeffectprepass.fx.ini
+    enbeffect.fx.ini
+    enbeffectpostpass.fx.ini
+    enbsunsprite.fx.ini
+    enbunderwater.fx.ini)
 
 function(elder_expected_optical_keys ini_file out_keys out_section)
     if(ini_file STREQUAL "enbdepthoffield.fx.ini")
@@ -305,6 +332,123 @@ function(elder_validate_optical_ini root tier ini_file)
     endforeach()
 endfunction()
 
+function(elder_expected_non_optical_keys ini_file out_keys out_section)
+    if(ini_file STREQUAL "enbeffectprepass.fx.ini")
+        set(keys ${elder_prepass_ui_keys})
+        set(section "[ENBEFFECTPREPASS.FX]")
+    elseif(ini_file STREQUAL "enbeffect.fx.ini")
+        set(keys ${elder_main_ui_keys})
+        set(section "[ENBEFFECT.FX]")
+    elseif(ini_file STREQUAL "enbeffectpostpass.fx.ini")
+        set(keys ${elder_postpass_ui_keys})
+        set(section "[ENBEFFECTPOSTPASS.FX]")
+    elseif(ini_file STREQUAL "enbsunsprite.fx.ini")
+        set(keys ${elder_sunsprite_ui_keys})
+        set(section "[ENBSUNSPRITE.FX]")
+    elseif(ini_file STREQUAL "enbunderwater.fx.ini")
+        set(keys ${elder_underwater_ui_keys})
+        set(section "[ENBUNDERWATER.FX]")
+    else()
+        message(FATAL_ERROR "No non-optical-key contract exists for ${ini_file}")
+    endif()
+    set(${out_keys} ${keys} PARENT_SCOPE)
+    set(${out_section} "${section}" PARENT_SCOPE)
+endfunction()
+
+function(elder_non_optical_numeric_range key out_min out_max)
+    if(key STREQUAL "[Elder 10] Prepass | Intensity")
+        set(minimum 0.0)
+        set(maximum 1.0)
+    elseif(key STREQUAL "[Elder 10] Prepass | Depth Shape")
+        set(minimum 0.0)
+        set(maximum 1.0)
+    elseif(key STREQUAL "[Elder 60] Main Effect | Color-Core Intensity")
+        set(minimum 0.0)
+        set(maximum 1.0)
+    elseif(key STREQUAL "[Elder 60] Main Effect | Optical Shape")
+        set(minimum 0.0)
+        set(maximum 1.0)
+    elseif(key STREQUAL "[Elder 70] Postpass | Intensity")
+        set(minimum 0.0)
+        set(maximum 1.0)
+    elseif(key STREQUAL "[Elder 70] Postpass | Vignette Strength")
+        set(minimum 0.0)
+        set(maximum 0.35)
+    elseif(key STREQUAL "[Elder 70] Postpass | Grain Shape")
+        set(minimum 0.0)
+        set(maximum 1.0)
+    elseif(key STREQUAL "[Elder 80] Sun Sprite | Intensity")
+        set(minimum 0.0)
+        set(maximum 1.0)
+    elseif(key STREQUAL "[Elder 80] Sun Sprite | Disc Shape")
+        set(minimum 0.0)
+        set(maximum 1.0)
+    elseif(key STREQUAL "[Elder 90] Underwater | Intensity")
+        set(minimum 0.0)
+        set(maximum 1.0)
+    elseif(key STREQUAL "[Elder 90] Underwater | Density Shape")
+        set(minimum 0.0)
+        set(maximum 1.0)
+    else()
+        message(FATAL_ERROR "No numeric range exists for non-optical key ${key}")
+    endif()
+    set(${out_min} "${minimum}" PARENT_SCOPE)
+    set(${out_max} "${maximum}" PARENT_SCOPE)
+endfunction()
+
+function(elder_validate_non_optical_ini root tier ini_file)
+    elder_expected_non_optical_keys("${ini_file}" expected_keys expected_section)
+    set(candidate "${root}/${tier}/${ini_file}")
+    file(READ "${candidate}" content)
+    string(FIND "${content}" "${expected_section}" section_position)
+    if(section_position EQUAL -1)
+        message(FATAL_ERROR "Non-optical preset must use uppercase stage section ${expected_section}: ${tier}/${ini_file}")
+    endif()
+    file(STRINGS "${candidate}" lines)
+    set(seen_keys "")
+    foreach(line IN LISTS lines)
+        if(line STREQUAL "" OR line MATCHES "^;" OR line MATCHES "^\\[[A-Z0-9.]+\\]$")
+            continue()
+        endif()
+        if(NOT line MATCHES "^(.+)=([^;]+)$")
+            message(FATAL_ERROR "Malformed non-optical preset line in ${tier}/${ini_file}: ${line}")
+        endif()
+        set(key "${CMAKE_MATCH_1}")
+        set(value "${CMAKE_MATCH_2}")
+        if(key MATCHES "^(Enable|Intensity|IntensityMin|IntensityMax|Shape|ShapeMin|ShapeMax)$")
+            message(FATAL_ERROR "Non-optical preset uses generic placeholder key ${key}: ${tier}/${ini_file}")
+        endif()
+        list(FIND expected_keys "${key}" allowed_key_position)
+        if(allowed_key_position EQUAL -1)
+            message(FATAL_ERROR "Unknown non-optical preset key ${key}: ${tier}/${ini_file}")
+        endif()
+        list(FIND seen_keys "${key}" duplicate_position)
+        if(NOT duplicate_position EQUAL -1)
+            message(FATAL_ERROR "Duplicate non-optical preset key ${key}: ${tier}/${ini_file}")
+        endif()
+        list(APPEND seen_keys "${key}")
+        if(key MATCHES "\\| Enabled$")
+            if(NOT value MATCHES "^(true|false)$")
+                message(FATAL_ERROR "Boolean non-optical preset key has non-boolean value ${value}: ${key}")
+            endif()
+        else()
+            if(NOT value MATCHES "^-?[0-9]+(\\.[0-9]+)?$")
+                message(FATAL_ERROR "Numeric non-optical preset key has non-numeric value ${value}: ${key}")
+            endif()
+            elder_non_optical_numeric_range("${key}" minimum maximum)
+            if(value LESS minimum OR value GREATER maximum)
+                message(FATAL_ERROR "Non-optical preset key out of range ${key}=${value}; allowed ${minimum}..${maximum}")
+            endif()
+        endif()
+    endforeach()
+    foreach(required_key IN LISTS expected_keys)
+        list(FIND seen_keys "${required_key}" required_key_position)
+        if(required_key_position EQUAL -1)
+            message(FATAL_ERROR "Missing non-optical preset key ${required_key}: ${tier}/${ini_file}")
+        endif()
+    endforeach()
+endfunction()
+
 function(elder_validate_tier_include root tier tier_value)
     set(generated_tier_include "${root}/${tier}/enbseries/elder/ElderTier.fxh")
     if(NOT EXISTS "${generated_tier_include}")
@@ -416,29 +560,9 @@ foreach(elder_root IN ITEMS "${elder_first_root}" "${elder_second_root}")
             elder_validate_optical_ini("${elder_root}" "${elder_tier}" "${elder_optical_file}")
         endforeach()
 
-        foreach(elder_file IN LISTS elder_expected_ini_files)
-            list(FIND elder_optical_ini_files "${elder_file}" elder_optical_position)
-            if(elder_file STREQUAL "elder-quality.ini" OR NOT elder_optical_position EQUAL -1)
-                continue()
-            endif()
-            file(READ "${elder_root}/${elder_tier}/${elder_file}" elder_non_optical_content)
-            foreach(generic_key IN ITEMS
-                "Enable=true"
-                "Intensity=1.000"
-                "IntensityMin=0.000"
-                "IntensityMax=2.000"
-                "Shape=1.000"
-                "ShapeMin=0.000"
-                "ShapeMax=2.000")
-                string(FIND "${elder_non_optical_content}" "${generic_key}" generic_key_position)
-                if(generic_key_position EQUAL -1)
-                    message(FATAL_ERROR "Temporary non-optical placeholder is missing expected generic key ${generic_key}: ${elder_tier}/${elder_file}")
-                endif()
-            endforeach()
-            string(FIND "${elder_non_optical_content}" "Temporary Task 4 placeholder for Task 5-owned stage controls" temporary_marker_position)
-            if(temporary_marker_position EQUAL -1)
-                message(FATAL_ERROR "Non-optical generic placeholders must be marked temporary for Task 5: ${elder_tier}/${elder_file}")
-            endif()
+        foreach(elder_non_optical_file IN LISTS elder_non_optical_ini_files)
+            elder_validate_non_optical_ini(
+                "${elder_root}" "${elder_tier}" "${elder_non_optical_file}")
         endforeach()
     endforeach()
 endforeach()
@@ -458,4 +582,4 @@ foreach(elder_file IN LISTS elder_first_files)
     endif()
 endforeach()
 
-message(STATUS "Elder quality presets generated deterministic 55-file tier overlays with real optical UIName keys")
+message(STATUS "Elder quality presets generated deterministic 55-file tier overlays with real stage UIName keys")
