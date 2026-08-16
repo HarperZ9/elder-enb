@@ -198,6 +198,15 @@ class RuntimeCoreIdentity(NamedTuple):
     revision: str
 
 
+class PeSection(NamedTuple):
+    name: str
+    virtual_address: int
+    virtual_size: int
+    raw_offset: int
+    raw_size: int
+    characteristics: int
+
+
 def _read_required(path: Path, description: str) -> bytes:
     if not path.is_file():
         raise PackageError(f"missing {description}: {path}")
@@ -701,6 +710,50 @@ def validate_native_parameters(source_root: Path, data: bytes) -> None:
         )
 
 
+def _pe_section_offset(
+    data: bytes,
+    sections: Sequence[PeSection],
+    rva: int,
+    size: int,
+    description: str,
+) -> tuple[PeSection, int]:
+    if rva <= 0 or size <= 0:
+        raise PackageError(f"Elder runtime {description} has an invalid RVA/size")
+    matches: list[tuple[PeSection, int]] = []
+    for section in sections:
+        delta = rva - section.virtual_address
+        if delta < 0 or delta + size > section.raw_size:
+            continue
+        offset = section.raw_offset + delta
+        if offset + size <= len(data):
+            matches.append((section, offset))
+    if len(matches) != 1:
+        raise PackageError(
+            f"Elder runtime {description} is not uniquely backed by a PE section"
+        )
+    return matches[0]
+
+
+def _pe_export_string(
+    data: bytes, sections: Sequence[PeSection], rva: int, description: str
+) -> str:
+    value = bytearray()
+    for index in range(256):
+        _, offset = _pe_section_offset(data, sections, rva + index, 1, description)
+        byte = data[offset]
+        if byte == 0:
+            if not value:
+                raise PackageError(f"Elder runtime {description} is empty")
+            try:
+                return value.decode("ascii")
+            except UnicodeDecodeError as error:
+                raise PackageError(
+                    f"Elder runtime {description} is not ASCII"
+                ) from error
+        value.append(byte)
+    raise PackageError(f"Elder runtime {description} is not NUL terminated")
+
+
 def validate_runtime_plugin(data: bytes) -> None:
     if len(data) < 0x9A or data[:2] != b"MZ":
         raise PackageError("Elder runtime plugin lacks a valid DOS header")
@@ -710,16 +763,173 @@ def validate_runtime_plugin(data: bytes) -> None:
     if data[pe_offset : pe_offset + 4] != b"PE\0\0":
         raise PackageError("Elder runtime plugin lacks a PE signature")
     machine = struct.unpack_from("<H", data, pe_offset + 4)[0]
+    section_count = struct.unpack_from("<H", data, pe_offset + 6)[0]
     optional_size = struct.unpack_from("<H", data, pe_offset + 20)[0]
     characteristics = struct.unpack_from("<H", data, pe_offset + 22)[0]
     if machine != 0x8664:
         raise PackageError("Elder runtime plugin is not AMD64")
-    if optional_size < 2 or pe_offset + 24 + optional_size > len(data):
+    if not 3 <= section_count <= 96:
+        raise PackageError("Elder runtime plugin has an invalid PE section count")
+    optional_offset = pe_offset + 24
+    if optional_size < 120 or optional_offset + optional_size > len(data):
         raise PackageError("Elder runtime plugin has an invalid optional header")
-    if struct.unpack_from("<H", data, pe_offset + 24)[0] != 0x20B:
+    if struct.unpack_from("<H", data, optional_offset)[0] != 0x20B:
         raise PackageError("Elder runtime plugin is not PE32+")
     if characteristics & 0x2000 == 0:
         raise PackageError("Elder runtime plugin is not marked as a DLL")
+
+    entrypoint_rva = struct.unpack_from("<I", data, optional_offset + 16)[0]
+    section_alignment = struct.unpack_from("<I", data, optional_offset + 32)[0]
+    file_alignment = struct.unpack_from("<I", data, optional_offset + 36)[0]
+    size_of_image = struct.unpack_from("<I", data, optional_offset + 56)[0]
+    size_of_headers = struct.unpack_from("<I", data, optional_offset + 60)[0]
+    directory_count = struct.unpack_from("<I", data, optional_offset + 108)[0]
+    if (
+        file_alignment < 0x200
+        or file_alignment > 0x10000
+        or file_alignment & (file_alignment - 1)
+        or section_alignment < file_alignment
+        or section_alignment & (section_alignment - 1)
+    ):
+        raise PackageError("Elder runtime plugin has invalid PE alignments")
+    section_table = optional_offset + optional_size
+    section_table_end = section_table + section_count * 40
+    if (
+        size_of_headers < section_table_end
+        or size_of_headers > len(data)
+        or size_of_image <= size_of_headers
+        or directory_count < 1
+    ):
+        raise PackageError("Elder runtime plugin has invalid PE image bounds")
+
+    sections: list[PeSection] = []
+    raw_ranges: list[tuple[int, int]] = []
+    virtual_ranges: list[tuple[int, int]] = []
+    for index in range(section_count):
+        offset = section_table + index * 40
+        raw_name = data[offset : offset + 8].split(b"\0", 1)[0]
+        try:
+            name = raw_name.decode("ascii")
+        except UnicodeDecodeError as error:
+            raise PackageError("Elder runtime PE section name is not ASCII") from error
+        if not re.fullmatch(r"[.A-Za-z0-9_$-]{1,8}", name):
+            raise PackageError("Elder runtime PE section name is invalid")
+        virtual_size, virtual_address, raw_size, raw_offset = struct.unpack_from(
+            "<IIII", data, offset + 8
+        )
+        section_characteristics = struct.unpack_from("<I", data, offset + 36)[0]
+        if (
+            virtual_size == 0
+            or virtual_address == 0
+            or virtual_address % section_alignment != 0
+            or raw_size == 0
+            or raw_offset < size_of_headers
+            or raw_offset % file_alignment != 0
+            or raw_size % file_alignment != 0
+            or raw_offset + raw_size > len(data)
+        ):
+            raise PackageError(f"Elder runtime PE section {name} has invalid bounds")
+        virtual_end = virtual_address + max(virtual_size, raw_size)
+        if virtual_end > size_of_image:
+            raise PackageError(f"Elder runtime PE section {name} escapes the image")
+        raw_ranges.append((raw_offset, raw_offset + raw_size))
+        virtual_ranges.append((virtual_address, virtual_end))
+        sections.append(
+            PeSection(
+                name,
+                virtual_address,
+                virtual_size,
+                raw_offset,
+                raw_size,
+                section_characteristics,
+            )
+        )
+    if len({section.name for section in sections}) != len(sections):
+        raise PackageError("Elder runtime plugin has duplicate PE section names")
+    for ranges, description in (
+        (sorted(raw_ranges), "raw"),
+        (sorted(virtual_ranges), "virtual"),
+    ):
+        if any(
+            previous[1] > current[0] for previous, current in zip(ranges, ranges[1:])
+        ):
+            raise PackageError(
+                f"Elder runtime plugin has overlapping {description} sections"
+            )
+
+    entry_section, _ = _pe_section_offset(
+        data, sections, entrypoint_rva, 1, "entrypoint"
+    )
+    if entry_section.characteristics & 0x20000020 != 0x20000020:
+        raise PackageError("Elder runtime entrypoint is not in executable code")
+
+    export_rva, export_size = struct.unpack_from("<II", data, optional_offset + 112)
+    if export_size < 40:
+        raise PackageError("Elder runtime plugin lacks a PE export directory")
+    export_section, export_offset = _pe_section_offset(
+        data, sections, export_rva, export_size, "export directory"
+    )
+    if export_section.characteristics & 0x40000040 != 0x40000040:
+        raise PackageError("Elder runtime export directory is not readable data")
+    (
+        dll_name_rva,
+        _ordinal_base,
+        function_count,
+        name_count,
+        functions_rva,
+        names_rva,
+        ordinals_rva,
+    ) = struct.unpack_from("<IIIIIII", data, export_offset + 12)
+    if not 2 <= name_count <= function_count <= 4096:
+        raise PackageError("Elder runtime export counts are invalid")
+    if (
+        _pe_export_string(data, sections, dll_name_rva, "export DLL name")
+        != "ElderENBRuntime.dllplugin"
+    ):
+        raise PackageError("Elder runtime export directory names a different DLL")
+
+    _, functions_offset = _pe_section_offset(
+        data, sections, functions_rva, function_count * 4, "export function table"
+    )
+    _, names_offset = _pe_section_offset(
+        data, sections, names_rva, name_count * 4, "export name table"
+    )
+    _, ordinals_offset = _pe_section_offset(
+        data, sections, ordinals_rva, name_count * 2, "export ordinal table"
+    )
+    exported_names: set[str] = set()
+    for index in range(name_count):
+        name_rva = struct.unpack_from("<I", data, names_offset + index * 4)[0]
+        export_name = _pe_export_string(
+            data, sections, name_rva, f"export name {index}"
+        )
+        ordinal = struct.unpack_from("<H", data, ordinals_offset + index * 2)[0]
+        if ordinal >= function_count:
+            raise PackageError("Elder runtime export ordinal is out of range")
+        function_rva = struct.unpack_from("<I", data, functions_offset + ordinal * 4)[0]
+        if export_rva <= function_rva < export_rva + export_size:
+            raise PackageError("Elder runtime probe export is unexpectedly forwarded")
+        function_section, _ = _pe_section_offset(
+            data, sections, function_rva, 1, f"export {export_name} target"
+        )
+        if function_section.characteristics & 0x20000020 != 0x20000020:
+            raise PackageError(
+                "Elder runtime probe export does not target executable code"
+            )
+        if export_name in exported_names:
+            raise PackageError("Elder runtime plugin has duplicate named exports")
+        exported_names.add(export_name)
+
+    expected_exports = {
+        "ElderEnbRuntimeProbeV1",
+        "ElderEnbRuntimeFrameProbeV1",
+    }
+    if exported_names != expected_exports:
+        raise PackageError(
+            "Elder runtime exports differ from the public probe ABI: "
+            f"missing={sorted(expected_exports - exported_names)}, "
+            f"unexpected={sorted(exported_names - expected_exports)}"
+        )
     for symbol in (
         b"ElderRuntimeFramePulse",
         b"ElderRuntimeRoomLight",

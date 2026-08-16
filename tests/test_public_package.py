@@ -81,6 +81,8 @@ def _amd64_elder_runtime() -> bytes:
         b"ElderRuntimeRoomLight\0"
         b"ElderRuntimeExposureColor\0"
         b"ElderRuntimeStatus\0"
+        b"ElderEnbRuntimeProbeV1\0"
+        b"ElderEnbRuntimeFrameProbeV1\0"
     )
     return bytes(data)
 
@@ -147,6 +149,22 @@ class ElderPublicPackageTests(unittest.TestCase):
     def test_synthetic_mz_runtime_is_rejected(self) -> None:
         with self.assertRaises(package.PackageError):
             package.validate_runtime_plugin(b"MZfixture")
+
+    def test_pe_shaped_marker_fixture_without_exports_is_rejected(self) -> None:
+        with self.assertRaises(package.PackageError):
+            package.validate_runtime_plugin(_amd64_elder_runtime())
+
+    def test_runtime_export_directory_requires_both_elder_probes(self) -> None:
+        built_runtime = package._default_runtime_plugin(ROOT)
+        if not built_runtime.is_file():
+            self.skipTest("built Elder runtime plugin is unavailable")
+        runtime_data = bytearray(built_runtime.read_bytes())
+        probe = b"ElderEnbRuntimeFrameProbeV1"
+        self.assertEqual(1, runtime_data.count(probe))
+        probe_offset = runtime_data.index(probe)
+        runtime_data[probe_offset + len(probe) - 1] = ord("2")
+        with self.assertRaises(package.PackageError):
+            package.validate_runtime_plugin(bytes(runtime_data))
 
     def test_incomplete_native_parameter_contract_is_rejected(self) -> None:
         incomplete = (
@@ -217,7 +235,10 @@ class ElderPublicPackageTests(unittest.TestCase):
             native_parameters = temporary_root / "ElderNativeParameters.fxh"
             native_parameters.write_bytes(_native_parameter_contract())
             runtime_plugin = temporary_root / "ElderENBRuntime.dllplugin"
-            runtime_data = _amd64_elder_runtime()
+            built_runtime = package._default_runtime_plugin(ROOT)
+            if not built_runtime.is_file():
+                self.skipTest("built Elder runtime plugin is unavailable")
+            runtime_data = built_runtime.read_bytes()
             runtime_plugin.write_bytes(runtime_data)
             runtime_receipt = temporary_root / "ElderENBRuntime.dllplugin.receipt"
             runtime_core_root = package.default_runtime_core_root(ROOT)
