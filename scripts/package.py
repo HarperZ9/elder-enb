@@ -730,19 +730,27 @@ def validate_runtime_plugin(data: bytes) -> None:
             raise PackageError(f"Elder runtime plugin omits {symbol.decode('ascii')}")
 
 
+def _normalized_runtime_receipt(receipt_data: bytes) -> bytes:
+    try:
+        receipt = receipt_data.decode("ascii")
+    except UnicodeDecodeError as error:
+        raise PackageError("Elder runtime receipt is not ASCII") from error
+    receipt = receipt.replace("\r\n", "\n")
+    if "\r" in receipt:
+        raise PackageError("Elder runtime receipt contains invalid line endings")
+    return receipt.encode("ascii")
+
+
 def validate_runtime_receipt(
     source_root: Path,
     receipt_data: bytes,
     runtime_data: bytes,
     runtime_core: RuntimeCoreIdentity,
 ) -> None:
-    try:
-        receipt = receipt_data.decode("ascii")
-    except UnicodeDecodeError as error:
-        raise PackageError("Elder runtime receipt is not ASCII") from error
+    receipt = _normalized_runtime_receipt(receipt_data).decode("ascii")
     lines = receipt.splitlines(keepends=True)
     if any(not line.endswith("\n") for line in lines):
-        raise PackageError("Elder runtime receipt must use canonical LF records")
+        raise PackageError("Elder runtime receipt must contain complete records")
     parsed: dict[str, str] = {}
     for line in lines:
         key, separator, value = line[:-1].partition("=")
@@ -890,6 +898,10 @@ def validate_release_members(source_root: Path, members: Mapping[str, bytes]) ->
         raise PackageError("packaged enb-runtime-core license is not MIT")
     if members[RUNTIME_CORE_NOTICE_MEMBER] != _runtime_core_notice(source_root):
         raise PackageError("packaged enb-runtime-core notice is not canonical")
+    if members[RUNTIME_RECEIPT_MEMBER] != _normalized_runtime_receipt(
+        members[RUNTIME_RECEIPT_MEMBER]
+    ):
+        raise PackageError("packaged Elder runtime receipt is not LF-normalized")
     validate_runtime_receipt(
         source_root,
         members[RUNTIME_RECEIPT_MEMBER],
@@ -949,7 +961,9 @@ def build_release(
         raise PackageError(
             "runtime receipt must be adjacent to ElderENBRuntime.dllplugin"
         )
-    runtime_receipt_data = _read_required(runtime_receipt, "Elder runtime receipt")
+    runtime_receipt_data = _normalized_runtime_receipt(
+        _read_required(runtime_receipt, "Elder runtime receipt")
+    )
     runtime_core = validate_runtime_core(source_root, runtime_core_root)
     validate_runtime_receipt(
         source_root, runtime_receipt_data, runtime_data, runtime_core
