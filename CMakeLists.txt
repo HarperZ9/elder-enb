@@ -101,9 +101,36 @@ if(MSVC)
     )
 endif()
 
+find_program(
+    ELDER_FXC_EXECUTABLE
+    NAMES fxc.exe fxc
+    HINTS
+        "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64"
+    DOC "Absolute path to Microsoft FXC used for Elder shader validation"
+)
+set(
+    ELDER_FXC_EXECUTABLE
+    "${ELDER_FXC_EXECUTABLE}"
+    CACHE FILEPATH "Absolute path to Microsoft FXC used for Elder shader validation"
+    FORCE
+)
+
 include(CTest)
 
 if(BUILD_TESTING)
+    add_test(
+        NAME elder_stage_compile_matrix
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_FXC=${ELDER_FXC_EXECUTABLE}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            "-DELDER_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderStageMatrix.cmake"
+    )
+    set_tests_properties(
+        elder_stage_compile_matrix
+        PROPERTIES LABELS "shader;fxc;quality;matrix"
+    )
+
     add_test(
         NAME elder_quality_presets
         COMMAND "${CMAKE_COMMAND}"
@@ -185,6 +212,32 @@ if(BUILD_TESTING)
 
     add_test(NAME elder_weather_theme_tests COMMAND elder_weather_theme_tests)
     set_tests_properties(elder_weather_theme_tests PROPERTIES TIMEOUT 90)
+
+    if(WIN32)
+        add_executable(elder_capability_warp_tests
+            tests/ElderCapabilityWarpTests.cpp
+        )
+        target_compile_features(elder_capability_warp_tests PRIVATE cxx_std_23)
+        target_link_libraries(elder_capability_warp_tests PRIVATE
+            d3d11
+            d3dcompiler
+        )
+        if(MSVC)
+            target_compile_options(
+                elder_capability_warp_tests
+                PRIVATE /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
+            )
+        endif()
+        add_test(
+            NAME elder_capability_warp
+            COMMAND elder_capability_warp_tests
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/elder/ElderCapabilityWarpProbe.hlsl"
+        )
+        set_tests_properties(
+            elder_capability_warp
+            PROPERTIES LABELS "shader;warp;capability;matrix"
+        )
+    endif()
 
     add_test(
         NAME elder_weather_structural_validation
