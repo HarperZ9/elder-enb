@@ -20,11 +20,25 @@ namespace {
     const float frame,
     const float last_frame) noexcept
 {
-  return std::isfinite(frame)
-      && integer_exact(frame)
-      && frame > 0.0F
-      && frame <= static_cast<float>(kRenderPayloadGenerationModulus)
-      && (last_frame == 0.0F || frame > last_frame);
+  // SB_Render_Frame.x is the public producer's uint32 frame counter cast to
+  // float, not Elder's 2^24 folded generation. Above 2^24 the representable
+  // float values skip integers; those are still valid producer outputs.
+  constexpr float kUint32MaximumCastToFloat = 4'294'967'296.0F;
+  constexpr float kWrapHighWater = 4'294'000'000.0F;
+  constexpr float kWrapLowWater = 1'000'000.0F;
+
+  if (!std::isfinite(frame) || !integer_exact(frame) || frame <= 0.0F
+      || frame > kUint32MaximumCastToFloat) {
+    return false;
+  }
+  if (last_frame == 0.0F || frame > last_frame) {
+    return true;
+  }
+  if (frame == last_frame) {
+    return false;
+  }
+
+  return last_frame >= kWrapHighWater && frame <= kWrapLowWater;
 }
 
 [[nodiscard]] float bounded_channel(const float value) noexcept

@@ -332,6 +332,80 @@ void public_bridge_source_rejects_malformed_flag_bit_patterns()
   EXPECT(same_float4_bits(result.room_light, NeutralRoomLightPayload()));
 }
 
+void public_bridge_source_accepts_representable_progression_above_folded_generation_range()
+{
+  FakeHost host = host_with_baselines();
+  host.put(kSkyrimBridgeRenderFrameSymbol, Float4{16'777'216.0F, 0.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorFlagsSymbol, Float4{1.0F, 1.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorAmbientSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorDirColorSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  active_host = &host;
+
+  PublicBridgeRoomLightSource source{fake_bridge()};
+  EXPECT(source.readRoomLight().used_public_bridge);
+
+  host.put(kSkyrimBridgeRenderFrameSymbol, Float4{16'777'218.0F, 0.0F, 0.0F, 0.0F});
+  const PublicBridgeRoomLightSourceResult progressed = source.readRoomLight();
+
+  EXPECT(progressed.used_public_bridge);
+  EXPECT(!same_float4_bits(progressed.room_light, NeutralRoomLightPayload()));
+}
+
+void public_bridge_source_rejects_same_frame_as_stale()
+{
+  FakeHost host = host_with_baselines();
+  host.put(kSkyrimBridgeRenderFrameSymbol, Float4{240.0F, 0.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorFlagsSymbol, Float4{1.0F, 1.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorAmbientSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorDirColorSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  active_host = &host;
+
+  PublicBridgeRoomLightSource source{fake_bridge()};
+  EXPECT(source.readRoomLight().used_public_bridge);
+  const PublicBridgeRoomLightSourceResult stale = source.readRoomLight();
+
+  EXPECT(!stale.used_public_bridge);
+  EXPECT(same_float4_bits(stale.room_light, NeutralRoomLightPayload()));
+}
+
+void public_bridge_source_rejects_arbitrary_backward_frame_jumps()
+{
+  FakeHost host = host_with_baselines();
+  host.put(kSkyrimBridgeRenderFrameSymbol, Float4{2000.0F, 0.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorFlagsSymbol, Float4{1.0F, 1.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorAmbientSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorDirColorSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  active_host = &host;
+
+  PublicBridgeRoomLightSource source{fake_bridge()};
+  EXPECT(source.readRoomLight().used_public_bridge);
+
+  host.put(kSkyrimBridgeRenderFrameSymbol, Float4{1998.0F, 0.0F, 0.0F, 0.0F});
+  const PublicBridgeRoomLightSourceResult rollback = source.readRoomLight();
+
+  EXPECT(!rollback.used_public_bridge);
+  EXPECT(same_float4_bits(rollback.room_light, NeutralRoomLightPayload()));
+}
+
+void public_bridge_source_accepts_uint32_wrap_to_small_positive_frame()
+{
+  FakeHost host = host_with_baselines();
+  host.put(kSkyrimBridgeRenderFrameSymbol, Float4{4'294'967'040.0F, 0.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorFlagsSymbol, Float4{1.0F, 1.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorAmbientSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorDirColorSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  active_host = &host;
+
+  PublicBridgeRoomLightSource source{fake_bridge()};
+  EXPECT(source.readRoomLight().used_public_bridge);
+
+  host.put(kSkyrimBridgeRenderFrameSymbol, Float4{4.0F, 0.0F, 0.0F, 0.0F});
+  const PublicBridgeRoomLightSourceResult wrapped = source.readRoomLight();
+
+  EXPECT(wrapped.used_public_bridge);
+  EXPECT(!same_float4_bits(wrapped.room_light, NeutralRoomLightPayload()));
+}
+
 void controller_publish_uses_public_bridge_source_when_available()
 {
   FakeHost host = host_with_baselines();
@@ -495,6 +569,10 @@ int main()
   public_bridge_source_derives_bounded_room_light_from_current_interior_scalars();
   public_bridge_source_falls_back_to_neutral_when_absent_stale_or_nonfinite();
   public_bridge_source_rejects_malformed_flag_bit_patterns();
+  public_bridge_source_accepts_representable_progression_above_folded_generation_range();
+  public_bridge_source_rejects_same_frame_as_stale();
+  public_bridge_source_rejects_arbitrary_backward_frame_jumps();
+  public_bridge_source_accepts_uint32_wrap_to_small_positive_frame();
   controller_publish_uses_public_bridge_source_when_available();
   publish_captures_baselines_then_invalidates_writes_payload_and_validates_last();
   every_primary_write_failure_rolls_back_to_authored_baselines();
