@@ -34,6 +34,8 @@ requirements, list those requirements only for that optional component.
 
 ## Media and promotion rules
 
+- Use this canonical caption for each generated promotional asset:
+  `Generated promotional brand art — not an in-game screenshot.`
 - Generated abstract artwork is promotional only, not gameplay. Mark it with
   Nexus's AI Media tag.
 - Do not enter the current 25th Anniversary Mod Drive.
