@@ -36,6 +36,10 @@ using elder::runtime::DecodeColor4Parameter;
 using elder::runtime::EncodeColor4Parameter;
 using elder::runtime::FoldRenderPayloadGeneration;
 using elder::runtime::MakeRenderPayload;
+using elder::runtime::NeutralExposureColorPayload;
+using elder::runtime::NeutralRoomLightPayload;
+using elder::runtime::PublicBridgeRoomLightSource;
+using elder::runtime::PublicBridgeRoomLightSourceResult;
 using elder::runtime::RenderPayload;
 using elder::runtime::RenderPayloadController;
 using elder::runtime::RenderPayloadPhase;
@@ -47,6 +51,10 @@ using elder::runtime::kElderRuntimeProtocol;
 using elder::runtime::kElderRuntimeRoomLightSymbol;
 using elder::runtime::kElderRuntimeSchemaTag;
 using elder::runtime::kElderRuntimeStatusSymbol;
+using elder::runtime::kSkyrimBridgeInteriorAmbientSymbol;
+using elder::runtime::kSkyrimBridgeInteriorDirColorSymbol;
+using elder::runtime::kSkyrimBridgeInteriorFlagsSymbol;
+using elder::runtime::kSkyrimBridgeRenderFrameSymbol;
 using enbcore::enb::CallbackId;
 using enbcore::enb::Parameter;
 using enbcore::enb::SdkBoolean;
@@ -194,6 +202,10 @@ void symbols_match_the_hidden_shader_contract()
   EXPECT(kElderRuntimeRoomLightSymbol == std::string_view{"ElderRuntimeRoomLight"});
   EXPECT(kElderRuntimeExposureColorSymbol == std::string_view{"ElderRuntimeExposureColor"});
   EXPECT(kElderRuntimeStatusSymbol == std::string_view{"ElderRuntimeStatus"});
+  EXPECT(kSkyrimBridgeRenderFrameSymbol == std::string_view{"SB_Render_Frame"});
+  EXPECT(kSkyrimBridgeInteriorFlagsSymbol == std::string_view{"SB_Interior_Flags"});
+  EXPECT(kSkyrimBridgeInteriorAmbientSymbol == std::string_view{"SB_Interior_Ambient"});
+  EXPECT(kSkyrimBridgeInteriorDirColorSymbol == std::string_view{"SB_Interior_DirColor"});
 }
 
 void payload_status_uses_protocol_valid_generation_and_schema_tag()
@@ -207,6 +219,139 @@ void payload_status_uses_protocol_valid_generation_and_schema_tag()
   EXPECT(same_bits(payload.status[1], 1.0F));
   EXPECT(same_bits(payload.status[2], FoldRenderPayloadGeneration(16'777'216ULL + 7ULL)));
   EXPECT(same_bits(payload.status[3], kElderRuntimeSchemaTag));
+}
+
+void status_exactness_rejects_noncanonical_validity_and_generation()
+{
+  std::array<RenderPayload, 4> invalid_payloads{
+      live_payload(),
+      live_payload(),
+      live_payload(),
+      live_payload(),
+  };
+  invalid_payloads[0].status[1] = 2.0F;
+  invalid_payloads[1].status[2] = 42.5F;
+  invalid_payloads[2].status[2] = -1.0F;
+  invalid_payloads[3].status[2] = 33'554'432.0F;
+
+  for (const RenderPayload& payload : invalid_payloads) {
+    FakeHost host = host_with_baselines();
+    active_host = &host;
+    RenderPayloadController controller{fake_bridge()};
+
+    const auto result = controller.publish(payload);
+
+    EXPECT(result.code == RenderPayloadResultCode::invalid_payload);
+    EXPECT(host.get_calls == 0U);
+    EXPECT(host.set_calls == 0U);
+  }
+}
+
+void public_bridge_source_derives_bounded_room_light_from_current_interior_scalars()
+{
+  FakeHost host = host_with_baselines();
+  host.put(kSkyrimBridgeRenderFrameSymbol, Float4{120.0F, 0.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorFlagsSymbol, Float4{1.0F, 1.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorAmbientSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorDirColorSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  active_host = &host;
+
+  PublicBridgeRoomLightSource source{fake_bridge()};
+  const PublicBridgeRoomLightSourceResult result = source.readRoomLight();
+
+  EXPECT(result.used_public_bridge);
+  EXPECT(std::fabs(result.room_light[0] - 1.25F) <= 1.0e-5F);
+  EXPECT(std::fabs(result.room_light[1] - 0.25F) <= 1.0e-5F);
+  EXPECT(std::fabs(result.room_light[2] - 0.2F) <= 1.0e-5F);
+  EXPECT(same_bits(result.room_light[3], 0.0F));
+}
+
+void public_bridge_source_falls_back_to_neutral_when_absent_stale_or_nonfinite()
+{
+  {
+    FakeHost host = host_with_baselines();
+    host.put(kSkyrimBridgeRenderFrameSymbol, Float4{120.0F, 0.0F, 0.0F, 0.0F});
+    host.put(kSkyrimBridgeInteriorFlagsSymbol, Float4{1.0F, 1.0F, 0.0F, 0.0F});
+    host.put(kSkyrimBridgeInteriorDirColorSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+    active_host = &host;
+
+    PublicBridgeRoomLightSource source{fake_bridge()};
+    const PublicBridgeRoomLightSourceResult result = source.readRoomLight();
+
+    EXPECT(!result.used_public_bridge);
+    EXPECT(same_float4_bits(result.room_light, NeutralRoomLightPayload()));
+  }
+
+  {
+    FakeHost host = host_with_baselines();
+    host.put(kSkyrimBridgeRenderFrameSymbol, Float4{120.0F, 0.0F, 0.0F, 0.0F});
+    host.put(kSkyrimBridgeInteriorFlagsSymbol, Float4{1.0F, 1.0F, 0.0F, 0.0F});
+    host.put(kSkyrimBridgeInteriorAmbientSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+    host.put(kSkyrimBridgeInteriorDirColorSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+    active_host = &host;
+
+    PublicBridgeRoomLightSource source{fake_bridge()};
+    EXPECT(source.readRoomLight().used_public_bridge);
+    const PublicBridgeRoomLightSourceResult stale = source.readRoomLight();
+
+    EXPECT(!stale.used_public_bridge);
+    EXPECT(same_float4_bits(stale.room_light, NeutralRoomLightPayload()));
+  }
+
+  {
+    FakeHost host = host_with_baselines();
+    host.put(kSkyrimBridgeRenderFrameSymbol, Float4{121.0F, 0.0F, 0.0F, 0.0F});
+    host.put(kSkyrimBridgeInteriorFlagsSymbol, Float4{1.0F, 1.0F, 0.0F, 0.0F});
+    host.put(kSkyrimBridgeInteriorAmbientSymbol,
+             Float4{std::numeric_limits<float>::quiet_NaN(), 1.0F, 1.0F, 0.0F});
+    host.put(kSkyrimBridgeInteriorDirColorSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+    active_host = &host;
+
+    PublicBridgeRoomLightSource source{fake_bridge()};
+    const PublicBridgeRoomLightSourceResult result = source.readRoomLight();
+
+    EXPECT(!result.used_public_bridge);
+    EXPECT(same_float4_bits(result.room_light, NeutralRoomLightPayload()));
+  }
+}
+
+void public_bridge_source_rejects_malformed_flag_bit_patterns()
+{
+  FakeHost host = host_with_baselines();
+  host.put(kSkyrimBridgeRenderFrameSymbol, Float4{122.0F, 0.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorFlagsSymbol,
+           Float4{std::bit_cast<float>(1U), 1.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorAmbientSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorDirColorSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  active_host = &host;
+
+  PublicBridgeRoomLightSource source{fake_bridge()};
+  const PublicBridgeRoomLightSourceResult result = source.readRoomLight();
+
+  EXPECT(!result.used_public_bridge);
+  EXPECT(same_float4_bits(result.room_light, NeutralRoomLightPayload()));
+}
+
+void controller_publish_uses_public_bridge_source_when_available()
+{
+  FakeHost host = host_with_baselines();
+  host.put(kSkyrimBridgeRenderFrameSymbol, Float4{123.0F, 0.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorFlagsSymbol, Float4{1.0F, 1.0F, 0.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorAmbientSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  host.put(kSkyrimBridgeInteriorDirColorSymbol, Float4{1.0F, 1.0F, 1.0F, 0.0F});
+  active_host = &host;
+
+  PublicBridgeRoomLightSource source{fake_bridge()};
+  RenderPayloadController controller{fake_bridge()};
+  const PublicBridgeRoomLightSourceResult bridge_room = source.readRoomLight();
+  const auto result = controller.publish(
+      MakeRenderPayload(bridge_room.room_light, NeutralExposureColorPayload(), 50U));
+
+  EXPECT(bridge_room.used_public_bridge);
+  EXPECT(result.code == RenderPayloadResultCode::published);
+  EXPECT(std::fabs(host.read(kElderRuntimeRoomLightSymbol)[0] - 1.25F) <= 1.0e-5F);
+  EXPECT(same_float4_bits(host.read(kElderRuntimeExposureColorSymbol),
+                          NeutralExposureColorPayload()));
 }
 
 void publish_captures_baselines_then_invalidates_writes_payload_and_validates_last()
@@ -346,6 +491,11 @@ int main()
 {
   symbols_match_the_hidden_shader_contract();
   payload_status_uses_protocol_valid_generation_and_schema_tag();
+  status_exactness_rejects_noncanonical_validity_and_generation();
+  public_bridge_source_derives_bounded_room_light_from_current_interior_scalars();
+  public_bridge_source_falls_back_to_neutral_when_absent_stale_or_nonfinite();
+  public_bridge_source_rejects_malformed_flag_bit_patterns();
+  controller_publish_uses_public_bridge_source_when_available();
   publish_captures_baselines_then_invalidates_writes_payload_and_validates_last();
   every_primary_write_failure_rolls_back_to_authored_baselines();
   lifecycle_save_reset_and_exit_restore_the_authored_baseline();

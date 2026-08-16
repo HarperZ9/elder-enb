@@ -5,8 +5,9 @@
 // On every BeginFrame the callback measures the frame, publishes the pulse
 // through the neutral core, applies Elder's publication policy, and writes the
 // result to the shader stack as ElderRuntimeFramePulse. It also publishes the
-// transactional Elder runtime payload for the ordered shader tree. Shaders read
-// these hidden parameters to know the native bridge is live this frame.
+// transactional Elder runtime payload for the ordered shader tree. Room light
+// is optionally derived from public SkyrimBridge-named shader parameters when
+// they are present and current; exposure_color remains neutral/reserved.
 //
 // Everything decidable is in FrameDriver, which is pure and tested. What stays
 // here is the clock, the host pointers, and the write. The callback runs on the
@@ -51,6 +52,7 @@ std::int64_t g_previous_ticks = 0;
 bool g_has_previous_frame = false;
 
 elder::runtime::RenderPayloadController g_payload_controller{};
+elder::runtime::PublicBridgeRoomLightSource g_bridge_room_light_source{};
 std::uint64_t g_payload_generation = 0U;
 
 [[nodiscard]] float TicksToSeconds(const std::int64_t delta_ticks) noexcept
@@ -83,12 +85,14 @@ std::uint64_t g_payload_generation = 0U;
     return elder::runtime::FrameTiming{TicksToSeconds(now.QuadPart - previous), true};
 }
 
-[[nodiscard]] elder::runtime::RenderPayload BuildNeutralRenderPayload() noexcept
+[[nodiscard]] elder::runtime::RenderPayload BuildRuntimeRenderPayload() noexcept
 {
     ++g_payload_generation;
+    const elder::runtime::PublicBridgeRoomLightSourceResult bridge_room =
+        g_bridge_room_light_source.readRoomLight();
     return elder::runtime::MakeRenderPayload(
-        elder::runtime::RuntimeFloat4{0.0F, 0.0F, 0.0F, 0.0F},
-        elder::runtime::RuntimeFloat4{1.0F, 1.0F, 1.0F, 1.0F},
+        bridge_room.room_light,
+        elder::runtime::NeutralExposureColorPayload(),
         g_payload_generation);
 }
 
@@ -134,7 +138,7 @@ void ElderEnbCallback(const enbcore::enb::CallbackId callback) noexcept
 
     if (g_payload_controller.ready()) {
         static_cast<void>(
-            g_payload_controller.publish(BuildNeutralRenderPayload()));
+            g_payload_controller.publish(BuildRuntimeRenderPayload()));
     }
 }
 
@@ -154,6 +158,10 @@ void ResolveAndRegisterHost() noexcept
         && host.exports.set_callback_function != nullptr) {
         g_exports = host.exports;
         g_payload_controller.bind(elder::runtime::ShaderParameterBridge{
+            g_exports.get_parameter,
+            g_exports.set_parameter,
+        });
+        g_bridge_room_light_source.bind(elder::runtime::ShaderParameterBridge{
             g_exports.get_parameter,
             g_exports.set_parameter,
         });

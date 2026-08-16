@@ -30,7 +30,7 @@
 
 RWStructuredBuffer<float4> ElderPrepassResults : register(u0);
 
-static const uint kElderPrepassCaseCount = 8;
+static const uint kElderPrepassCaseCount = 10;
 
 float4 ElderPrepassValidStatus()
 {
@@ -131,19 +131,36 @@ void ElderPrepassWarpProbeMain(uint3 dispatch_thread_id : SV_DispatchThreadID)
         }
         else
         {
-            // unsupported-reflection-and-subsurface-are-identity
-            float3 scene = float3(0.3, 0.4, 0.5);
-            ElderScreenSpaceNeighborhood neighborhood =
-                ElderSyntheticContactNeighborhood(scene, 0.42);
-            float3 reflection = ElderApplyUnsupportedReflectionIdentity(
-                scene, neighborhood);
-            float3 subsurface = ElderApplyUnsupportedSubsurfaceIdentity(
-                scene, neighborhood);
-            ElderPrepassResults[index] = float4(
-                all(reflection == scene) ? 1.0 : 0.0,
-                all(subsurface == scene) ? 1.0 : 0.0,
-                0.0,
-                1.0);
+            if (index == 7)
+            {
+                // unsupported-reflection-and-subsurface-are-identity
+                float3 scene = float3(0.3, 0.4, 0.5);
+                ElderScreenSpaceNeighborhood neighborhood =
+                    ElderSyntheticContactNeighborhood(scene, 0.42);
+                float3 reflection = ElderApplyUnsupportedReflectionIdentity(
+                    scene, neighborhood);
+                float3 subsurface = ElderApplyUnsupportedSubsurfaceIdentity(
+                    scene, neighborhood);
+                ElderPrepassResults[index] = float4(
+                    all(reflection == scene) ? 1.0 : 0.0,
+                    all(subsurface == scene) ? 1.0 : 0.0,
+                    0.0,
+                    1.0);
+            }
+            else if (index == 8)
+            {
+                // status-valid-marker-is-exact
+                bool accepted = ElderRuntimeStatusIsValid(
+                    float4(1.0, 2.0, 3.0, 20260717.0));
+                ElderPrepassResults[index] = float4(accepted ? 0.0 : 1.0, 0.0, 0.0, 1.0);
+            }
+            else
+            {
+                // status-generation-is-integer-exact
+                bool accepted = ElderRuntimeStatusIsValid(
+                    float4(1.0, 1.0, 3.5, 20260717.0));
+                ElderPrepassResults[index] = float4(accepted ? 0.0 : 1.0, 0.0, 0.0, 1.0);
+            }
         }
     }
 }

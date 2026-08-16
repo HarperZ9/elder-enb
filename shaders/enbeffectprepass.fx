@@ -32,26 +32,41 @@ float4 Weather;
 float ENightDayFactor;
 float EInteriorFactor;
 
-// Optional SkyrimBridge-compatible values. They are hidden and retained only
-// when this Bridge-declaring stage compiles; absence selects native/spatial or
-// identity routes without hard dependency.
-float4 ElderBridgeSunDirection
-<
-    string UIName = "SB_Sun_Direction";
-    string UIWidget = "Color";
-    int UIHidden = 1;
-> = {0.0, 0.0, 0.0, 0.0};
-
-float4 ElderBridgeRenderFrame
+// Optional SkyrimBridge-compatible public values. They are hidden and retained
+// only when this Bridge-declaring stage compiles; absence selects native/spatial
+// or identity routes without a DLL dependency or private ABI.
+float4 SB_Render_Frame
 <
     string UIName = "SB_Render_Frame";
     string UIWidget = "Color";
     int UIHidden = 1;
 > = {0.0, 0.0, 0.0, 0.0};
 
+float4 SB_Interior_Flags
+<
+    string UIName = "SB_Interior_Flags";
+    string UIWidget = "Color";
+    int UIHidden = 1;
+> = {0.0, 0.0, 0.0, 0.0};
+
+float4 SB_Interior_Ambient
+<
+    string UIName = "SB_Interior_Ambient";
+    string UIWidget = "Color";
+    int UIHidden = 1;
+> = {0.0, 0.0, 0.0, 0.0};
+
+float4 SB_Interior_DirColor
+<
+    string UIName = "SB_Interior_DirColor";
+    string UIWidget = "Color";
+    int UIHidden = 1;
+> = {0.0, 0.0, 0.0, 0.0};
+
 float3 SB_Retain(float2 uv)
 {
-    float4 sink = ElderBridgeSunDirection + ElderBridgeRenderFrame;
+    float4 sink =
+        SB_Render_Frame + SB_Interior_Flags + SB_Interior_Ambient + SB_Interior_DirColor;
     float retain_scale = Timer.x < -1.0e15 ? 0.0001 : 0.0;
     return sink.rgb * uv.x * retain_scale;
 }
@@ -105,9 +120,12 @@ bool ElderPrepassNativeAvailable()
 
 bool ElderPrepassBridgeAvailable()
 {
-    return ElderFinite1(ElderBridgeRenderFrame.x)
-        && ElderBridgeRenderFrame.x > 0.0
-        && ElderFinite3(ElderBridgeSunDirection.xyz);
+    return ElderFinite1(SB_Render_Frame.x)
+        && SB_Render_Frame.x > 0.0
+        && ElderFinite1(SB_Interior_Flags.x)
+        && ElderFinite1(SB_Interior_Flags.y)
+        && ElderFinite3(SB_Interior_Ambient.xyz)
+        && ElderFinite3(SB_Interior_DirColor.xyz);
 }
 
 float4 ElderPrepassMain(ElderStageVSOutput input) : SV_Target

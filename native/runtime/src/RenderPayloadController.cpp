@@ -1,5 +1,6 @@
 #include "elder/runtime/RenderPayloadController.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 namespace elder::runtime {
@@ -8,6 +9,57 @@ namespace {
 [[nodiscard]] bool integer_exact(const float value) noexcept
 {
   return std::nearbyint(value) == value;
+}
+
+[[nodiscard]] bool binary_scalar(const float value) noexcept
+{
+  return std::isfinite(value) && (value == 0.0F || value == 1.0F);
+}
+
+[[nodiscard]] bool bridge_frame_current(
+    const float frame,
+    const float last_frame) noexcept
+{
+  return std::isfinite(frame)
+      && integer_exact(frame)
+      && frame > 0.0F
+      && frame <= static_cast<float>(kRenderPayloadGenerationModulus)
+      && (last_frame == 0.0F || frame > last_frame);
+}
+
+[[nodiscard]] float bounded_channel(const float value) noexcept
+{
+  return std::clamp(value, 0.0F, 1'000'000.0F);
+}
+
+[[nodiscard]] float luminance(const RuntimeFloat4& color) noexcept
+{
+  return (0.2126F * bounded_channel(color[0]))
+      + (0.7152F * bounded_channel(color[1]))
+      + (0.0722F * bounded_channel(color[2]));
+}
+
+[[nodiscard]] RuntimeFloat4 bounded_room_light_from_bridge(
+    const RuntimeFloat4& flags,
+    const RuntimeFloat4& ambient,
+    const RuntimeFloat4& dir_color) noexcept
+{
+  constexpr float kDirectionalRoomLightScale = 0.25F;
+
+  const float ambient_luminance = luminance(ambient);
+  const float directional_luminance =
+      flags[1] == 1.0F ? luminance(dir_color) * kDirectionalRoomLightScale : 0.0F;
+  const float room_luminance =
+      std::clamp(ambient_luminance + directional_luminance, 0.0F, 1'000'000.0F);
+  const float exterior_daylight =
+      std::clamp(directional_luminance, 0.0F, room_luminance);
+  const float open_fraction =
+      room_luminance > 0.0F ? std::clamp(exterior_daylight / room_luminance,
+                                         0.0F,
+                                         1.0F)
+                            : 0.0F;
+  const float sealed = open_fraction > 0.0F ? 0.0F : 1.0F;
+  return RuntimeFloat4{room_luminance, exterior_daylight, open_fraction, sealed};
 }
 
 [[nodiscard]] bool room_light_valid(const RuntimeFloat4& value) noexcept
@@ -98,6 +150,73 @@ RenderPayload MakeRenderPayload(const RuntimeFloat4 room_light,
           kElderRuntimeSchemaTag,
       },
   };
+}
+
+PublicBridgeRoomLightSource::PublicBridgeRoomLightSource(
+    const ShaderParameterBridge bridge) noexcept
+    : bridge_(bridge)
+{
+}
+
+void PublicBridgeRoomLightSource::bind(const ShaderParameterBridge bridge) noexcept
+{
+  bridge_ = bridge;
+  last_bridge_frame_ = 0.0F;
+}
+
+bool PublicBridgeRoomLightSource::ready() const noexcept
+{
+  return bridge_.available();
+}
+
+PublicBridgeRoomLightSourceResult PublicBridgeRoomLightSource::readRoomLight() noexcept
+{
+  RuntimeFloat4 render_frame{};
+  if (!bridge_.getColor4(kElderRenderPayloadShader,
+                         kSkyrimBridgeRenderFrameSymbol,
+                         render_frame)
+           .ok()) {
+    return {NeutralRoomLightPayload(), false};
+  }
+  if (!bridge_frame_current(render_frame[0], last_bridge_frame_)) {
+    return {NeutralRoomLightPayload(), false};
+  }
+
+  RuntimeFloat4 flags{};
+  if (!bridge_.getColor4(kElderRenderPayloadShader,
+                         kSkyrimBridgeInteriorFlagsSymbol,
+                         flags)
+           .ok()) {
+    return {NeutralRoomLightPayload(), false};
+  }
+  if (!binary_scalar(flags[0]) || !binary_scalar(flags[1]) || flags[0] != 1.0F) {
+    return {NeutralRoomLightPayload(), false};
+  }
+
+  RuntimeFloat4 ambient{};
+  if (!bridge_.getColor4(kElderRenderPayloadShader,
+                         kSkyrimBridgeInteriorAmbientSymbol,
+                         ambient)
+           .ok()) {
+    return {NeutralRoomLightPayload(), false};
+  }
+
+  RuntimeFloat4 dir_color{};
+  if (!bridge_.getColor4(kElderRenderPayloadShader,
+                         kSkyrimBridgeInteriorDirColorSymbol,
+                         dir_color)
+           .ok()) {
+    return {NeutralRoomLightPayload(), false};
+  }
+
+  const RuntimeFloat4 room_light =
+      bounded_room_light_from_bridge(flags, ambient, dir_color);
+  if (!room_light_valid(room_light)) {
+    return {NeutralRoomLightPayload(), false};
+  }
+
+  last_bridge_frame_ = render_frame[0];
+  return {room_light, true};
 }
 
 RenderPayloadController::RenderPayloadController(

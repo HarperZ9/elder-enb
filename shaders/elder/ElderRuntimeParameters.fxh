@@ -29,8 +29,8 @@ float4 ElderRuntimeStatus
 //   w = sealed-room flag
 //
 // Exposure color layout:
-//   x/y/z = bounded linear exposure color multiplier
-//   w     = reserved bounded scalar, currently 1.0
+//   reserved neutral payload. The native publisher writes {1,1,1,1}; no Elder
+//   shader consumes it until a non-duplicative exposure-color use is proven.
 //
 // Status layout:
 //   x = schema/live marker
@@ -55,9 +55,10 @@ bool ElderRuntimeStatusIsValid(float4 status)
 {
     return ElderRuntimeParameterFinite4(status)
         && status.x == ElderRuntimeProtocol
-        && status.y >= 1.0
+        && status.y == 1.0
         && status.z >= 0.0
         && status.z <= 16777216.0
+        && floor(status.z) == status.z
         && status.w == ElderRuntimeSchemaTag;
 }
 

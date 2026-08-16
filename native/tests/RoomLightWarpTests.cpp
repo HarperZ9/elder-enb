@@ -53,7 +53,7 @@ void check_hr(const HRESULT hr, const char* what)
 }
 
 constexpr std::uint32_t kCaseCount = 5U;
-constexpr std::uint32_t kPrepassCaseCount = 8U;
+constexpr std::uint32_t kPrepassCaseCount = 10U;
 
 constexpr std::array<std::string_view, kPrepassCaseCount> kPrepassCaseNames{
     "exterior-preserves-room-payload",
@@ -63,7 +63,9 @@ constexpr std::array<std::string_view, kPrepassCaseCount> kPrepassCaseNames{
     "interior-transition-is-continuous",
     "sealed-interior-contact-attenuates-without-crushing",
     "route-selection-prefers-native-then-bridge-then-spatial",
-    "unsupported-reflection-and-subsurface-are-identity"};
+    "unsupported-reflection-and-subsurface-are-identity",
+    "status-valid-marker-is-exact",
+    "status-generation-is-integer-exact"};
 
 struct Float4 {
   float x;
@@ -302,6 +304,18 @@ void run_prepass_integration(const wchar_t* probe_path)
     const std::string tag(kPrepassCaseNames[7U]);
     expect(near_value(g.x, 1.0F), tag + " reflection identity");
     expect(near_value(g.y, 1.0F), tag + " subsurface identity");
+  }
+
+  {
+    const Float4& g = gpu[8U];
+    const std::string tag(kPrepassCaseNames[8U]);
+    expect(near_value(g.x, 1.0F), tag + " rejects status.y values other than 1.0");
+  }
+
+  {
+    const Float4& g = gpu[9U];
+    const std::string tag(kPrepassCaseNames[9U]);
+    expect(near_value(g.x, 1.0F), tag + " rejects fractional folded generations");
   }
 }
 
