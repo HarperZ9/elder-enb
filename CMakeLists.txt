@@ -117,7 +117,84 @@ set(
 
 include(CTest)
 
+find_package(Python3 3.10 REQUIRED COMPONENTS Interpreter)
+
+set(
+    ELDER_PUBLIC_NATIVE_PARAMETERS
+    "${CMAKE_CURRENT_SOURCE_DIR}/out/native-schema/vs18-x64-static/generated/Release/shaders/ElderNativeParameters.fxh"
+    CACHE FILEPATH
+    "Generated ElderNativeParameters.fxh admitted to the public archive"
+)
+set(
+    ELDER_PUBLIC_RUNTIME_PLUGIN
+    "${CMAKE_CURRENT_SOURCE_DIR}/out/native-schema/vs18-x64-static/runtime/Release/ElderENBRuntime.dllplugin"
+    CACHE FILEPATH
+    "Elder-owned ElderENBRuntime.dllplugin admitted to the public archive"
+)
+set(elder_public_runtime_core_default "${CMAKE_CURRENT_SOURCE_DIR}/../enb-runtime-core")
+if(
+    NOT EXISTS "${elder_public_runtime_core_default}/LICENSE"
+    AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../enb-runtime-core/LICENSE"
+)
+    set(elder_public_runtime_core_default "${CMAKE_CURRENT_SOURCE_DIR}/../../enb-runtime-core")
+endif()
+set(
+    ELDER_PUBLIC_RUNTIME_CORE_ROOT
+    "${elder_public_runtime_core_default}"
+    CACHE PATH
+    "Pinned enb-runtime-core checkout used for the public runtime license"
+)
+set(
+    ELDER_PUBLIC_PACKAGE_OUTPUT_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/dist"
+    CACHE PATH
+    "Output directory for the strict Elder public archive"
+)
+option(
+    ELDER_PUBLIC_PACKAGE_REQUIRE_RUNTIME
+    "Require and verify the runtime-complete public archive in CTest"
+    OFF
+)
+
+add_custom_target(
+    elder_public_release_package
+    COMMAND "${CMAKE_COMMAND}" -E env PYTHONDONTWRITEBYTECODE=1
+        "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/scripts/package.py"
+        build
+        --source-root "${CMAKE_CURRENT_SOURCE_DIR}"
+        --output-dir "${ELDER_PUBLIC_PACKAGE_OUTPUT_DIR}"
+        --work-dir "${CMAKE_CURRENT_BINARY_DIR}/public-package/target"
+        --native-parameters "${ELDER_PUBLIC_NATIVE_PARAMETERS}"
+        --runtime-plugin "${ELDER_PUBLIC_RUNTIME_PLUGIN}"
+        --runtime-core-root "${ELDER_PUBLIC_RUNTIME_CORE_ROOT}"
+    BYPRODUCTS
+        "${ELDER_PUBLIC_PACKAGE_OUTPUT_DIR}/Elder-ENB-1.0.0-win64.zip"
+        "${ELDER_PUBLIC_PACKAGE_OUTPUT_DIR}/Elder-ENB-1.0.0-win64.zip.sha256"
+    COMMENT "Building the strict runtime-complete Elder public archive"
+    VERBATIM
+)
+
 if(BUILD_TESTING)
+    add_test(
+        NAME elder_public_release_package
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_PYTHON=${Python3_EXECUTABLE}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            "-DELDER_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}"
+            "-DELDER_REQUIRE_RUNTIME=${ELDER_PUBLIC_PACKAGE_REQUIRE_RUNTIME}"
+            "-DELDER_NATIVE_PARAMETERS=${ELDER_PUBLIC_NATIVE_PARAMETERS}"
+            "-DELDER_RUNTIME_PLUGIN=${ELDER_PUBLIC_RUNTIME_PLUGIN}"
+            "-DELDER_RUNTIME_CORE_ROOT=${ELDER_PUBLIC_RUNTIME_CORE_ROOT}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderPublicReleasePackage.cmake"
+    )
+    set_tests_properties(
+        elder_public_release_package
+        PROPERTIES
+            LABELS "release;package;manifest;determinism;security"
+            TIMEOUT 180
+    )
+
     add_test(
         NAME elder_stage_compile_matrix
         COMMAND "${CMAKE_COMMAND}"
