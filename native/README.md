@@ -85,6 +85,7 @@ include min/default/max settings, a representative authored profile, master
 passthrough, every generated sanitizer, and NaN/positive-infinity/negative-
 infinity scene inputs.
 
-The root project still has no selected public distribution license. Package
-generation is therefore a release-candidate verification boundary, not
-permission to publish; the project owner must choose the license first.
+The root project is licensed under the MIT License. Package generation remains
+a release-candidate verification boundary, not permission to publish by itself:
+the final public archive, credits/notices, and live ENB 0.504 acceptance matrix
+must be recorded before any public upload.
