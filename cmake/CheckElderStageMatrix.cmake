@@ -457,10 +457,15 @@ function(run_elder_tier_budget_probe tier_index tier_name budget_row)
   list(GET budget_values 4 bloom_radius)
   list(GET budget_values 5 lens_ghosts)
   list(GET budget_values 6 room_light_refinement)
-  set(tier_include_root "${elder_matrix_preset_root}/${tier_name}/enbseries")
-  if(NOT IS_DIRECTORY "${tier_include_root}")
-    message(FATAL_ERROR "Generated tier include root is absent: ${tier_include_root}")
+  set(tier_override "${elder_matrix_preset_root}/${tier_name}/enbseries/elder/ElderTier.fxh")
+  if(NOT EXISTS "${tier_override}")
+    message(FATAL_ERROR "Generated tier include override is absent: ${tier_override}")
   endif()
+  set(installed_shader_root "${elder_matrix_root}/installed-tier-${tier_name}")
+  file(REMOVE_RECURSE "${installed_shader_root}")
+  file(MAKE_DIRECTORY "${installed_shader_root}")
+  file(COPY "${elder_source_dir}/shaders/elder" DESTINATION "${installed_shader_root}")
+  file(COPY "${tier_override}" DESTINATION "${installed_shader_root}/elder")
   execute_process(
     COMMAND "${ELDER_FXC}"
       /nologo
@@ -469,8 +474,7 @@ function(run_elder_tier_budget_probe tier_index tier_name budget_row)
       /WX
       /Ges
       /O3
-      /I "${tier_include_root}"
-      /I "${elder_source_dir}/shaders"
+      /I "${installed_shader_root}"
       "/DELDER_PROBE_QUALITY_TIER=${tier_index}"
       "/DELDER_PROBE_AO_DIRECTIONS=${ao_directions}"
       "/DELDER_PROBE_AO_STEPS=${ao_steps}"

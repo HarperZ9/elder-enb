@@ -5,13 +5,21 @@
 #error Include ElderPipelineCommon.fxh before ElderLens.fxh
 #endif
 
-float4 ElderStageOpticalIdentityWhenDisabled(
-    float4 source,
-    float4 candidate,
-    bool stage_enabled,
-    float intensity)
+float ElderLensScratchAlpha(float source_alpha)
 {
-    return ElderStageIdentity(source, candidate, stage_enabled, intensity);
+    return ElderFinite1(source_alpha) ? source_alpha : 1.0;
+}
+
+float4 ElderNeutralLensScratch(float source_alpha)
+{
+    return float4(0.0.xxx, ElderLensScratchAlpha(source_alpha));
+}
+
+float4 ElderLensContribution(float3 radiance, float source_alpha)
+{
+    float cap_value = max(ElderLensEnergyCap, 0.0);
+    float3 bounded_radiance = min(ElderFiniteOrBlack(radiance), cap_value.xxx);
+    return float4(bounded_radiance, ElderLensScratchAlpha(source_alpha));
 }
 
 void ElderAccumulateLensGhost(
@@ -32,18 +40,18 @@ float4 ElderApplyLens(float2 uv, float4 bloom_source)
 {
     if (!ElderStageIsActive() || ELDER_STAGE_INTENSITY <= 0.0)
     {
-        return bloom_source;
+        return ElderNeutralLensScratch(bloom_source.a);
     }
 
     if (ElderLensGhosts == 0u)
     {
-        return bloom_source;
+        return ElderNeutralLensScratch(bloom_source.a);
     }
 
     if (!ElderFinite3(bloom_source.rgb) || !ElderFinite1(bloom_source.a)
         || !ElderFinite3(ScreenSize.xyz))
     {
-        return bloom_source;
+        return ElderNeutralLensScratch(bloom_source.a);
     }
 
     float2 center_vector = uv - 0.5.xx;
@@ -73,12 +81,10 @@ float4 ElderApplyLens(float2 uv, float4 bloom_source)
         filtered_lens * max(ElderLensGhostStrength, 0.0)
         + halo_color * max(ElderLensHaloStrength, 0.0)
             * saturate(1.0 - center_distance * 1.35);
-    float3 capped_lens = min(lens_add, max(ElderLensEnergyCap, 0.0).xxx);
-    float3 candidate_color = bloom_source.rgb + capped_lens;
-    float4 candidate = float4(
-        ElderFinite3(candidate_color) ? max(candidate_color, 0.0.xxx) : bloom_source.rgb,
-        bloom_source.a);
-    return ElderStageOpticalIdentityWhenDisabled(bloom_source, candidate, true, 1.0);
+    float3 capped_lens = min(
+        lens_add * saturate(ElderLensIntensity),
+        max(ElderLensEnergyCap, 0.0).xxx);
+    return ElderLensContribution(capped_lens, bloom_source.a);
 }
 
 #endif  // ELDER_LENS_FXH

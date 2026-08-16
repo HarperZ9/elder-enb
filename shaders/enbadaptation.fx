@@ -40,28 +40,12 @@ float4 ElderAdaptationMain(ElderStageVSOutput input) : SV_Target
     float previous_scalar =
         TexturePrevious.SampleLevel(Sampler0, float2(0.5, 0.5), 0.0).x;
     float measured_luminance = ElderAdaptationMeasuredLuminance(source.rgb);
-    float delta_seconds = ElderFinite1(Timer.x) ? clamp(Timer.x, 0.0, 0.25) : 0.0;
-    float native_available = ElderFinite3(source.rgb)
-        && ElderFinite1(source.a)
-        && ElderFinite1(measured_luminance)
-        && ElderFinite1(previous_scalar)
-        && measured_luminance > 0.0
-        && previous_scalar > 0.0 ? 1.0 : 0.0;
+    float delta_seconds = ElderAdaptationDeltaSeconds(Timer);
     float adapted_luminance = ElderUpdateAdaptedLuminance(
         measured_luminance, previous_scalar, delta_seconds);
-    float4 candidate = native_available > 0.0
-        ? float4(adapted_luminance.xxx, source.a)
-        : source;
-    float4 selected = ElderResolveCapabilityColor(
-        candidate,
-        source,
-        source,
-        source,
-        native_available,
-        0.0,
-        0.0);
-    return ElderStageIdentity(
-        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+    float stable_alpha = ElderFinite1(source.a) ? source.a : 1.0;
+    float4 scalar_output = float4(adapted_luminance.xxx, stable_alpha);
+    return ElderStageIsActive() ? scalar_output : source;
 }
 
 technique11 Draw <string UIName = "Elder [40] Adaptation";>

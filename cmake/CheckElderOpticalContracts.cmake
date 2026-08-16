@@ -142,6 +142,20 @@ function(require_elder_optical_tokens source_file contract_name)
     endforeach()
 endfunction()
 
+function(forbid_elder_optical_tokens source_file contract_name)
+    file(READ "${source_file}" elder_optical_source)
+    foreach(elder_forbidden_token IN LISTS ARGN)
+        if(elder_forbidden_token STREQUAL "")
+            continue()
+        endif()
+        string(FIND "${elder_optical_source}" "${elder_forbidden_token}" elder_forbidden_token_position)
+        if(NOT elder_forbidden_token_position EQUAL -1)
+            message(FATAL_ERROR
+                "${contract_name} contains forbidden Task 4 review token: ${elder_forbidden_token}")
+        endif()
+    endforeach()
+endfunction()
+
 require_elder_optical_tokens(
     "${elder_source_dir}/shaders/elder/ElderDepthOfField.fxh"
     "Elder depth-of-field module"
@@ -160,16 +174,31 @@ require_elder_optical_tokens(
     "ElderBloomThreshold"
     "ElderBloomSoftKnee"
     "ElderExtractBloomHighlight"
-    "ElderStageOpticalIdentityWhenDisabled"
+    "ElderNeutralBloomScratch"
+    "ElderBloomContribution"
     "for (uint tap_index = 1u; tap_index <= ElderBloomRadius; ++tap_index)")
+forbid_elder_optical_tokens(
+    "${elder_source_dir}/shaders/elder/ElderBloom.fxh"
+    "Elder bloom module"
+    "return source"
+    "source.rgb +"
+    "ElderStageOpticalIdentityWhenDisabled")
 require_elder_optical_tokens(
     "${elder_source_dir}/shaders/elder/ElderAdaptation.fxh"
     "Elder adaptation module"
     "ElderUpdateAdaptedLuminance"
+    "ElderAdaptationDeltaSeconds"
+    "timer_value.w"
+    "1.0 / 60.0"
+    "ElderSeedAdaptationHistory"
     "ElderAdaptationBrightenRate"
     "ElderAdaptationDarkenRate"
     "ElderAdaptationMinLuminance"
-    "ElderAdaptationMaxLuminance"
+    "ElderAdaptationMaxLuminance")
+forbid_elder_optical_tokens(
+    "${elder_source_dir}/shaders/elder/ElderAdaptation.fxh"
+    "Elder adaptation module"
+    "return previous_luminance"
     "ElderStageOpticalIdentityWhenDisabled")
 require_elder_optical_tokens(
     "${elder_source_dir}/shaders/elder/ElderLens.fxh"
@@ -178,10 +207,17 @@ require_elder_optical_tokens(
     "ElderLensGhosts"
     "TextureBloom"
     "ElderLensEnergyCap"
-    "ElderStageOpticalIdentityWhenDisabled"
+    "ElderNeutralLensScratch"
+    "ElderLensContribution"
     "#if ELDER_LENS_GHOSTS_VALUE >= 1"
     "#if ELDER_LENS_GHOSTS_VALUE >= 2"
     "#if ELDER_LENS_GHOSTS_VALUE >= 3")
+forbid_elder_optical_tokens(
+    "${elder_source_dir}/shaders/elder/ElderLens.fxh"
+    "Elder lens module"
+    "return bloom_source"
+    "bloom_source.rgb +"
+    "ElderStageOpticalIdentityWhenDisabled")
 
 require_elder_optical_tokens(
     "${elder_source_dir}/shaders/enbdepthoffield.fx"
@@ -195,20 +231,33 @@ require_elder_optical_tokens(
     "Elder bloom stage"
     "#include \"elder/ElderBloom.fxh\""
     "Texture2D TextureColor"
-    "ElderApplyBloom")
+    "return ElderApplyBloom")
+forbid_elder_optical_tokens(
+    "${elder_source_dir}/shaders/enbbloom.fx"
+    "Elder bloom stage"
+    "ElderStageIdentity(")
 require_elder_optical_tokens(
     "${elder_source_dir}/shaders/enbadaptation.fx"
     "Elder adaptation stage"
     "#include \"elder/ElderAdaptation.fxh\""
     "Texture2D TextureCurrent"
     "Texture2D TexturePrevious"
+    "ElderAdaptationDeltaSeconds(Timer)"
     "ElderUpdateAdaptedLuminance")
+forbid_elder_optical_tokens(
+    "${elder_source_dir}/shaders/enbadaptation.fx"
+    "Elder adaptation stage"
+    "Timer.x")
 require_elder_optical_tokens(
     "${elder_source_dir}/shaders/enblens.fx"
     "Elder lens stage"
     "#include \"elder/ElderLens.fxh\""
     "Texture2D TextureBloom"
-    "ElderApplyLens")
+    "return ElderApplyLens")
+forbid_elder_optical_tokens(
+    "${elder_source_dir}/shaders/enblens.fx"
+    "Elder lens stage"
+    "ElderStageIdentity(")
 
 file(READ "${elder_source_dir}/shaders/enblens.fx" elder_lens_stage_source)
 string(FIND "${elder_lens_stage_source}" "Texture2D TextureColor" elder_lens_raw_scene_position)

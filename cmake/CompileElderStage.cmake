@@ -154,11 +154,22 @@ if(NOT elder_bridge_stage_position EQUAL -1)
 endif()
 
 if(NOT elder_stage_name STREQUAL "enbeffect.fx"
-    AND NOT elder_stage_name STREQUAL "enbeffectprepass.fx")
+    AND NOT elder_stage_name STREQUAL "enbeffectprepass.fx"
+    AND NOT elder_stage_name STREQUAL "enbadaptation.fx"
+    AND NOT elder_stage_name STREQUAL "enbbloom.fx"
+    AND NOT elder_stage_name STREQUAL "enblens.fx")
   string(FIND "${elder_stage_contents}" "ElderStageIdentity" identity_position)
   if(identity_position EQUAL -1)
     message(FATAL_ERROR
       "Identity stage ${elder_stage_name} must use the exact ElderStageIdentity output")
+  endif()
+endif()
+if(elder_stage_name STREQUAL "enbbloom.fx"
+    OR elder_stage_name STREQUAL "enblens.fx")
+  string(FIND "${elder_stage_contents}" "ElderStageIdentity" additive_identity_position)
+  if(NOT additive_identity_position EQUAL -1)
+    message(FATAL_ERROR
+      "Additive scratch stage ${elder_stage_name} must output neutral/contribution scratch directly")
   endif()
 endif()
 string(FIND "${elder_stage_contents}" "ORIGINALPOSTPROCESS" original_postprocess_position)

@@ -36,9 +36,7 @@ SamplerState Sampler0
 float4 ElderLensMain(ElderStageVSOutput input) : SV_Target
 {
     float4 source = TextureBloom.Sample(Sampler0, input.texcoord);
-    float4 selected = ElderApplyLens(input.texcoord, source);
-    return ElderStageIdentity(
-        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+    return ElderApplyLens(input.texcoord, source);
 }
 
 technique11 Draw <string UIName = "Elder [50] Lens";>

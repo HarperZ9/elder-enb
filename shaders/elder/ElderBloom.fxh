@@ -5,13 +5,20 @@
 #error Include ElderPipelineCommon.fxh before ElderBloom.fxh
 #endif
 
-float4 ElderStageOpticalIdentityWhenDisabled(
-    float4 source,
-    float4 candidate,
-    bool stage_enabled,
-    float intensity)
+float ElderBloomScratchAlpha(float source_alpha)
 {
-    return ElderStageIdentity(source, candidate, stage_enabled, intensity);
+    return ElderFinite1(source_alpha) ? source_alpha : 1.0;
+}
+
+float4 ElderNeutralBloomScratch(float source_alpha)
+{
+    return float4(0.0.xxx, ElderBloomScratchAlpha(source_alpha));
+}
+
+float4 ElderBloomContribution(float3 radiance, float source_alpha)
+{
+    float3 bounded_radiance = min(ElderFiniteOrBlack(radiance), 1.25.xxx);
+    return float4(bounded_radiance, ElderBloomScratchAlpha(source_alpha));
 }
 
 float ElderBloomLuminance(float3 color)
@@ -42,25 +49,25 @@ float4 ElderApplyBloom(float2 uv, float4 source)
 {
     if (!ElderStageIsActive() || ELDER_STAGE_INTENSITY <= 0.0)
     {
-        return source;
+        return ElderNeutralBloomScratch(source.a);
     }
 
     if (ElderBloomRadius == 0u)
     {
-        return source;
+        return ElderNeutralBloomScratch(source.a);
     }
 
     if (!ElderFinite3(source.rgb) || !ElderFinite1(source.a)
         || !ElderFinite3(ScreenSize.xyz))
     {
-        return source;
+        return ElderNeutralBloomScratch(source.a);
     }
 
     float3 center_highlight = ElderExtractBloomHighlight(source.rgb);
     float center_luma = ElderBloomLuminance(center_highlight);
     if (center_luma <= 0.0)
     {
-        return source;
+        return ElderNeutralBloomScratch(source.a);
     }
 
     float2 texel_size = 1.0 / max(ScreenSize.xy, float2(1.0, 1.0));
@@ -93,14 +100,10 @@ float4 ElderApplyBloom(float2 uv, float4 source)
 
     float3 filtered_highlight =
         accumulated_highlight / max(accumulated_weight, 0.0001);
-    float3 bounded_add = min(
-        filtered_highlight * 0.55,
-        max(source.rgb, 0.02.xxx) * 0.22 + 0.08.xxx);
-    float3 candidate_color = source.rgb + bounded_add;
-    float4 candidate = float4(
-        ElderFinite3(candidate_color) ? max(candidate_color, 0.0.xxx) : source.rgb,
-        source.a);
-    return ElderStageOpticalIdentityWhenDisabled(source, candidate, true, 1.0);
+    float3 contribution_radiance = filtered_highlight
+        * saturate(ElderBloomIntensity)
+        * 0.55;
+    return ElderBloomContribution(contribution_radiance, source.a);
 }
 
 #endif  // ELDER_BLOOM_FXH

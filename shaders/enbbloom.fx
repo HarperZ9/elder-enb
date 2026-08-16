@@ -36,9 +36,7 @@ SamplerState Sampler0
 float4 ElderBloomMain(ElderStageVSOutput input) : SV_Target
 {
     float4 source = TextureColor.Sample(Sampler0, input.texcoord);
-    float4 selected = ElderApplyBloom(input.texcoord, source);
-    return ElderStageIdentity(
-        source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
+    return ElderApplyBloom(input.texcoord, source);
 }
 
 technique11 Draw <string UIName = "Elder [30] Bloom";>
