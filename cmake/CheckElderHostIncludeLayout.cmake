@@ -56,5 +56,38 @@ if(unqualified_elder_includes)
     "Root/enbseries package layout:\n  ${unqualified_text}")
 endif()
 
+# ENBSeries 0.504 supplies a fullscreen quad through POSITION/TEXCOORD0 and may
+# use shared/non-zero vertex indices. Synthesizing a triangle from SV_VertexID
+# collapses every id above one onto the same corner and can black out the pass.
+set(host_stage_contract_violations)
+set(elder_pipeline_common
+  "${elder_public_include_root}/ElderPipelineCommon.fxh")
+file(READ "${elder_pipeline_common}" elder_pipeline_common_source)
+foreach(required_token IN ITEMS
+    "ElderStageVSOutput ElderFullscreenVertex(float3 position : POSITION, float2 texcoord : TEXCOORD0)"
+    "output.position = float4(position, 1.0);"
+    "output.texcoord = texcoord;")
+  string(FIND "${elder_pipeline_common_source}" "${required_token}"
+    required_token_position)
+  if(required_token_position EQUAL -1)
+    list(APPEND host_stage_contract_violations
+      "ElderPipelineCommon.fxh lacks host quad pass-through: ${required_token}")
+  endif()
+endforeach()
+foreach(forbidden_token IN ITEMS "SV_VertexID" "triangle_position")
+  string(FIND "${elder_pipeline_common_source}" "${forbidden_token}"
+    forbidden_token_position)
+  if(NOT forbidden_token_position EQUAL -1)
+    list(APPEND host_stage_contract_violations
+      "ElderPipelineCommon.fxh synthesizes unsupported host geometry: ${forbidden_token}")
+  endif()
+endforeach()
+
+if(host_stage_contract_violations)
+  string(JOIN "\n  " host_stage_contract_text ${host_stage_contract_violations})
+  message(FATAL_ERROR
+    "Elder ENB host stage contract failed:\n  ${host_stage_contract_text}")
+endif()
+
 message(STATUS
-  "Elder public nested .fxh includes resolve from the packaged ENB root")
+  "Elder public includes and ENB host stage inputs are compatible")

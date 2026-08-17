@@ -379,5 +379,26 @@ foreach(output_file IN ITEMS "${ELDER_OUTPUT}" "${ELDER_LISTING}")
   endif()
 endforeach()
 
+# The effect may compile even when its vertex entrypoint expects a system
+# vertex id that ENB 0.504 never supplies. Require FXC's reflected input
+# signature to prove that the selected pass consumes the host quad instead.
+file(READ "${ELDER_LISTING}" elder_compiled_listing)
+foreach(required_signature IN ITEMS
+    "//[ \t]+POSITION[ \t]+0[ \t]+xyz[ \t]+0[ \t]+NONE[ \t]+float[ \t]+xyz"
+    "//[ \t]+TEXCOORD[ \t]+0[ \t]+xy[ \t]+1[ \t]+NONE[ \t]+float[ \t]+xy")
+  string(REGEX MATCH "${required_signature}" reflected_signature
+    "${elder_compiled_listing}")
+  if(reflected_signature STREQUAL "")
+    message(FATAL_ERROR
+      "FXC reflection for ${elder_stage_name} lacks ENB host POSITION/TEXCOORD0 inputs")
+  endif()
+endforeach()
+string(FIND "${elder_compiled_listing}" "SV_VertexID"
+  reflected_vertex_id_position)
+if(NOT reflected_vertex_id_position EQUAL -1)
+  message(FATAL_ERROR
+    "FXC reflection for ${elder_stage_name} still consumes unsupported SV_VertexID")
+endif()
+
 message(STATUS
   "FXC stage: ${elder_stage_name}; tier: ${ELDER_QUALITY_TIER}; technique: ${ELDER_STAGE_TECHNIQUE}")

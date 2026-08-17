@@ -52,14 +52,11 @@ struct ElderStageVSOutput
     float2 texcoord : TEXCOORD0;
 };
 
-ElderStageVSOutput ElderFullscreenVertex(uint vertex_id : SV_VertexID)
+ElderStageVSOutput ElderFullscreenVertex(float3 position : POSITION, float2 texcoord : TEXCOORD0)
 {
     ElderStageVSOutput output;
-    float2 triangle_position = vertex_id == 0u
-        ? float2(-1.0, -1.0)
-        : (vertex_id == 1u ? float2(-1.0, 3.0) : float2(3.0, -1.0));
-    output.position = float4(triangle_position, 0.0, 1.0);
-    output.texcoord = triangle_position * float2(0.5, -0.5) + 0.5;
+    output.position = float4(position, 1.0);
+    output.texcoord = texcoord;
     return output;
 }
 

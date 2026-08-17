@@ -267,6 +267,54 @@ function(expect_elder_stage_rejection case_name source_name source_token replace
   endif()
 endfunction()
 
+function(expect_elder_synthesized_vertex_rejection)
+  set(source_path "${elder_source_dir}/shaders/enbbloom.fx")
+  file(READ "${source_path}" source_contents)
+  string(REPLACE
+    "ElderFullscreenVertex()"
+    "ElderSynthesizedFullscreenVertex()"
+    rejected_contents "${source_contents}")
+  set(synthesized_vertex [=[
+ElderStageVSOutput ElderSynthesizedFullscreenVertex(uint vertex_id : SV_VertexID)
+{
+    ElderStageVSOutput output;
+    float2 triangle_position = vertex_id == 0u
+        ? float2(-1.0, -1.0)
+        : (vertex_id == 1u ? float2(-1.0, 3.0) : float2(3.0, -1.0));
+    output.position = float4(triangle_position, 0.0, 1.0);
+    output.texcoord = triangle_position * float2(0.5, -0.5) + 0.5;
+    return output;
+}
+
+]=])
+  string(REPLACE "technique11 Draw"
+    "${synthesized_vertex}technique11 Draw"
+    rejected_contents "${rejected_contents}")
+  set(rejected_source
+    "${elder_matrix_root}/negative/synthesized-host-vertex.fx")
+  file(WRITE "${rejected_source}" "${rejected_contents}")
+  execute_process(
+    COMMAND "${CMAKE_COMMAND}"
+      "-DELDER_FXC=${ELDER_FXC}"
+      "-DELDER_SOURCE_DIR=${elder_source_dir}"
+      "-DELDER_STAGE_SOURCE=${rejected_source}"
+      "-DELDER_STAGE_TECHNIQUE=Draw"
+      "-DELDER_QUALITY_TIER=1"
+      "-DELDER_GENERATED_INCLUDE=${elder_generated_native_root}"
+      "-DELDER_OUTPUT=${elder_matrix_root}/negative/synthesized-host-vertex.fxo"
+      "-DELDER_LISTING=${elder_matrix_root}/negative/synthesized-host-vertex.asm"
+      -P "${elder_compile_script}"
+    RESULT_VARIABLE rejected_result
+    OUTPUT_VARIABLE rejected_stdout
+    ERROR_VARIABLE rejected_stderr)
+  if(rejected_result EQUAL 0)
+    message(FATAL_ERROR
+      "Reflected host signature accepted synthesized SV_VertexID geometry")
+  endif()
+endfunction()
+
+expect_elder_synthesized_vertex_rejection()
+
 expect_elder_stage_rejection("full-frame-history"
   "enbeffectprepass.fx"
   "#define ELDER_STAGE_OWNS_FULL_FRAME_HISTORY 0"
