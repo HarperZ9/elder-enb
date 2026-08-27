@@ -11,7 +11,10 @@
 #include <cstdint>
 #include <cstring>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
+#include <limits>
+#include <new>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -74,6 +77,65 @@ std::string blob_text(ID3DBlob* blob) {
   return std::string{text, text + blob->GetBufferSize()};
 }
 
+// Resolves probe includes the way the installed enbseries layout does: the
+// probe's own directory covers sibling includes, and the shader root one level
+// up anchors the host-qualified "elder/..." include paths. The stock
+// D3DCompile include handler knows only the probe's directory, so the
+// qualified nested includes cannot resolve without this.
+class IncludeResolver final : public ID3DInclude {
+ public:
+  explicit IncludeResolver(const std::filesystem::path& probe_path)
+      : search_roots_{probe_path.parent_path(),
+                      probe_path.parent_path().parent_path()} {}
+
+  HRESULT __stdcall Open(
+      D3D_INCLUDE_TYPE,
+      LPCSTR file_name,
+      LPCVOID,
+      LPCVOID* data,
+      UINT* byte_count) override {
+    if (file_name == nullptr || data == nullptr || byte_count == nullptr) {
+      return E_INVALIDARG;
+    }
+    for (const std::filesystem::path& root : search_roots_) {
+      const std::filesystem::path candidate = root / file_name;
+      std::error_code probe_error;
+      if (!std::filesystem::is_regular_file(candidate, probe_error)) {
+        continue;
+      }
+      std::ifstream stream(candidate, std::ios::binary | std::ios::ate);
+      if (!stream) return E_FAIL;
+      const std::streamoff length = stream.tellg();
+      if (length < 0
+          || static_cast<std::uint64_t>(length)
+              > static_cast<std::uint64_t>((std::numeric_limits<UINT>::max)())) {
+        return E_FAIL;
+      }
+      stream.seekg(0, std::ios::beg);
+      const auto size = static_cast<std::size_t>(length);
+      auto* bytes = new (std::nothrow) char[size == 0U ? 1U : size];
+      if (bytes == nullptr) return E_OUTOFMEMORY;
+      if (size != 0U
+          && !stream.read(bytes, static_cast<std::streamsize>(size))) {
+        delete[] bytes;
+        return E_FAIL;
+      }
+      *data = bytes;
+      *byte_count = static_cast<UINT>(size);
+      return S_OK;
+    }
+    return E_FAIL;
+  }
+
+  HRESULT __stdcall Close(const LPCVOID data) override {
+    delete[] static_cast<const char*>(data);
+    return S_OK;
+  }
+
+ private:
+  std::array<std::filesystem::path, 2U> search_roots_;
+};
+
 ComPtr<ID3DBlob> compile_probe(
     const std::filesystem::path& probe_path,
     const bool declared_native_available) {
@@ -92,8 +154,9 @@ ComPtr<ID3DBlob> compile_probe(
   constexpr UINT flags = D3DCOMPILE_ENABLE_STRICTNESS
       | D3DCOMPILE_WARNINGS_ARE_ERRORS
       | D3DCOMPILE_OPTIMIZATION_LEVEL3;
+  IncludeResolver includes{probe_path};
   const HRESULT hr = D3DCompileFromFile(
-      probe_path.c_str(), macros.data(), D3D_COMPILE_STANDARD_FILE_INCLUDE,
+      probe_path.c_str(), macros.data(), &includes,
       "ElderCapabilityWarpProbeMain", "cs_5_0", flags, 0U, &bytecode,
       &diagnostics);
   if (FAILED(hr)) {
