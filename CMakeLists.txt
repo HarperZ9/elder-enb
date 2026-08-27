@@ -101,9 +101,137 @@ if(MSVC)
     )
 endif()
 
+find_program(
+    ELDER_FXC_EXECUTABLE
+    NAMES fxc.exe fxc
+    HINTS
+        "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64"
+    DOC "Absolute path to Microsoft FXC used for Elder shader validation"
+)
+set(
+    ELDER_FXC_EXECUTABLE
+    "${ELDER_FXC_EXECUTABLE}"
+    CACHE FILEPATH "Absolute path to Microsoft FXC used for Elder shader validation"
+    FORCE
+)
+
 include(CTest)
 
+find_package(Python3 3.10 REQUIRED COMPONENTS Interpreter)
+
+set(
+    ELDER_PUBLIC_NATIVE_PARAMETERS
+    "${CMAKE_CURRENT_SOURCE_DIR}/out/native-schema/vs18-x64-static/generated/Release/shaders/ElderNativeParameters.fxh"
+    CACHE FILEPATH
+    "Generated ElderNativeParameters.fxh admitted to the public archive"
+)
+set(
+    ELDER_PUBLIC_RUNTIME_PLUGIN
+    "${CMAKE_CURRENT_SOURCE_DIR}/out/native-schema/vs18-x64-static/runtime/Release/ElderENBRuntime.dllplugin"
+    CACHE FILEPATH
+    "Elder-owned ElderENBRuntime.dllplugin admitted to the public archive"
+)
+set(
+    ELDER_PUBLIC_RUNTIME_RECEIPT
+    "${CMAKE_CURRENT_SOURCE_DIR}/out/native-schema/vs18-x64-static/runtime/Release/ElderENBRuntime.dllplugin.receipt"
+    CACHE FILEPATH
+    "Build receipt binding ElderENBRuntime.dllplugin to its source revisions"
+)
+set(elder_public_runtime_core_default "${CMAKE_CURRENT_SOURCE_DIR}/../enb-runtime-core")
+if(
+    NOT EXISTS "${elder_public_runtime_core_default}/LICENSE"
+    AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../enb-runtime-core/LICENSE"
+)
+    set(elder_public_runtime_core_default "${CMAKE_CURRENT_SOURCE_DIR}/../../enb-runtime-core")
+endif()
+set(
+    ELDER_PUBLIC_RUNTIME_CORE_ROOT
+    "${elder_public_runtime_core_default}"
+    CACHE PATH
+    "Pinned enb-runtime-core checkout used for the public runtime license"
+)
+set(
+    ELDER_PUBLIC_PACKAGE_OUTPUT_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/dist"
+    CACHE PATH
+    "Output directory for the strict Elder public archive"
+)
+add_custom_target(
+    elder_public_release_package
+    COMMAND "${CMAKE_COMMAND}" -E env PYTHONDONTWRITEBYTECODE=1
+        "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/scripts/package.py"
+        build
+        --source-root "${CMAKE_CURRENT_SOURCE_DIR}"
+        --output-dir "${ELDER_PUBLIC_PACKAGE_OUTPUT_DIR}"
+        --work-dir "${CMAKE_CURRENT_BINARY_DIR}/public-package/target"
+        --native-parameters "${ELDER_PUBLIC_NATIVE_PARAMETERS}"
+        --runtime-plugin "${ELDER_PUBLIC_RUNTIME_PLUGIN}"
+        --runtime-receipt "${ELDER_PUBLIC_RUNTIME_RECEIPT}"
+        --runtime-core-root "${ELDER_PUBLIC_RUNTIME_CORE_ROOT}"
+    BYPRODUCTS
+        "${ELDER_PUBLIC_PACKAGE_OUTPUT_DIR}/Elder-ENB-1.0.0-win64.zip"
+        "${ELDER_PUBLIC_PACKAGE_OUTPUT_DIR}/Elder-ENB-1.0.0-win64.zip.sha256"
+    COMMENT "Building the strict runtime-complete Elder public archive"
+    VERBATIM
+)
+
 if(BUILD_TESTING)
+    add_test(
+        NAME elder_public_release_package
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_PYTHON=${Python3_EXECUTABLE}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            "-DELDER_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}"
+            "-DELDER_NATIVE_PARAMETERS=${ELDER_PUBLIC_NATIVE_PARAMETERS}"
+            "-DELDER_RUNTIME_PLUGIN=${ELDER_PUBLIC_RUNTIME_PLUGIN}"
+            "-DELDER_RUNTIME_RECEIPT=${ELDER_PUBLIC_RUNTIME_RECEIPT}"
+            "-DELDER_RUNTIME_CORE_ROOT=${ELDER_PUBLIC_RUNTIME_CORE_ROOT}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderPublicReleasePackage.cmake"
+    )
+    set_tests_properties(
+        elder_public_release_package
+        PROPERTIES
+            CONFIGURATIONS Release
+            LABELS "release;package;manifest;determinism;security"
+            TIMEOUT 180
+    )
+
+    add_test(
+        NAME elder_stage_compile_matrix
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_FXC=${ELDER_FXC_EXECUTABLE}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            "-DELDER_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderStageMatrix.cmake"
+    )
+    set_tests_properties(
+        elder_stage_compile_matrix
+        PROPERTIES LABELS "shader;fxc;quality;matrix"
+    )
+
+    add_test(
+        NAME elder_host_include_layout_contract
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderHostIncludeLayout.cmake"
+    )
+    set_tests_properties(
+        elder_host_include_layout_contract
+        PROPERTIES LABELS "shader;host;include;package"
+    )
+
+    add_test(
+        NAME elder_prepass_contract
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderPrepassContracts.cmake"
+    )
+    set_tests_properties(
+        elder_prepass_contract
+        PROPERTIES LABELS "shader;prepass;contract"
+    )
+
     add_test(
         NAME elder_quality_presets
         COMMAND "${CMAKE_COMMAND}"
@@ -114,6 +242,29 @@ if(BUILD_TESTING)
     set_tests_properties(
         elder_quality_presets
         PROPERTIES LABELS "shader;quality;presets;determinism"
+    )
+
+    add_test(
+        NAME elder_optical_contracts
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            "-DELDER_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderOpticalContracts.cmake"
+    )
+    set_tests_properties(
+        elder_optical_contracts
+        PROPERTIES LABELS "shader;optical;contract"
+    )
+
+    add_test(
+        NAME elder_composition_contracts
+        COMMAND "${CMAKE_COMMAND}"
+            "-DELDER_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckElderCompositionContracts.cmake"
+    )
+    set_tests_properties(
+        elder_composition_contracts
+        PROPERTIES LABELS "shader;composition;contract"
     )
 
     add_executable(elder_profile_tests
@@ -185,6 +336,84 @@ if(BUILD_TESTING)
 
     add_test(NAME elder_weather_theme_tests COMMAND elder_weather_theme_tests)
     set_tests_properties(elder_weather_theme_tests PROPERTIES TIMEOUT 90)
+
+    if(WIN32)
+        add_executable(elder_room_light_cpp_tests
+            native/tests/RoomLightTests.cpp
+            native/src/RoomLight.cpp
+        )
+        target_compile_features(elder_room_light_cpp_tests PRIVATE cxx_std_23)
+        target_include_directories(elder_room_light_cpp_tests PRIVATE
+            "${CMAKE_CURRENT_SOURCE_DIR}/native/include"
+        )
+        if(MSVC)
+            target_compile_options(
+                elder_room_light_cpp_tests
+                PRIVATE /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
+            )
+        endif()
+        add_test(
+            NAME elder_room_light_cpp
+            COMMAND elder_room_light_cpp_tests
+        )
+        set_tests_properties(
+            elder_room_light_cpp
+            PROPERTIES LABELS "shader;room-light;prepass;cpp"
+        )
+
+        add_executable(elder_room_light_warp_tests
+            native/tests/RoomLightWarpTests.cpp
+            native/src/RoomLight.cpp
+        )
+        target_compile_features(elder_room_light_warp_tests PRIVATE cxx_std_23)
+        target_include_directories(elder_room_light_warp_tests PRIVATE
+            "${CMAKE_CURRENT_SOURCE_DIR}/native/include"
+        )
+        target_link_libraries(elder_room_light_warp_tests PRIVATE
+            d3d11
+            d3dcompiler
+        )
+        if(MSVC)
+            target_compile_options(
+                elder_room_light_warp_tests
+                PRIVATE /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
+            )
+        endif()
+        add_test(
+            NAME elder_room_light_warp
+            COMMAND elder_room_light_warp_tests
+                "${CMAKE_CURRENT_SOURCE_DIR}/native/shaders/ElderRoomLightWarpProbe.hlsl"
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/elder/ElderPrepassWarpProbe.hlsl"
+        )
+        set_tests_properties(
+            elder_room_light_warp
+            PROPERTIES LABELS "shader;warp;room-light;prepass"
+        )
+
+        add_executable(elder_capability_warp_tests
+            tests/ElderCapabilityWarpTests.cpp
+        )
+        target_compile_features(elder_capability_warp_tests PRIVATE cxx_std_23)
+        target_link_libraries(elder_capability_warp_tests PRIVATE
+            d3d11
+            d3dcompiler
+        )
+        if(MSVC)
+            target_compile_options(
+                elder_capability_warp_tests
+                PRIVATE /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
+            )
+        endif()
+        add_test(
+            NAME elder_capability_warp
+            COMMAND elder_capability_warp_tests
+                "${CMAKE_CURRENT_SOURCE_DIR}/shaders/elder/ElderCapabilityWarpProbe.hlsl"
+        )
+        set_tests_properties(
+            elder_capability_warp
+            PROPERTIES LABELS "shader;warp;capability;matrix"
+        )
+    endif()
 
     add_test(
         NAME elder_weather_structural_validation

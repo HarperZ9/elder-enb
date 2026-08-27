@@ -119,6 +119,8 @@ endif()
 add_library(elder_runtime STATIC
   src/PulsePublication.cpp
   src/FrameDriver.cpp
+  src/ShaderParameterBridge.cpp
+  src/RenderPayloadController.cpp
 )
 target_compile_features(elder_runtime PUBLIC cxx_std_23)
 target_include_directories(
@@ -176,6 +178,27 @@ if(WIN32)
       PRIVATE /DYNAMICBASE /NXCOMPAT /GUARD:CF /CETCOMPAT /Brepro
     )
   endif()
+
+  set(
+    elder_runtime_release_receipt
+    "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/ElderENBRuntime.dllplugin.receipt"
+  )
+  add_custom_target(
+    elder_runtime_release_receipt ALL
+    COMMAND "${CMAKE_COMMAND}"
+      "-DELDER_RUNTIME_PLUGIN=$<TARGET_FILE:elder_enb_runtime_plugin>"
+      "-DELDER_RUNTIME_RECEIPT=${elder_runtime_release_receipt}"
+      "-DELDER_SOURCE_ROOT=${CMAKE_SOURCE_DIR}/.."
+      "-DELDER_RUNTIME_CORE_ROOT=${ELDER_ENB_RUNTIME_CORE_ROOT}"
+      "-DELDER_RUNTIME_CORE_LOCK=${CMAKE_CURRENT_SOURCE_DIR}/enb-runtime-core.lock"
+      -P "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/WriteElderRuntimeReceipt.cmake"
+    DEPENDS
+      elder_enb_runtime_plugin
+      "${CMAKE_CURRENT_SOURCE_DIR}/enb-runtime-core.lock"
+      "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/WriteElderRuntimeReceipt.cmake"
+    COMMENT "Binding the Elder runtime binary to its admitted source revisions"
+    VERBATIM
+  )
 endif()
 
 if(BUILD_TESTING)
@@ -219,5 +242,25 @@ if(BUILD_TESTING)
   add_test(
     NAME elder_runtime_frame_driver
     COMMAND elder_runtime_frame_driver_tests
+  )
+
+  add_executable(elder_runtime_render_payload_tests
+    tests/RenderPayloadControllerTests.cpp
+  )
+  target_compile_features(elder_runtime_render_payload_tests PRIVATE cxx_std_23)
+  target_link_libraries(elder_runtime_render_payload_tests PRIVATE
+    elder_runtime
+    enb_runtime_core
+  )
+
+  if(MSVC)
+    target_compile_options(elder_runtime_render_payload_tests PRIVATE
+      /W4 /WX /permissive- /EHsc /Zc:__cplusplus /utf-8
+    )
+  endif()
+
+  add_test(
+    NAME elder_runtime_render_payload
+    COMMAND elder_runtime_render_payload_tests
   )
 endif()

@@ -7,11 +7,14 @@
 #include "elder/shaders/InteriorLight.hpp"
 
 #include <array>
+#include <bit>
 #include <cmath>
 #include <cstdint>
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <string_view>
+#include <vector>
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
@@ -50,6 +53,19 @@ void check_hr(const HRESULT hr, const char* what)
 }
 
 constexpr std::uint32_t kCaseCount = 5U;
+constexpr std::uint32_t kPrepassCaseCount = 10U;
+
+constexpr std::array<std::string_view, kPrepassCaseCount> kPrepassCaseNames{
+    "exterior-preserves-room-payload",
+    "sealed-room-keeps-ambient-floor",
+    "partial-aperture-is-bounded",
+    "invalid-runtime-preserves-scene",
+    "interior-transition-is-continuous",
+    "sealed-interior-contact-attenuates-without-crushing",
+    "route-selection-prefers-native-then-bridge-then-spatial",
+    "unsupported-reflection-and-subsurface-are-identity",
+    "status-valid-marker-is-exact",
+    "status-generation-is-integer-exact"};
 
 struct Float4 {
   float x;
@@ -87,17 +103,20 @@ struct Float4 {
   return input;
 }
 
-[[nodiscard]] ComPtr<ID3DBlob> compile_probe(const wchar_t* path)
+[[nodiscard]] ComPtr<ID3DBlob> compile_probe(
+    const wchar_t* path, const char* entry_point, const char* label)
 {
   ComPtr<ID3DBlob> bytecode;
   ComPtr<ID3DBlob> diagnostics;
   const HRESULT hr = D3DCompileFromFile(
       path, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
-      "ElderRoomLightWarpProbeMain", "cs_5_0",
+      entry_point, "cs_5_0",
       D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_OPTIMIZATION_LEVEL3, 0U,
       &bytecode, &diagnostics);
   if (FAILED(hr)) {
-    std::string message = "D3DCompileFromFile(room-light probe) failed";
+    std::string message = "D3DCompileFromFile(";
+    message += label;
+    message += ") failed";
     if (diagnostics) {
       message += ": ";
       message.append(static_cast<const char*>(diagnostics->GetBufferPointer()),
@@ -108,7 +127,11 @@ struct Float4 {
   return bytecode;
 }
 
-std::array<Float4, kCaseCount> run_gpu(const wchar_t* probe_path)
+std::vector<Float4> run_gpu(
+    const wchar_t* probe_path,
+    const char* entry_point,
+    const std::uint32_t case_count,
+    const char* label)
 {
   constexpr std::array<D3D_FEATURE_LEVEL, 2> levels{
       D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0};
@@ -126,14 +149,14 @@ std::array<Float4, kCaseCount> run_gpu(const wchar_t* probe_path)
   }
   check_hr(hr, "D3D11CreateDevice(WARP)");
 
-  const ComPtr<ID3DBlob> bytecode = compile_probe(probe_path);
+  const ComPtr<ID3DBlob> bytecode = compile_probe(probe_path, entry_point, label);
   ComPtr<ID3D11ComputeShader> shader;
   check_hr(device->CreateComputeShader(bytecode->GetBufferPointer(),
                                        bytecode->GetBufferSize(), nullptr, &shader),
            "CreateComputeShader");
 
   D3D11_BUFFER_DESC output_desc{};
-  output_desc.ByteWidth = sizeof(Float4) * kCaseCount;
+  output_desc.ByteWidth = sizeof(Float4) * case_count;
   output_desc.Usage = D3D11_USAGE_DEFAULT;
   output_desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
   output_desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
@@ -144,13 +167,13 @@ std::array<Float4, kCaseCount> run_gpu(const wchar_t* probe_path)
   D3D11_UNORDERED_ACCESS_VIEW_DESC view_desc{};
   view_desc.Format = DXGI_FORMAT_UNKNOWN;
   view_desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
-  view_desc.Buffer.NumElements = kCaseCount;
+  view_desc.Buffer.NumElements = case_count;
   ComPtr<ID3D11UnorderedAccessView> output_view;
   check_hr(device->CreateUnorderedAccessView(output.Get(), &view_desc, &output_view),
            "CreateUnorderedAccessView(output)");
 
   D3D11_BUFFER_DESC staging_desc{};
-  staging_desc.ByteWidth = sizeof(Float4) * kCaseCount;
+  staging_desc.ByteWidth = sizeof(Float4) * case_count;
   staging_desc.Usage = D3D11_USAGE_STAGING;
   staging_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
   ComPtr<ID3D11Buffer> staging;
@@ -168,8 +191,8 @@ std::array<Float4, kCaseCount> run_gpu(const wchar_t* probe_path)
 
   D3D11_MAPPED_SUBRESOURCE mapped{};
   check_hr(context->Map(staging.Get(), 0U, D3D11_MAP_READ, 0U, &mapped), "Map(staging)");
-  std::array<Float4, kCaseCount> results{};
-  std::memcpy(results.data(), mapped.pData, sizeof(results));
+  std::vector<Float4> results(case_count);
+  std::memcpy(results.data(), mapped.pData, sizeof(Float4) * results.size());
   context->Unmap(staging.Get(), 0U);
   return results;
 }
@@ -179,18 +202,15 @@ std::array<Float4, kCaseCount> run_gpu(const wchar_t* probe_path)
   return std::fabs(a - b) <= 1.0e-4F;
 }
 
-}  // namespace
-
-int main(int argc, char** argv)
+[[nodiscard]] bool same_bits(const float a, const float b)
 {
-  if (argc < 2) {
-    fail("usage: elder_native_room_light_warp_tests <probe.hlsl>");
-  }
+  return std::bit_cast<std::uint32_t>(a) == std::bit_cast<std::uint32_t>(b);
+}
 
-  const std::string narrow_path = argv[1];
-  const std::wstring probe_path(narrow_path.begin(), narrow_path.end());
-
-  const std::array<Float4, kCaseCount> gpu = run_gpu(probe_path.c_str());
+void run_room_light_parity(const wchar_t* probe_path)
+{
+  const std::vector<Float4> gpu = run_gpu(
+      probe_path, "ElderRoomLightWarpProbeMain", kCaseCount, "room-light probe");
 
   for (std::uint32_t index = 0U; index < kCaseCount; ++index) {
     RoomLightOutput cpu{};
@@ -205,6 +225,117 @@ int main(int argc, char** argv)
     expect(near_value(g.z, cpu.open_fraction), tag + "open_fraction parity");
     expect(near_value(g.w, cpu.daylight_sealed ? 1.0F : 0.0F), tag + "daylight_sealed parity");
   }
+}
+
+void expect_exact_rgb(
+    const Float4& value, const float x, const float y, const float z, const std::string& tag)
+{
+  expect(same_bits(value.x, x), tag + " preserves red exactly");
+  expect(same_bits(value.y, y), tag + " preserves green exactly");
+  expect(same_bits(value.z, z), tag + " preserves blue exactly");
+}
+
+void run_prepass_integration(const wchar_t* probe_path)
+{
+  const std::vector<Float4> gpu = run_gpu(
+      probe_path, "ElderPrepassWarpProbeMain", kPrepassCaseCount, "prepass probe");
+
+  {
+    const Float4& g = gpu[0U];
+    const std::string tag(kPrepassCaseNames[0U]);
+    expect_exact_rgb(g, 0.25F, 0.5F, 0.75F, tag);
+  }
+
+  {
+    const Float4& g = gpu[1U];
+    const std::string tag(kPrepassCaseNames[1U]);
+    expect(g.x >= 0.05F && g.y >= 0.04F && g.z >= 0.03F,
+           tag + " does not crush the authored ambient floor");
+    expect(g.x <= 0.065F && g.y <= 0.052F && g.z <= 0.039F,
+           tag + " keeps sealed-room lift restrained");
+  }
+
+  {
+    const Float4& g = gpu[2U];
+    const std::string tag(kPrepassCaseNames[2U]);
+    expect(g.x > 0.2F && g.y > 0.2F && g.z > 0.2F,
+           tag + " applies the valid interior room-light payload");
+    expect(g.x <= 0.28F && g.y <= 0.28F && g.z <= 0.28F,
+           tag + " remains bounded");
+  }
+
+  {
+    const Float4& g = gpu[3U];
+    const std::string tag(kPrepassCaseNames[3U]);
+    expect_exact_rgb(g, 0.125F, 0.25F, 0.5F, tag);
+  }
+
+  {
+    const Float4& g = gpu[4U];
+    const std::string tag(kPrepassCaseNames[4U]);
+    expect(g.x >= 0.2F, tag + " starts at or above the exterior identity");
+    expect(g.x <= g.y && g.y <= g.z && g.z <= g.w,
+           tag + " is monotonic across the interior factor");
+    expect(g.w <= 0.28F, tag + " remains bounded at full interior");
+    expect((g.y - g.x) <= 0.03F && (g.z - g.y) <= 0.03F && (g.w - g.z) <= 0.03F,
+           tag + " changes continuously without steps");
+  }
+
+  {
+    const Float4& g = gpu[5U];
+    const std::string tag(kPrepassCaseNames[5U]);
+    expect(g.x < 0.5F && g.y < 0.5F && g.z < 0.5F,
+           tag + " permits bounded contact attenuation");
+    expect(g.x >= 0.47F && g.y >= 0.47F && g.z >= 0.47F,
+           tag + " preserves an explicit ambient floor");
+  }
+
+  {
+    const Float4& g = gpu[6U];
+    const std::string tag(kPrepassCaseNames[6U]);
+    expect(near_value(g.x, 3.0F), tag + " native route");
+    expect(near_value(g.y, 2.0F), tag + " bridge route");
+    expect(near_value(g.z, 1.0F), tag + " spatial route");
+    expect(near_value(g.w, 0.0F), tag + " identity route on invalid runtime");
+  }
+
+  {
+    const Float4& g = gpu[7U];
+    const std::string tag(kPrepassCaseNames[7U]);
+    expect(near_value(g.x, 1.0F), tag + " reflection identity");
+    expect(near_value(g.y, 1.0F), tag + " subsurface identity");
+  }
+
+  {
+    const Float4& g = gpu[8U];
+    const std::string tag(kPrepassCaseNames[8U]);
+    expect(near_value(g.x, 1.0F), tag + " rejects status.y values other than 1.0");
+  }
+
+  {
+    const Float4& g = gpu[9U];
+    const std::string tag(kPrepassCaseNames[9U]);
+    expect(near_value(g.x, 1.0F), tag + " rejects fractional folded generations");
+  }
+}
+
+}  // namespace
+
+int main(int argc, char** argv)
+{
+  if (argc < 2) {
+    fail("usage: elder_native_room_light_warp_tests <room-light-probe.hlsl> [prepass-probe.hlsl]");
+  }
+
+  const std::string narrow_path = argv[1];
+  const std::wstring probe_path(narrow_path.begin(), narrow_path.end());
+  run_room_light_parity(probe_path.c_str());
+
+  if (argc >= 3) {
+    const std::string narrow_prepass_path = argv[2];
+    const std::wstring prepass_path(narrow_prepass_path.begin(), narrow_prepass_path.end());
+    run_prepass_integration(prepass_path.c_str());
+  }
 
   if (failures != 0) {
     std::cerr << failures << " assertion(s) failed\n";
@@ -212,5 +343,9 @@ int main(int argc, char** argv)
   }
 
   std::cout << "Elder room-light WARP parity: " << kCaseCount << " cases matched CPU\n";
+  if (argc >= 3) {
+    std::cout << "Elder prepass room-light integration: "
+              << kPrepassCaseCount << " cases matched contract\n";
+  }
   return 0;
 }

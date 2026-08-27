@@ -1,77 +1,98 @@
-# Transactional Profile Architecture
+# Elder ENB architecture
 
-## State
+Elder is an independently authored ENBSeries 0.504 shader suite with a small,
+typed native publication boundary. Rendering remains in ENB's normal shader
+stages; the runtime does not inject draw calls or replace the engine pipeline.
 
-`TransactionalProfile` owns four pieces of state:
+## Ordered shader frame
 
-1. A const baseline map supplied at construction.
-2. The currently observable value map.
-3. An optional full active package; the public accessor projects only overlay and preset identity.
-4. A generation counter that advances once per committed apply or removal.
+The host order is fixed and treated as an API:
 
-## Apply Transition
+1. `enbeffectprepass.fx` — depth-safe masks, room-light reach, bounded
+   current-frame scene effects, and far-depth atmosphere fallback.
+2. `enbdepthoffield.fx` — focus and circle-of-confusion response only.
+3. `enbbloom.fx` — contribution-only HDR radiance extraction and filtering.
+4. `enbadaptation.fx` — finite luminance metering and bounded scalar history.
+5. `enblens.fx` — contribution-only glare, ghost, and halo response sourced
+   from bloom.
+6. `enbeffect.fx` — single scene/bloom/lens composition, exposure, color core,
+   tone mapping, and gamut control.
+7. `enbeffectpostpass.fx` — minimal display-space finish with dithering as its
+   final color operation.
+8. `enbsunsprite.fx` — bounded celestial optics without a second exposure or
+   bloom pass.
+9. `enbunderwater.fx` — one exclusive underwater absorption/scattering medium.
 
-```text
-ProfilePackage
-    -> validate every field and operation
-       -> diagnostics present: REJECTED, state unchanged
-       -> exact active package: ALREADY_ACTIVE, state unchanged
-       -> copy immutable baseline
-          -> evaluate ordered operations
-             -> non-finite result: REJECTED, state unchanged
-             -> prepare package/report
-                -> no-throw swaps + one generation increment: APPLIED
-```
+Each stage has one owner and an identity value. A disabled stage, zero
+intensity, invalid input, or unavailable capability chooses that identity or a
+documented finite fallback instead of leaking an invalid intermediate into the
+next stage.
 
-Validation gathers deterministic diagnostics in this order: package-level fields, then each operation in list order with unknown-target, duplicate-target, and numeric checks. Numeric staging is private. A valid operation earlier in a package cannot leak into current values if a later operation fails.
+## Shared shader contracts
 
-All potentially allocating copies and the success report are prepared before commit. The commit itself uses no-throw swaps, then increments generation once. A changed package always starts from `baseline_`, including when it reuses the same overlay and preset IDs.
+`shaders/elder/` contains the shared stage, quality, finite-value, capability,
+and effect modules. `native/shaders/ElderColorCore.fxh` is the Elder-owned typed
+color implementation consumed by the main effect. The generated
+`ElderNativeParameters.fxh` is built from the canonical native schema and ships
+beside the main shader.
 
-## Removal Transition
-
-When active, `RemoveActive` copies the baseline before mutation, swaps it into current values, clears active package state, increments generation once, and returns `REMOVED`. When inactive, it returns `NO_ACTIVE_PROFILE` with identical before/after generations and no state change.
-
-## Scope
-
-This vertical slice intentionally excludes persistence, file parsing, synchronization, rendering integration, and third-party dependencies. It is the in-memory transaction boundary those later adapters can call.
-
-## Legacy Binding Compilation
-
-The binding compiler is a read-only adapter in front of the transaction boundary:
-
-```text
-reviewed CSV + authorized overlay/preset roots
-    -> validate catalog structure
-    -> parse whitelisted identity metadata + stream SHA-256
-    -> account for every selected, retired, and preset entry
-       -> any diagnostic: no bindings, deterministic failure report
-       -> no diagnostics: sorted binding manifest
-          -> exact overlay filename + preset directory -> ProfilePackage IDs
-```
-
-The reviewed CSV—not file order, numeric prefixes, or timestamps—is the disposition authority. `BINDING`, `RETIRED`, and `ALIAS` rows make every one of the 55 target overlays explicit. Outputs must be distinct and outside both input roots; the CLI rejects unsafe paths before attempting any write.
-
-The compiler does not load runtime operations. Overlay parsing stops when `[OVERLAYINFO]` ends, `PresetInfo.ini` retains only five identity fields, and manifest/report surfaces expose only identities, filenames, hashes, counts, and stable diagnostic codes.
-
-## Legacy Record Audit Boundary
-
-The record auditor consumes the catalog's 37 bound preset directories through
-an explicitly supplied read-only root:
+Modern inputs follow one capability order:
 
 ```text
-catalog-bound preset directories
-    -> normalized UTF-8 relative paths + deterministic INI tokenization
-    -> identity, Optional, section/key, scalar/vector, and quoted-value checks
-    -> duplicate identity check scoped to preset + category
-    -> per-file SHA-256 leaves
-    -> path-bound per-preset SHA-256 tree
-    -> metadata-only manifest and diagnostic report under the build tree
+valid native host input
+    -> versioned SkyrimBridge-compatible input
+        -> stable bounded spatial fallback
+            -> exact identity
 ```
 
-Malformed values and suspicious duplicate filenames are actionable findings;
-the normal audit still completes and emits its full inventory. I/O failures,
-invalid UTF-8, and structurally unparseable INI input are fatal. A separate
-strict exit mode promotes any finding to a failing command without changing
-the report. Full-corpus integration is Release-only because the portable
-scalar SHA-256 implementation processes hundreds of MiB; Debug remains the
-fast semantic test configuration.
+No stage may promote a current-frame target to persistent history, invent
+object motion, or share packed channels without a declared ownership contract.
+Bridge-consuming stages retain direct bindings where required, while the public
+suite remains usable without SkyrimBridge.
+
+## Five quality tiers
+
+`config/quality-tiers.csv` owns Performance (0), Balanced (1), Quality (2),
+Ultra (3), and Cinematic (4). `ElderTier.fxh` selects the tier at compile time;
+loop bounds and feature budgets are therefore fixed shader permutations rather
+than runtime branches. Balanced is the copy-ready default.
+
+The preset generator emits exactly 55 files: five directories, each with nine
+stage `.fx.ini` files, one `elder-quality.ini`, and one
+`enbseries/elder/ElderTier.fxh` override. Stage INI keys are the exact shader
+`UIName` labels, so configuration cannot silently target an HLSL identifier the
+ENB serializer does not recognize.
+
+## Runtime publication boundary
+
+`ElderENBRuntime.dllplugin` uses the pinned `enb-runtime-core` dependency and
+ENB's parameter API to publish validated hidden values. A frame transaction
+writes invalid status first, payload values second, and valid status last.
+Failure restores captured authored values. Reset, save, and exit restore the
+baseline; malformed or unavailable payloads fail closed.
+
+The plugin is the only binary admitted to the public archive. ENB binaries,
+native replacement suites, compiler outputs, debug symbols, and test programs
+are outside the runtime boundary.
+
+## Supporting tools
+
+The transactional profile, legacy identity audit, and migration tools under
+`src/`, `include/`, and `config/` are maintainer infrastructure. They can read
+explicitly supplied historical inputs to produce Elder-owned metadata and
+configuration, but historical record bodies, recovered shaders, and protected
+evidence never enter the public package.
+
+## Release boundary
+
+The public packager constructs an exact allowlist instead of copying a staging
+directory. It generates presets from the canonical CSV, selects the nine stage
+files and support includes, installs Balanced as the default, adds the Elder
+runtime and required licenses, then hashes every member in `MANIFEST.sha256`.
+ZIP entry order, timestamps, permissions, compression settings, archive name,
+and checksum format are fixed. Two independent builds must be byte-identical.
+
+Generated Nexus artwork is packaged separately under `Media/Nexus/` and is
+explicitly promotional, not gameplay evidence. Public upload remains gated on
+the final runtime-complete archive and the recorded ENB 0.504 live acceptance
+matrix.

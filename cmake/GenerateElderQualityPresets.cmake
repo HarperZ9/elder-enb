@@ -89,7 +89,7 @@ foreach(elder_index RANGE 0 4)
         "; Elder ENB quality preset\n"
         "; Tier: ${elder_label} (${elder_tier})\n"
         "[ElderQuality]\n"
-        "ELDER_QUALITY_TIER=${elder_tier}\n"
+        "QualityTier=${elder_tier}\n"
         "TierId=${elder_id}\n"
         "TierLabel=${elder_label}\n"
         "AODirections=${elder_ao_directions}\n"
@@ -101,18 +101,311 @@ foreach(elder_index RANGE 0 4)
         "RoomLightRefinement=${elder_room_light_refinement}\n")
     file(WRITE "${elder_tier_dir}/elder-quality.ini" "${elder_quality_content}")
 
+    set(elder_tier_include_dir "${elder_tier_dir}/enbseries/elder")
+    cmake_path(IS_PREFIX elder_tier_dir "${elder_tier_include_dir}" NORMALIZE elder_tier_include_is_contained)
+    if(NOT elder_tier_include_is_contained)
+        message(FATAL_ERROR "Generated tier include path escapes its quality tier directory")
+    endif()
+    file(MAKE_DIRECTORY "${elder_tier_include_dir}")
+    string(CONCAT elder_tier_include_content
+        "// Elder ENB generated tier override\n"
+        "// Tier: ${elder_label} (${elder_tier})\n"
+        "#ifndef ELDER_QUALITY_TIER\n"
+        "#define ELDER_QUALITY_TIER ${elder_tier}\n"
+        "#endif\n")
+    file(WRITE "${elder_tier_include_dir}/ElderTier.fxh" "${elder_tier_include_content}")
+
+    if(elder_id STREQUAL "performance")
+        set(elder_dof_enabled false)
+        set(elder_dof_intensity 0.000)
+        set(elder_dof_focus_depth 0.55)
+        set(elder_dof_focus_range 0.24)
+        set(elder_dof_foreground_strength 0.00)
+        set(elder_dof_background_strength 0.00)
+        set(elder_dof_max_blur 0.00)
+        set(elder_bloom_enabled true)
+        set(elder_bloom_intensity 0.080)
+        set(elder_bloom_threshold 1.65)
+        set(elder_bloom_soft_knee 0.18)
+        set(elder_bloom_radius_scale 0.70)
+        set(elder_adaptation_enabled true)
+        set(elder_adaptation_intensity 0.45)
+        set(elder_adaptation_brighten_rate 0.55)
+        set(elder_adaptation_darken_rate 0.35)
+        set(elder_adaptation_min_luminance 0.080)
+        set(elder_adaptation_max_luminance 7.00)
+        set(elder_lens_enabled false)
+        set(elder_lens_intensity 0.000)
+        set(elder_lens_ghost_strength 0.00)
+        set(elder_lens_halo_strength 0.00)
+        set(elder_lens_energy_cap 0.00)
+        set(elder_prepass_enabled true)
+        set(elder_prepass_intensity 0.900)
+        set(elder_prepass_depth_shape 0.40)
+        set(elder_main_enabled true)
+        set(elder_main_intensity 1.000)
+        set(elder_main_optical_shape 0.35)
+        set(elder_postpass_enabled true)
+        set(elder_postpass_intensity 1.000)
+        set(elder_postpass_vignette_strength 0.10)
+        set(elder_postpass_grain_shape 0.00)
+        set(elder_sunsprite_enabled false)
+        set(elder_sunsprite_intensity 0.000)
+        set(elder_sunsprite_disc_shape 0.45)
+        set(elder_underwater_enabled true)
+        set(elder_underwater_intensity 0.45)
+        set(elder_underwater_density_shape 0.18)
+    elseif(elder_id STREQUAL "balanced")
+        set(elder_dof_enabled true)
+        set(elder_dof_intensity 0.180)
+        set(elder_dof_focus_depth 0.55)
+        set(elder_dof_focus_range 0.22)
+        set(elder_dof_foreground_strength 0.20)
+        set(elder_dof_background_strength 0.35)
+        set(elder_dof_max_blur 0.45)
+        set(elder_bloom_enabled true)
+        set(elder_bloom_intensity 0.120)
+        set(elder_bloom_threshold 1.45)
+        set(elder_bloom_soft_knee 0.25)
+        set(elder_bloom_radius_scale 0.80)
+        set(elder_adaptation_enabled true)
+        set(elder_adaptation_intensity 0.55)
+        set(elder_adaptation_brighten_rate 0.70)
+        set(elder_adaptation_darken_rate 0.45)
+        set(elder_adaptation_min_luminance 0.080)
+        set(elder_adaptation_max_luminance 8.00)
+        set(elder_lens_enabled true)
+        set(elder_lens_intensity 0.070)
+        set(elder_lens_ghost_strength 0.05)
+        set(elder_lens_halo_strength 0.04)
+        set(elder_lens_energy_cap 0.08)
+        set(elder_prepass_enabled true)
+        set(elder_prepass_intensity 1.000)
+        set(elder_prepass_depth_shape 0.50)
+        set(elder_main_enabled true)
+        set(elder_main_intensity 1.000)
+        set(elder_main_optical_shape 0.50)
+        set(elder_postpass_enabled true)
+        set(elder_postpass_intensity 1.000)
+        set(elder_postpass_vignette_strength 0.18)
+        set(elder_postpass_grain_shape 0.00)
+        set(elder_sunsprite_enabled true)
+        set(elder_sunsprite_intensity 0.180)
+        set(elder_sunsprite_disc_shape 0.50)
+        set(elder_underwater_enabled true)
+        set(elder_underwater_intensity 0.55)
+        set(elder_underwater_density_shape 0.25)
+    elseif(elder_id STREQUAL "quality")
+        set(elder_dof_enabled true)
+        set(elder_dof_intensity 0.220)
+        set(elder_dof_focus_depth 0.54)
+        set(elder_dof_focus_range 0.20)
+        set(elder_dof_foreground_strength 0.25)
+        set(elder_dof_background_strength 0.42)
+        set(elder_dof_max_blur 0.52)
+        set(elder_bloom_enabled true)
+        set(elder_bloom_intensity 0.150)
+        set(elder_bloom_threshold 1.35)
+        set(elder_bloom_soft_knee 0.30)
+        set(elder_bloom_radius_scale 0.90)
+        set(elder_adaptation_enabled true)
+        set(elder_adaptation_intensity 0.62)
+        set(elder_adaptation_brighten_rate 0.85)
+        set(elder_adaptation_darken_rate 0.55)
+        set(elder_adaptation_min_luminance 0.070)
+        set(elder_adaptation_max_luminance 9.00)
+        set(elder_lens_enabled true)
+        set(elder_lens_intensity 0.090)
+        set(elder_lens_ghost_strength 0.07)
+        set(elder_lens_halo_strength 0.05)
+        set(elder_lens_energy_cap 0.10)
+        set(elder_prepass_enabled true)
+        set(elder_prepass_intensity 1.000)
+        set(elder_prepass_depth_shape 0.55)
+        set(elder_main_enabled true)
+        set(elder_main_intensity 1.000)
+        set(elder_main_optical_shape 0.58)
+        set(elder_postpass_enabled true)
+        set(elder_postpass_intensity 1.000)
+        set(elder_postpass_vignette_strength 0.20)
+        set(elder_postpass_grain_shape 0.05)
+        set(elder_sunsprite_enabled true)
+        set(elder_sunsprite_intensity 0.220)
+        set(elder_sunsprite_disc_shape 0.55)
+        set(elder_underwater_enabled true)
+        set(elder_underwater_intensity 0.60)
+        set(elder_underwater_density_shape 0.30)
+    elseif(elder_id STREQUAL "ultra")
+        set(elder_dof_enabled true)
+        set(elder_dof_intensity 0.260)
+        set(elder_dof_focus_depth 0.53)
+        set(elder_dof_focus_range 0.18)
+        set(elder_dof_foreground_strength 0.30)
+        set(elder_dof_background_strength 0.48)
+        set(elder_dof_max_blur 0.62)
+        set(elder_bloom_enabled true)
+        set(elder_bloom_intensity 0.180)
+        set(elder_bloom_threshold 1.25)
+        set(elder_bloom_soft_knee 0.35)
+        set(elder_bloom_radius_scale 1.00)
+        set(elder_adaptation_enabled true)
+        set(elder_adaptation_intensity 0.68)
+        set(elder_adaptation_brighten_rate 1.00)
+        set(elder_adaptation_darken_rate 0.65)
+        set(elder_adaptation_min_luminance 0.060)
+        set(elder_adaptation_max_luminance 10.00)
+        set(elder_lens_enabled true)
+        set(elder_lens_intensity 0.100)
+        set(elder_lens_ghost_strength 0.08)
+        set(elder_lens_halo_strength 0.06)
+        set(elder_lens_energy_cap 0.12)
+        set(elder_prepass_enabled true)
+        set(elder_prepass_intensity 1.000)
+        set(elder_prepass_depth_shape 0.62)
+        set(elder_main_enabled true)
+        set(elder_main_intensity 1.000)
+        set(elder_main_optical_shape 0.64)
+        set(elder_postpass_enabled true)
+        set(elder_postpass_intensity 1.000)
+        set(elder_postpass_vignette_strength 0.22)
+        set(elder_postpass_grain_shape 0.08)
+        set(elder_sunsprite_enabled true)
+        set(elder_sunsprite_intensity 0.250)
+        set(elder_sunsprite_disc_shape 0.60)
+        set(elder_underwater_enabled true)
+        set(elder_underwater_intensity 0.65)
+        set(elder_underwater_density_shape 0.34)
+    else()
+        set(elder_dof_enabled true)
+        set(elder_dof_intensity 0.300)
+        set(elder_dof_focus_depth 0.52)
+        set(elder_dof_focus_range 0.16)
+        set(elder_dof_foreground_strength 0.34)
+        set(elder_dof_background_strength 0.55)
+        set(elder_dof_max_blur 0.72)
+        set(elder_bloom_enabled true)
+        set(elder_bloom_intensity 0.210)
+        set(elder_bloom_threshold 1.15)
+        set(elder_bloom_soft_knee 0.40)
+        set(elder_bloom_radius_scale 1.10)
+        set(elder_adaptation_enabled true)
+        set(elder_adaptation_intensity 0.72)
+        set(elder_adaptation_brighten_rate 1.15)
+        set(elder_adaptation_darken_rate 0.75)
+        set(elder_adaptation_min_luminance 0.050)
+        set(elder_adaptation_max_luminance 11.00)
+        set(elder_lens_enabled true)
+        set(elder_lens_intensity 0.120)
+        set(elder_lens_ghost_strength 0.10)
+        set(elder_lens_halo_strength 0.07)
+        set(elder_lens_energy_cap 0.14)
+        set(elder_prepass_enabled true)
+        set(elder_prepass_intensity 1.000)
+        set(elder_prepass_depth_shape 0.70)
+        set(elder_main_enabled true)
+        set(elder_main_intensity 1.000)
+        set(elder_main_optical_shape 0.70)
+        set(elder_postpass_enabled true)
+        set(elder_postpass_intensity 1.000)
+        set(elder_postpass_vignette_strength 0.24)
+        set(elder_postpass_grain_shape 0.10)
+        set(elder_sunsprite_enabled true)
+        set(elder_sunsprite_intensity 0.300)
+        set(elder_sunsprite_disc_shape 0.65)
+        set(elder_underwater_enabled true)
+        set(elder_underwater_intensity 0.70)
+        set(elder_underwater_density_shape 0.38)
+    endif()
+
     foreach(elder_stage IN LISTS elder_stages)
-        string(CONCAT elder_stage_content
-            "; Elder ENB quality preset\n"
-            "; Tier: ${elder_label} (${elder_tier})\n"
-            "[${elder_stage}]\n"
-            "Enable=true\n"
-            "Intensity=1.000\n"
-            "IntensityMin=0.000\n"
-            "IntensityMax=2.000\n"
-            "Shape=1.000\n"
-            "ShapeMin=0.000\n"
-            "ShapeMax=2.000\n")
+        string(TOUPPER "${elder_stage}" elder_stage_section)
+        if(elder_stage STREQUAL "enbdepthoffield.fx")
+            string(CONCAT elder_stage_content
+                "; Elder ENB quality preset\n"
+                "; Tier: ${elder_label} (${elder_tier})\n"
+                "[${elder_stage_section}]\n"
+                "[Elder 20] Depth of Field | Enabled=${elder_dof_enabled}\n"
+                "[Elder 20] Depth of Field | Intensity=${elder_dof_intensity}\n"
+                "[Elder 20] Depth of Field | Focus Depth=${elder_dof_focus_depth}\n"
+                "[Elder 20] Depth of Field | Focus Range=${elder_dof_focus_range}\n"
+                "[Elder 20] Depth of Field | Foreground Strength=${elder_dof_foreground_strength}\n"
+                "[Elder 20] Depth of Field | Background Strength=${elder_dof_background_strength}\n"
+                "[Elder 20] Depth of Field | Max Blur=${elder_dof_max_blur}\n")
+        elseif(elder_stage STREQUAL "enbbloom.fx")
+            string(CONCAT elder_stage_content
+                "; Elder ENB quality preset\n"
+                "; Tier: ${elder_label} (${elder_tier})\n"
+                "[${elder_stage_section}]\n"
+                "[Elder 30] Bloom | Enabled=${elder_bloom_enabled}\n"
+                "[Elder 30] Bloom | Intensity=${elder_bloom_intensity}\n"
+                "[Elder 30] Bloom | Highlight Threshold=${elder_bloom_threshold}\n"
+                "[Elder 30] Bloom | Soft Knee=${elder_bloom_soft_knee}\n"
+                "[Elder 30] Bloom | Radius Scale=${elder_bloom_radius_scale}\n")
+        elseif(elder_stage STREQUAL "enbadaptation.fx")
+            string(CONCAT elder_stage_content
+                "; Elder ENB quality preset\n"
+                "; Tier: ${elder_label} (${elder_tier})\n"
+                "[${elder_stage_section}]\n"
+                "[Elder 40] Adaptation | Enabled=${elder_adaptation_enabled}\n"
+                "[Elder 40] Adaptation | Intensity=${elder_adaptation_intensity}\n"
+                "[Elder 40] Adaptation | Brighten Rate=${elder_adaptation_brighten_rate}\n"
+                "[Elder 40] Adaptation | Darken Rate=${elder_adaptation_darken_rate}\n"
+                "[Elder 40] Adaptation | Min Luminance=${elder_adaptation_min_luminance}\n"
+                "[Elder 40] Adaptation | Max Luminance=${elder_adaptation_max_luminance}\n")
+        elseif(elder_stage STREQUAL "enblens.fx")
+            string(CONCAT elder_stage_content
+                "; Elder ENB quality preset\n"
+                "; Tier: ${elder_label} (${elder_tier})\n"
+                "[${elder_stage_section}]\n"
+                "[Elder 50] Lens | Enabled=${elder_lens_enabled}\n"
+                "[Elder 50] Lens | Intensity=${elder_lens_intensity}\n"
+                "[Elder 50] Lens | Ghost Strength=${elder_lens_ghost_strength}\n"
+                "[Elder 50] Lens | Halo Strength=${elder_lens_halo_strength}\n"
+                "[Elder 50] Lens | Energy Cap=${elder_lens_energy_cap}\n")
+        elseif(elder_stage STREQUAL "enbeffectprepass.fx")
+            string(CONCAT elder_stage_content
+                "; Elder ENB quality preset\n"
+                "; Tier: ${elder_label} (${elder_tier})\n"
+                "[${elder_stage_section}]\n"
+                "[Elder 10] Prepass | Enabled=${elder_prepass_enabled}\n"
+                "[Elder 10] Prepass | Intensity=${elder_prepass_intensity}\n"
+                "[Elder 10] Prepass | Depth Shape=${elder_prepass_depth_shape}\n")
+        elseif(elder_stage STREQUAL "enbeffect.fx")
+            string(CONCAT elder_stage_content
+                "; Elder ENB quality preset\n"
+                "; Tier: ${elder_label} (${elder_tier})\n"
+                "[${elder_stage_section}]\n"
+                "[Elder 60] Main Effect | Enabled=${elder_main_enabled}\n"
+                "[Elder 60] Main Effect | Color-Core Intensity=${elder_main_intensity}\n"
+                "[Elder 60] Main Effect | Optical Shape=${elder_main_optical_shape}\n")
+        elseif(elder_stage STREQUAL "enbeffectpostpass.fx")
+            string(CONCAT elder_stage_content
+                "; Elder ENB quality preset\n"
+                "; Tier: ${elder_label} (${elder_tier})\n"
+                "[${elder_stage_section}]\n"
+                "[Elder 70] Postpass | Enabled=${elder_postpass_enabled}\n"
+                "[Elder 70] Postpass | Intensity=${elder_postpass_intensity}\n"
+                "[Elder 70] Postpass | Vignette Strength=${elder_postpass_vignette_strength}\n"
+                "[Elder 70] Postpass | Grain Shape=${elder_postpass_grain_shape}\n")
+        elseif(elder_stage STREQUAL "enbsunsprite.fx")
+            string(CONCAT elder_stage_content
+                "; Elder ENB quality preset\n"
+                "; Tier: ${elder_label} (${elder_tier})\n"
+                "[${elder_stage_section}]\n"
+                "[Elder 80] Sun Sprite | Enabled=${elder_sunsprite_enabled}\n"
+                "[Elder 80] Sun Sprite | Intensity=${elder_sunsprite_intensity}\n"
+                "[Elder 80] Sun Sprite | Disc Shape=${elder_sunsprite_disc_shape}\n")
+        elseif(elder_stage STREQUAL "enbunderwater.fx")
+            string(CONCAT elder_stage_content
+                "; Elder ENB quality preset\n"
+                "; Tier: ${elder_label} (${elder_tier})\n"
+                "[${elder_stage_section}]\n"
+                "[Elder 90] Underwater | Enabled=${elder_underwater_enabled}\n"
+                "[Elder 90] Underwater | Intensity=${elder_underwater_intensity}\n"
+                "[Elder 90] Underwater | Density Shape=${elder_underwater_density_shape}\n")
+        else()
+            message(FATAL_ERROR "Unhandled Elder stage preset: ${elder_stage}")
+        endif()
         file(WRITE "${elder_tier_dir}/${elder_stage}.ini" "${elder_stage_content}")
     endforeach()
 endforeach()

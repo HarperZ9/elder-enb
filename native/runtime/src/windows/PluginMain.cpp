@@ -4,8 +4,10 @@
 //
 // On every BeginFrame the callback measures the frame, publishes the pulse
 // through the neutral core, applies Elder's publication policy, and writes the
-// result to the shader stack as ElderRuntimeFramePulse. A shader reads that to
-// know the native bridge is live this frame.
+// result to the shader stack as ElderRuntimeFramePulse. It also publishes the
+// transactional Elder runtime payload for the ordered shader tree. Room light
+// is optionally derived from public SkyrimBridge-named shader parameters when
+// they are present and current; exposure_color remains neutral/reserved.
 //
 // Everything decidable is in FrameDriver, which is pure and tested. What stays
 // here is the clock, the host pointers, and the write. The callback runs on the
@@ -14,6 +16,8 @@
 
 #include <elder/runtime/FrameDriver.hpp>
 #include <elder/runtime/PulsePublication.hpp>
+#include <elder/runtime/RenderPayloadController.hpp>
+#include <elder/runtime/ShaderParameterBridge.hpp>
 
 #include <enbcore/enb/LoadedHostResolver.hpp>
 #include <enbcore/enb/SdkContract.hpp>
@@ -47,6 +51,10 @@ enbcore::runtime::FramePulseState g_pulse_state{};
 std::int64_t g_previous_ticks = 0;
 bool g_has_previous_frame = false;
 
+elder::runtime::RenderPayloadController g_payload_controller{};
+elder::runtime::PublicBridgeRoomLightSource g_bridge_room_light_source{};
+std::uint64_t g_payload_generation = 0U;
+
 [[nodiscard]] float TicksToSeconds(const std::int64_t delta_ticks) noexcept
 {
     LARGE_INTEGER frequency{};
@@ -77,12 +85,30 @@ bool g_has_previous_frame = false;
     return elder::runtime::FrameTiming{TicksToSeconds(now.QuadPart - previous), true};
 }
 
+[[nodiscard]] elder::runtime::RenderPayload BuildRuntimeRenderPayload() noexcept
+{
+    ++g_payload_generation;
+    const elder::runtime::PublicBridgeRoomLightSourceResult bridge_room =
+        g_bridge_room_light_source.readRoomLight();
+    return elder::runtime::MakeRenderPayload(
+        bridge_room.room_light,
+        elder::runtime::NeutralExposureColorPayload(),
+        g_payload_generation);
+}
+
 #if defined(_MSC_VER)
 void __stdcall ElderEnbCallback(const enbcore::enb::CallbackId callback) noexcept
 #else
 void ElderEnbCallback(const enbcore::enb::CallbackId callback) noexcept
 #endif
 {
+    if (callback == enbcore::enb::CallbackId::PreSave
+        || callback == enbcore::enb::CallbackId::PreReset
+        || callback == enbcore::enb::CallbackId::OnExit) {
+        static_cast<void>(g_payload_controller.handleLifecycle(callback));
+        return;
+    }
+
     if (callback != enbcore::enb::CallbackId::BeginFrame) {
         return;
     }
@@ -109,6 +135,11 @@ void ElderEnbCallback(const enbcore::enb::CallbackId callback) noexcept
                                 const_cast<char*>(elder::runtime::kElderFramePulseSymbol),
                                 &parameter);
     }
+
+    if (g_payload_controller.ready()) {
+        static_cast<void>(
+            g_payload_controller.publish(BuildRuntimeRenderPayload()));
+    }
 }
 
 void ResolveAndRegisterHost() noexcept
@@ -126,6 +157,14 @@ void ResolveAndRegisterHost() noexcept
             || host.code == enbcore::enb::HostResolutionCode::NotReady)
         && host.exports.set_callback_function != nullptr) {
         g_exports = host.exports;
+        g_payload_controller.bind(elder::runtime::ShaderParameterBridge{
+            g_exports.get_parameter,
+            g_exports.set_parameter,
+        });
+        g_bridge_room_light_source.bind(elder::runtime::ShaderParameterBridge{
+            g_exports.get_parameter,
+            g_exports.set_parameter,
+        });
         host.exports.set_callback_function(&ElderEnbCallback);
         g_callback_registered.store(true, std::memory_order_relaxed);
     }

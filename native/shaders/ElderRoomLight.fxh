@@ -59,4 +59,13 @@ ElderRoomLightOutput ElderEvaluateRoomLight(ElderRoomLightInput input)
     return output;
 }
 
+float4 ElderRoomLightRuntimePayload(ElderRoomLightOutput output)
+{
+    return float4(
+        clamp(output.room_light, 0.0, ElderRoomMaxLight),
+        clamp(output.exterior_daylight, 0.0, ElderRoomMaxLight),
+        saturate(output.open_fraction),
+        output.daylight_sealed ? 1.0 : 0.0);
+}
+
 #endif  // ELDER_ROOM_LIGHT_FXH

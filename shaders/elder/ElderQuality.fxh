@@ -1,6 +1,4 @@
-#ifndef ELDER_QUALITY_TIER
-#define ELDER_QUALITY_TIER 1
-#endif
+#include "elder/ElderTier.fxh"
 
 #if ELDER_QUALITY_TIER < 0 || ELDER_QUALITY_TIER > 4
 #error ELDER_QUALITY_TIER must be in [0,4]
@@ -9,43 +7,51 @@
 static const uint ElderQualityTier = ELDER_QUALITY_TIER;
 
 #if ELDER_QUALITY_TIER == 0
-static const uint ElderAODirections = 4;
-static const uint ElderAOSteps = 2;
-static const uint ElderSSRSteps = 0;
-static const uint ElderDOFRings = 0;
-static const uint ElderBloomRadius = 2;
-static const uint ElderLensGhosts = 0;
-static const uint ElderRoomLightRefinement = 0;
+#define ELDER_AO_DIRECTIONS_VALUE 4
+#define ELDER_AO_STEPS_VALUE 2
+#define ELDER_SSR_STEPS_VALUE 0
+#define ELDER_DOF_RINGS_VALUE 0
+#define ELDER_BLOOM_RADIUS_VALUE 2
+#define ELDER_LENS_GHOSTS_VALUE 0
+#define ELDER_ROOM_LIGHT_REFINEMENT_VALUE 0
 #elif ELDER_QUALITY_TIER == 1
-static const uint ElderAODirections = 6;
-static const uint ElderAOSteps = 3;
-static const uint ElderSSRSteps = 0;
-static const uint ElderDOFRings = 2;
-static const uint ElderBloomRadius = 3;
-static const uint ElderLensGhosts = 1;
-static const uint ElderRoomLightRefinement = 1;
+#define ELDER_AO_DIRECTIONS_VALUE 6
+#define ELDER_AO_STEPS_VALUE 3
+#define ELDER_SSR_STEPS_VALUE 0
+#define ELDER_DOF_RINGS_VALUE 2
+#define ELDER_BLOOM_RADIUS_VALUE 3
+#define ELDER_LENS_GHOSTS_VALUE 1
+#define ELDER_ROOM_LIGHT_REFINEMENT_VALUE 1
 #elif ELDER_QUALITY_TIER == 2
-static const uint ElderAODirections = 8;
-static const uint ElderAOSteps = 4;
-static const uint ElderSSRSteps = 8;
-static const uint ElderDOFRings = 3;
-static const uint ElderBloomRadius = 4;
-static const uint ElderLensGhosts = 2;
-static const uint ElderRoomLightRefinement = 1;
+#define ELDER_AO_DIRECTIONS_VALUE 8
+#define ELDER_AO_STEPS_VALUE 4
+#define ELDER_SSR_STEPS_VALUE 8
+#define ELDER_DOF_RINGS_VALUE 3
+#define ELDER_BLOOM_RADIUS_VALUE 4
+#define ELDER_LENS_GHOSTS_VALUE 2
+#define ELDER_ROOM_LIGHT_REFINEMENT_VALUE 1
 #elif ELDER_QUALITY_TIER == 3
-static const uint ElderAODirections = 12;
-static const uint ElderAOSteps = 5;
-static const uint ElderSSRSteps = 12;
-static const uint ElderDOFRings = 4;
-static const uint ElderBloomRadius = 5;
-static const uint ElderLensGhosts = 2;
-static const uint ElderRoomLightRefinement = 2;
+#define ELDER_AO_DIRECTIONS_VALUE 12
+#define ELDER_AO_STEPS_VALUE 5
+#define ELDER_SSR_STEPS_VALUE 12
+#define ELDER_DOF_RINGS_VALUE 4
+#define ELDER_BLOOM_RADIUS_VALUE 5
+#define ELDER_LENS_GHOSTS_VALUE 2
+#define ELDER_ROOM_LIGHT_REFINEMENT_VALUE 2
 #else
-static const uint ElderAODirections = 16;
-static const uint ElderAOSteps = 6;
-static const uint ElderSSRSteps = 16;
-static const uint ElderDOFRings = 5;
-static const uint ElderBloomRadius = 6;
-static const uint ElderLensGhosts = 3;
-static const uint ElderRoomLightRefinement = 2;
+#define ELDER_AO_DIRECTIONS_VALUE 16
+#define ELDER_AO_STEPS_VALUE 6
+#define ELDER_SSR_STEPS_VALUE 16
+#define ELDER_DOF_RINGS_VALUE 5
+#define ELDER_BLOOM_RADIUS_VALUE 6
+#define ELDER_LENS_GHOSTS_VALUE 3
+#define ELDER_ROOM_LIGHT_REFINEMENT_VALUE 2
 #endif
+
+static const uint ElderAODirections = ELDER_AO_DIRECTIONS_VALUE;
+static const uint ElderAOSteps = ELDER_AO_STEPS_VALUE;
+static const uint ElderSSRSteps = ELDER_SSR_STEPS_VALUE;
+static const uint ElderDOFRings = ELDER_DOF_RINGS_VALUE;
+static const uint ElderBloomRadius = ELDER_BLOOM_RADIUS_VALUE;
+static const uint ElderLensGhosts = ELDER_LENS_GHOSTS_VALUE;
+static const uint ElderRoomLightRefinement = ELDER_ROOM_LIGHT_REFINEMENT_VALUE;
