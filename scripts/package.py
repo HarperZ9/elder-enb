@@ -437,7 +437,19 @@ def validate_generated_presets(source_root: Path, generated_root: Path) -> None:
             ):
                 raise PackageError(f"preset provenance is not canonical: {preset_path}")
             expected_section = f"[{stage.upper()}]"
+            # TECHNIQUE=1 must sit directly under the section header, matching
+            # ENB's own save format; index 1 activates the first declared
+            # Elder technique instead of ENB's internal DEFAULT shader.
+            if f"{expected_section}\nTECHNIQUE=1\n" not in preset_source:
+                raise PackageError(
+                    f"preset must set TECHNIQUE=1 directly under "
+                    f"{expected_section}: {preset_path}"
+                )
             parsed = _parse_ini(preset_path, expected_section)
+            if parsed.pop("TECHNIQUE", None) != "1":
+                raise PackageError(
+                    f"preset technique must be exactly TECHNIQUE=1: {preset_path}"
+                )
             prefix = STAGE_UI_PREFIXES[stage]
             expected_keys = {name for name in ui_names if name.startswith(prefix)}
             if set(parsed) != expected_keys:

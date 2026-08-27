@@ -54,6 +54,11 @@ manifest, but this README intentionally does not claim a current release-archive
 file count. The final package manifest is a release gate, not a marketing
 sentence.
 
+Each tier's nine per-stage `.fx.ini` files carry `TECHNIQUE=1` directly under
+the stage section. Index 1 selects the first declared Elder technique in that
+stage; without the key, ENB falls back to its internal DEFAULT shader in every
+stage and none of the Elder passes render.
+
 Reserved/configured SSR budgets are not a live effect claim. SSR remains
 identity/unshipped until an implementation is integrated, accepted, and recorded
 in the final archive evidence.

@@ -317,6 +317,10 @@ foreach(elder_index RANGE 0 4)
         set(elder_underwater_density_shape 0.38)
     endif()
 
+    # ENB's per-stage technique dropdown defaults to index 0, its internal
+    # DEFAULT shader; index 1 is the first technique11 declared in the stage
+    # file. Without TECHNIQUE=1 an installed preset renders ENB's built-in
+    # path instead of Elder.
     foreach(elder_stage IN LISTS elder_stages)
         string(TOUPPER "${elder_stage}" elder_stage_section)
         if(elder_stage STREQUAL "enbdepthoffield.fx")
@@ -324,6 +328,7 @@ foreach(elder_index RANGE 0 4)
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
+                "TECHNIQUE=1\n"
                 "[Elder 20] Depth of Field | Enabled=${elder_dof_enabled}\n"
                 "[Elder 20] Depth of Field | Intensity=${elder_dof_intensity}\n"
                 "[Elder 20] Depth of Field | Focus Depth=${elder_dof_focus_depth}\n"
@@ -336,6 +341,7 @@ foreach(elder_index RANGE 0 4)
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
+                "TECHNIQUE=1\n"
                 "[Elder 30] Bloom | Enabled=${elder_bloom_enabled}\n"
                 "[Elder 30] Bloom | Intensity=${elder_bloom_intensity}\n"
                 "[Elder 30] Bloom | Highlight Threshold=${elder_bloom_threshold}\n"
@@ -346,6 +352,7 @@ foreach(elder_index RANGE 0 4)
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
+                "TECHNIQUE=1\n"
                 "[Elder 40] Adaptation | Enabled=${elder_adaptation_enabled}\n"
                 "[Elder 40] Adaptation | Intensity=${elder_adaptation_intensity}\n"
                 "[Elder 40] Adaptation | Brighten Rate=${elder_adaptation_brighten_rate}\n"
@@ -357,6 +364,7 @@ foreach(elder_index RANGE 0 4)
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
+                "TECHNIQUE=1\n"
                 "[Elder 50] Lens | Enabled=${elder_lens_enabled}\n"
                 "[Elder 50] Lens | Intensity=${elder_lens_intensity}\n"
                 "[Elder 50] Lens | Ghost Strength=${elder_lens_ghost_strength}\n"
@@ -367,6 +375,7 @@ foreach(elder_index RANGE 0 4)
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
+                "TECHNIQUE=1\n"
                 "[Elder 10] Prepass | Enabled=${elder_prepass_enabled}\n"
                 "[Elder 10] Prepass | Intensity=${elder_prepass_intensity}\n"
                 "[Elder 10] Prepass | Depth Shape=${elder_prepass_depth_shape}\n")
@@ -375,6 +384,7 @@ foreach(elder_index RANGE 0 4)
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
+                "TECHNIQUE=1\n"
                 "[Elder 60] Main Effect | Enabled=${elder_main_enabled}\n"
                 "[Elder 60] Main Effect | Color-Core Intensity=${elder_main_intensity}\n"
                 "[Elder 60] Main Effect | Optical Shape=${elder_main_optical_shape}\n")
@@ -383,6 +393,7 @@ foreach(elder_index RANGE 0 4)
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
+                "TECHNIQUE=1\n"
                 "[Elder 70] Postpass | Enabled=${elder_postpass_enabled}\n"
                 "[Elder 70] Postpass | Intensity=${elder_postpass_intensity}\n"
                 "[Elder 70] Postpass | Vignette Strength=${elder_postpass_vignette_strength}\n"
@@ -392,6 +403,7 @@ foreach(elder_index RANGE 0 4)
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
+                "TECHNIQUE=1\n"
                 "[Elder 80] Sun Sprite | Enabled=${elder_sunsprite_enabled}\n"
                 "[Elder 80] Sun Sprite | Intensity=${elder_sunsprite_intensity}\n"
                 "[Elder 80] Sun Sprite | Disc Shape=${elder_sunsprite_disc_shape}\n")
@@ -400,6 +412,7 @@ foreach(elder_index RANGE 0 4)
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
+                "TECHNIQUE=1\n"
                 "[Elder 90] Underwater | Enabled=${elder_underwater_enabled}\n"
                 "[Elder 90] Underwater | Intensity=${elder_underwater_intensity}\n"
                 "[Elder 90] Underwater | Density Shape=${elder_underwater_density_shape}\n")
