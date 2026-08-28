@@ -30,6 +30,13 @@ float ElderBloomLuminance(float3 color)
     return dot(max(color, 0.0.xxx), float3(0.2126, 0.7152, 0.0722));
 }
 
+// The threshold must sit inside the range the host actually renders. An
+// in-game luma contour of the chain input at noon-clear, the brightest
+// scene the host produces, measured the sun disc at 1.2 to 1.45, its
+// fringe at 1.0 to 1.2, near-sun sky at 0.8 to 1.0, and no pixel above
+// 1.45 anywhere in frame. A threshold above the disc range extracts
+// nothing in any scene and the whole chain runs black. The tier presets
+// span 0.75 to 1.00 around that measured range.
 float3 ElderExtractBloomHighlight(float3 color)
 {
     float3 finite_color = ElderFiniteOrBlack(color);
@@ -178,15 +185,16 @@ float4 ElderApplyBloom(
 
     float3 filtered_highlight =
         accumulated_highlight / max(accumulated_weight, 0.0001);
-    // Energy model, calibrated against the C12a in-game A/B: the old
-    // single-pass gather stayed within ambient drift even at four times
-    // its shipped gain, so the failure was reach, not energy. The pyramid
-    // dilutes a blown highlight across its octaves and the main effect
-    // adds this surface straight to the scene, so the product of the
-    // shipped 0.12 dial and this gain must lift the halo clear of the 1.0
-    // daylight sky. 0.12 x 12.0 puts a 2.0 filtered highlight at 2.88
-    // added radiance, inside the 4.0 contribution bound. A zero dial
-    // still disables the stage.
+    // Energy model, verified in-game at noon-clear with the 0.90
+    // threshold and the shipped 0.12 dial: the composite lifts the
+    // display frame by 17 luma steps at 30 to 45 pixels from the sun
+    // center, decaying to 3 near 100 and to measurement noise past 160,
+    // against a plus or minus 2 drift floor. The pyramid dilutes the
+    // extracted disc across its octaves and the main effect adds this
+    // surface straight to the scene; the 12.0 gain keeps that halo
+    // visible over the daylight sky while the sun disc itself, measured
+    // at 1.45 peak luma, stays far inside the 4.0 contribution bound.
+    // A zero dial still disables the stage.
     float3 contribution_radiance =
         filtered_highlight * (saturate(ElderBloomIntensity) * 12.0);
     return ElderBloomContribution(contribution_radiance, source.a);

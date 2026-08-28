@@ -49,7 +49,7 @@ float ElderDepthOfFieldMaxBlur <string UIName = "Elder 20 | Depth of Field | Max
 #elif ELDER_STAGE_PARAMETER_SLOT == 2
 bool ElderBloomEnabled <string UIName = "Elder 30 | Bloom | Enabled";> = true;
 float ElderBloomIntensity <string UIName = "Elder 30 | Bloom | Intensity"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 0.45; float UIStep = 0.01;> = 0.12;
-float ElderBloomThreshold <string UIName = "Elder 30 | Bloom | Highlight Threshold"; string UIWidget = "Spinner"; float UIMin = 0.70; float UIMax = 4.00; float UIStep = 0.01;> = 1.45;
+float ElderBloomThreshold <string UIName = "Elder 30 | Bloom | Highlight Threshold"; string UIWidget = "Spinner"; float UIMin = 0.70; float UIMax = 4.00; float UIStep = 0.01;> = 0.90;
 float ElderBloomSoftKnee <string UIName = "Elder 30 | Bloom | Soft Knee"; string UIWidget = "Spinner"; float UIMin = 0.01; float UIMax = 1.00; float UIStep = 0.01;> = 0.25;
 float ElderBloomRadiusScale <string UIName = "Elder 30 | Bloom | Radius Scale"; string UIWidget = "Spinner"; float UIMin = 0.25; float UIMax = 1.50; float UIStep = 0.01;> = 0.80;
 #define ELDER_STAGE_ENABLED ElderBloomEnabled
