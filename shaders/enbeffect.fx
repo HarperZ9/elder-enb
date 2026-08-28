@@ -85,7 +85,14 @@ float3 ElderBoundHdrDisplay(float3 color)
 
 float3 ElderBoundOpticalContribution(float3 contribution)
 {
-    float optical_cap = lerp(0.50, 1.50, saturate(ElderMainEffectOpticalShape));
+    // The cap must clear the daytime scene radiance or the difference add
+    // below discards every optical surface in daylight: a clear noon sky
+    // arrives near 1.0, and the old lerp(0.50, 1.50) ceiling pinned bloom
+    // at or under it, which the in-game A/B confirmed as a null at the
+    // sun. This range admits a blown highlight's halo at every tier while
+    // staying far under the 11.2 tonemap white point, so a stray hot
+    // surface cannot flood the frame.
+    float optical_cap = lerp(2.0, 6.0, saturate(ElderMainEffectOpticalShape));
     return min(ElderFiniteOrBlack(contribution), optical_cap.xxx);
 }
 

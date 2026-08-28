@@ -17,7 +17,12 @@ float4 ElderNeutralBloomScratch(float source_alpha)
 
 float4 ElderBloomContribution(float3 radiance, float source_alpha)
 {
-    float3 bounded_radiance = min(ElderFiniteOrBlack(radiance), 1.25.xxx);
+    // The bound matches the consumer allowance in enbeffect.fx, which caps
+    // each optical surface near 4.0 at the balanced tier. The old 1.25
+    // bound sat at the daylight sky's own radiance, and the difference add
+    // downstream lifts a pixel only where bloom exceeds the scene, so no
+    // daytime pixel could ever receive bloom.
+    float3 bounded_radiance = min(ElderFiniteOrBlack(radiance), 4.0.xxx);
     return float4(bounded_radiance, ElderBloomScratchAlpha(source_alpha));
 }
 
@@ -119,10 +124,17 @@ float4 ElderApplyBloom(float2 uv, float4 source)
 
     float3 filtered_highlight =
         accumulated_highlight / max(accumulated_weight, 0.0001);
-    // The intensity dial is the only attenuation. A second fixed multiplier
-    // sat here before and pushed the whole stage under the visibility floor.
+    // Energy model. The normalized gather dilutes a blown highlight to
+    // about half its radiance, so under the shipped 0.12 dial the noon
+    // sun's bloom peaked near 0.9 while the sky it must exceed sits near
+    // 1.0. The in-game A/B measured bloom on minus bloom off as zero at
+    // the disc. The gain of 6.0 puts an 8.0 radiance highlight at the
+    // stage bound from the shipped dial, so its halo clears the sky and
+    // the difference add in enbeffect.fx has energy to pass. Dimmer
+    // highlights scale down through the same soft knee, and a zero dial
+    // still disables the stage.
     float3 contribution_radiance =
-        filtered_highlight * saturate(ElderBloomIntensity);
+        filtered_highlight * (saturate(ElderBloomIntensity) * 6.0);
     return ElderBloomContribution(contribution_radiance, source.a);
 }
 

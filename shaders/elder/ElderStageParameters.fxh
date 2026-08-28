@@ -68,7 +68,7 @@ bool ElderLensEnabled <string UIName = "Elder 50 | Lens | Enabled";> = true;
 float ElderLensIntensity <string UIName = "Elder 50 | Lens | Intensity"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 0.30; float UIStep = 0.01;> = 0.07;
 float ElderLensGhostStrength <string UIName = "Elder 50 | Lens | Ghost Strength"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 0.35; float UIStep = 0.01;> = 0.05;
 float ElderLensHaloStrength <string UIName = "Elder 50 | Lens | Halo Strength"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 0.30; float UIStep = 0.01;> = 0.04;
-float ElderLensEnergyCap <string UIName = "Elder 50 | Lens | Energy Cap"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 0.50; float UIStep = 0.01;> = 0.08;
+float ElderLensEnergyCap <string UIName = "Elder 50 | Lens | Energy Cap"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 0.50; float UIStep = 0.01;> = 0.35;
 #define ELDER_STAGE_ENABLED ElderLensEnabled
 #define ELDER_STAGE_INTENSITY ElderLensIntensity
 #elif ELDER_STAGE_PARAMETER_SLOT == 5
