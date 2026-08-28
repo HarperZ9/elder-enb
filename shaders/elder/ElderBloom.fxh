@@ -114,7 +114,7 @@ float4 ElderApplyBloom(float2 uv, float4 source)
         [unroll]
         for (uint axis_index = 0u; axis_index < 8u; ++axis_index)
         {
-            float3 tap_color = TextureColor.SampleLevel(
+            float3 tap_color = TextureDownsampled.SampleLevel(
                 Sampler1, saturate(uv + tap_offsets[axis_index]), 0.0).rgb;
             float tap_weight = 1.0 / (1.0 + float(tap_index));
             accumulated_highlight += ElderExtractBloomHighlight(tap_color) * tap_weight;

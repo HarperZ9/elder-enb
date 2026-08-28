@@ -231,12 +231,13 @@ require_elder_optical_tokens(
     "${elder_source_dir}/shaders/enbbloom.fx"
     "Elder bloom stage"
     "#include \"elder/ElderBloom.fxh\""
-    "Texture2D TextureColor"
+    "Texture2D TextureDownsampled"
     "return ElderApplyBloom")
 forbid_elder_optical_tokens(
     "${elder_source_dir}/shaders/enbbloom.fx"
     "Elder bloom stage"
-    "ElderStageIdentity(")
+    "ElderStageIdentity("
+    "Texture2D TextureColor")
 require_elder_optical_tokens(
     "${elder_source_dir}/shaders/enbadaptation.fx"
     "Elder adaptation stage"

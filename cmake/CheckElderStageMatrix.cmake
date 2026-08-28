@@ -364,8 +364,8 @@ expect_elder_stage_rejection("non-adaptation-texture-previous"
   "Texture2D TexturePrevious;")
 expect_elder_stage_rejection("false-resource-declaration"
   "enbbloom.fx"
-  "Texture2D TextureColor;"
-  "Texture2D TextureColor;\nTexture2D TextureDepth;")
+  "Texture2D TextureDownsampled;"
+  "Texture2D TextureDownsampled;\nTexture2D TextureDepth;")
 
 set(elder_capability_probe "${elder_matrix_root}/ElderCapabilityProbe.hlsl")
 file(WRITE "${elder_capability_probe}" [=[

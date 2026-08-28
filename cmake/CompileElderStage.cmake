@@ -312,6 +312,28 @@ elseif(elder_stage_name STREQUAL "enbunderwater.fx")
       message(FATAL_ERROR "${elder_stage_name} is missing required texture: ${required_texture}")
     endif()
   endforeach()
+elseif(elder_stage_name STREQUAL "enbbloom.fx")
+  list(LENGTH elder_texture_declarations elder_texture_count)
+  if(NOT elder_texture_count EQUAL 1
+      OR NOT "${elder_texture_declarations}" STREQUAL "Texture2D TextureDownsampled")
+    message(FATAL_ERROR
+      "Bloom stage must declare only the TextureDownsampled scene source supplied by ENB")
+  endif()
+  string(FIND "${elder_stage_contents}" "Texture2D TextureColor" elder_bloom_texture_color_position)
+  if(NOT elder_bloom_texture_color_position EQUAL -1)
+    message(FATAL_ERROR
+      "Bloom stage must gather from TextureDownsampled; the host binds TextureColor to the prior technique output in this chain")
+  endif()
+  string(FIND "${elder_stage_contents}" "TexturePrevious" elder_previous_position)
+  if(NOT elder_previous_position EQUAL -1)
+    message(FATAL_ERROR "Only adaptation may declare TexturePrevious scalar history")
+  endif()
+  string(FIND "${elder_stage_contents}"
+    "#define ELDER_STAGE_OWNS_PREVIOUS_SCALAR_ADAPTATION 1"
+    elder_bloom_history_owner_position)
+  if(NOT elder_bloom_history_owner_position EQUAL -1)
+    message(FATAL_ERROR "Only adaptation may own scalar history")
+  endif()
 elseif(elder_stage_name STREQUAL "enblens.fx")
   list(LENGTH elder_texture_declarations elder_texture_count)
   if(NOT elder_texture_count EQUAL 1

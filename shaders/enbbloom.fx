@@ -21,7 +21,13 @@
 #include "elder/ElderStageParameters.fxh"
 #include "elder/ElderPipelineCommon.fxh"
 
-Texture2D TextureColor;
+// Scene input. The 0.504 host feeds the bloom chain through
+// TextureDownsampled, the square downsampled HDR scene surface whose
+// dimensions arrive in BloomSize. In this file the host binds TextureColor
+// to the output of the previous technique in the chain, and with a single
+// technique that binding carries no scene light, so the gather must read
+// the downsampled scene directly.
+Texture2D TextureDownsampled;
 float4 ScreenSize;
 // Host-owned size of the bloom render chain, packed like ScreenSize:
 // x = width, y = 1/width, z = aspect, w = 1/aspect. The 0.504 chain runs
@@ -49,7 +55,7 @@ SamplerState Sampler1
 
 float4 ElderBloomMain(ElderStageVSOutput input) : SV_Target
 {
-    float4 source = TextureColor.Sample(Sampler0, input.texcoord);
+    float4 source = TextureDownsampled.Sample(Sampler0, input.texcoord);
     return ElderApplyBloom(input.texcoord, source);
 }
 
