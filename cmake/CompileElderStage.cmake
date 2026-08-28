@@ -148,7 +148,7 @@ string(FIND "${elder_stage_contents}" "#define ELDER_STAGE_OWNS_BRIDGE_VALUE 1"
 if(NOT elder_bridge_stage_position EQUAL -1)
   if(elder_stage_name STREQUAL "enbsunsprite.fx")
     foreach(required_sun_bridge_token IN ITEMS
-        "ElderBridgeSunDirection"
+        "ElderBridgeSunNdc"
         "ElderBridgeRenderFrame"
         "ElderSunSpriteBridgeAvailable")
       string(FIND "${elder_stage_contents}" "${required_sun_bridge_token}"
@@ -312,6 +312,28 @@ elseif(elder_stage_name STREQUAL "enbeffect.fx")
   string(FIND "${elder_stage_contents}" "TexturePrevious" elder_previous_position)
   if(NOT elder_previous_position EQUAL -1)
     message(FATAL_ERROR "Main effect may not declare TexturePrevious")
+  endif()
+elseif(elder_stage_name STREQUAL "enbsunsprite.fx")
+  list(LENGTH elder_texture_declarations elder_texture_count)
+  if(NOT elder_texture_count EQUAL 1
+      OR NOT "${elder_texture_declarations}" STREQUAL "Texture2D TextureMask")
+    message(FATAL_ERROR
+      "Sun sprite must declare only the TextureMask occlusion source")
+  endif()
+  string(FIND "${elder_stage_contents}" "Texture2D TextureColor" elder_sun_texture_color_position)
+  if(NOT elder_sun_texture_color_position EQUAL -1)
+    message(FATAL_ERROR
+      "Sun sprite draws additively and must not consume raw TextureColor")
+  endif()
+  string(FIND "${elder_stage_contents}" "TexturePrevious" elder_previous_position)
+  if(NOT elder_previous_position EQUAL -1)
+    message(FATAL_ERROR "Only adaptation may declare TexturePrevious scalar history")
+  endif()
+  string(FIND "${elder_stage_contents}"
+    "#define ELDER_STAGE_OWNS_PREVIOUS_SCALAR_ADAPTATION 1"
+    elder_sun_history_owner_position)
+  if(NOT elder_sun_history_owner_position EQUAL -1)
+    message(FATAL_ERROR "Only adaptation may own scalar history")
   endif()
 else()
   list(LENGTH elder_texture_declarations elder_texture_count)

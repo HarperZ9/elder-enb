@@ -184,9 +184,10 @@ endforeach()
 
 file(READ "${elder_sun}" elder_sun_source)
 foreach(required_sun_token IN ITEMS
-    "#define ELDER_STAGE_CAPABILITY ELDER_CAPABILITY_BRIDGE"
+    "#define ELDER_STAGE_CAPABILITY ELDER_CAPABILITY_NATIVE"
     "#define ELDER_STAGE_OWNS_BRIDGE_VALUE 1"
     "#include \"elder/ElderSunSprite.fxh\""
+    "LightParameters"
     "ElderSunSpriteBridgeAvailable()"
     "ElderEvaluateSunSprite(")
   elder_require_token("${elder_sun_source}" "${required_sun_token}"
@@ -194,10 +195,9 @@ foreach(required_sun_token IN ITEMS
 endforeach()
 file(READ "${elder_source_dir}/shaders/elder/ElderSunSprite.fxh" elder_sun_module)
 foreach(required_sun_module_token IN ITEMS
-    "ElderFinite3(sun_direction)"
-    "direction_length <= 0.0001"
     "visibility <= 0.0"
-    "saturate(ElderSunSpriteIntensity)")
+    "saturate(ElderSunSpriteIntensity)"
+    "min(ElderFiniteOrBlack(sprite), 8.0.xxx)")
   elder_require_token("${elder_sun_module}" "${required_sun_module_token}"
     "Sun sprite module")
 endforeach()
