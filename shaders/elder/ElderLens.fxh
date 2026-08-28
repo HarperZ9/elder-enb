@@ -22,6 +22,14 @@ float4 ElderLensContribution(float3 radiance, float source_alpha)
     return float4(bounded_radiance, ElderLensScratchAlpha(source_alpha));
 }
 
+// A tap that leaves the frame fades to nothing instead of smearing the
+// border texel across the ghost, which is what UV clamping used to do.
+float ElderLensBorderFade(float2 tap_uv)
+{
+    float2 interior = saturate((0.5.xx - abs(tap_uv - 0.5.xx)) * 8.0);
+    return interior.x * interior.y;
+}
+
 void ElderAccumulateLensGhost(
     inout float3 accumulated_lens,
     inout float accumulated_weight,
@@ -29,11 +37,22 @@ void ElderAccumulateLensGhost(
     float ghost_order)
 {
     float ghost_scale = 0.45 + ghost_order * 0.28;
-    float2 ghost_uv = saturate(0.5.xx - center_vector * ghost_scale);
-    float3 ghost_color = TextureBloom.SampleLevel(Sampler0, ghost_uv, 0.0).rgb;
-    float ghost_weight = 1.0 / (ghost_order + 1.0);
+    // Each internal reflection disperses a little more, so the red and
+    // blue taps sit at slightly different scales than the green tap.
+    float dispersion = 0.012 * ghost_order;
+    float2 uv_red = 0.5.xx - center_vector * (ghost_scale * (1.0 - dispersion));
+    float2 uv_green = 0.5.xx - center_vector * ghost_scale;
+    float2 uv_blue = 0.5.xx - center_vector * (ghost_scale * (1.0 + dispersion));
+    float3 ghost_color = float3(
+        TextureBloom.SampleLevel(Sampler0, uv_red, 0.0).r,
+        TextureBloom.SampleLevel(Sampler0, uv_green, 0.0).g,
+        TextureBloom.SampleLevel(Sampler0, uv_blue, 0.0).b);
+    float center_falloff = 1.0 - saturate(length(uv_green - 0.5.xx) * 1.6);
+    float ghost_weight = (1.0 / (ghost_order + 1.0))
+        * ElderLensBorderFade(uv_green)
+        * center_falloff * center_falloff;
     accumulated_lens += ElderFiniteOrBlack(ghost_color) * ghost_weight;
-    accumulated_weight += ghost_weight;
+    accumulated_weight += 1.0 / (ghost_order + 1.0);
 }
 
 float4 ElderApplyLens(float2 uv, float4 bloom_source)
@@ -72,15 +91,26 @@ float4 ElderApplyLens(float2 uv, float4 bloom_source)
     float2 safe_direction = center_distance > 0.0001
         ? center_vector / center_distance
         : float2(0.0, 1.0);
-    float2 halo_uv = saturate(0.5.xx - safe_direction * 0.22);
-    float3 halo_color = ElderFiniteOrBlack(
-        TextureBloom.SampleLevel(Sampler0, halo_uv, 0.0).rgb);
+    // The halo is a ring at a fixed radius from the frame center: every
+    // pixel samples the bloom texel displaced toward center by the ring
+    // width, and the window lights only the pixels sitting near that
+    // radius, so bright sources smear into a circle instead of a smudge.
+    float halo_width = 0.22;
+    float2 halo_uv = uv - safe_direction * halo_width;
+    float3 halo_color = float3(
+        TextureBloom.SampleLevel(
+            Sampler0, uv - safe_direction * (halo_width * 0.985), 0.0).r,
+        TextureBloom.SampleLevel(Sampler0, halo_uv, 0.0).g,
+        TextureBloom.SampleLevel(
+            Sampler0, uv - safe_direction * (halo_width * 1.015), 0.0).b);
+    float ring_window = 1.0 - saturate(abs(center_distance - halo_width) * 4.0);
+    float3 windowed_halo = ElderFiniteOrBlack(halo_color)
+        * ring_window * ring_window * ElderLensBorderFade(halo_uv);
 
     float3 filtered_lens = accumulated_lens / max(accumulated_weight, 0.0001);
     float3 lens_add =
         filtered_lens * max(ElderLensGhostStrength, 0.0)
-        + halo_color * max(ElderLensHaloStrength, 0.0)
-            * saturate(1.0 - center_distance * 1.35);
+        + windowed_halo * max(ElderLensHaloStrength, 0.0);
     // The stage intensity is a master dial around a reference of 0.07. At the
     // default it multiplies by one, so the ghost and halo dials read at face
     // value instead of compounding into a sub-percent contribution. The

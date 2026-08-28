@@ -118,7 +118,8 @@ endif()
 foreach(required_main_token IN ITEMS
     "float3 bloom_add = ElderBoundOpticalContribution(TextureBloom.Sample(Sampler1, texcoord).rgb);"
     "float3 lens_add = ElderBoundOpticalContribution(TextureLens.Sample(Sampler1, texcoord).rgb);"
-    "float3 optical_color = ElderBoundHdrDisplay(scene_color + bloom_add + lens_add);"
+    "float3 bloom_lift = max(bloom_add - scene_color, 0.0.xxx);"
+    "float3 optical_color = ElderBoundHdrDisplay(scene_color + bloom_lift + lens_add);"
     "TextureBloom.Sample"
     "TextureLens.Sample")
   elder_require_token("${elder_main_source}" "${required_main_token}"

@@ -85,7 +85,7 @@ float3 ElderBoundHdrDisplay(float3 color)
 
 float3 ElderBoundOpticalContribution(float3 contribution)
 {
-    float optical_cap = lerp(0.18, 0.45, saturate(ElderMainEffectOpticalShape));
+    float optical_cap = lerp(0.50, 1.50, saturate(ElderMainEffectOpticalShape));
     return min(ElderFiniteOrBlack(contribution), optical_cap.xxx);
 }
 
@@ -95,7 +95,12 @@ float3 ElderResolveMainSource(float2 texcoord)
         TextureColor.Sample(Sampler0, texcoord).rgb);
     float3 bloom_add = ElderBoundOpticalContribution(TextureBloom.Sample(Sampler1, texcoord).rgb);
     float3 lens_add = ElderBoundOpticalContribution(TextureLens.Sample(Sampler1, texcoord).rgb);
-    float3 optical_color = ElderBoundHdrDisplay(scene_color + bloom_add + lens_add);
+    // The stock 0.504 composite is a difference add: bloom lifts a pixel
+    // only toward the halo level, so the glow lands around a bright source
+    // without doubling the energy inside it. Lens ghosts are stray light
+    // and stay purely additive.
+    float3 bloom_lift = max(bloom_add - scene_color, 0.0.xxx);
+    float3 optical_color = ElderBoundHdrDisplay(scene_color + bloom_lift + lens_add);
     return optical_color;
 }
 
