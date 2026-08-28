@@ -116,13 +116,19 @@ float3 ElderResolveMainCapability(float3 color, float adaptation_scalar)
 // Adaptation consumption. The adaptation stage publishes a smoothed scene
 // luminance through TextureAdaptation, and publishes the raw 0.18 mid-gray
 // anchor when its dial is off, which resolves this steer to exactly zero.
-// This turns the scalar into a bounded exposure steer toward mid-gray. The
-// bounds keep it reading as eye response rather than auto-brightness, and
-// the adaptation stage's own dials shape the scalar upstream, so this
-// consumer stays parameter-free.
+// The steer compensates only a fraction of the log distance to mid-gray
+// and moves inside a narrow band. A noon exterior meters far above 0.18,
+// so full compensation with a two stop darken clamp parked the whole day
+// at minus two EV and rendered noon as twilight. Playtest receipt: the
+// same noon frame measured mean luma 41.5 with the old steer and 61.9
+// with the steer removed. The tight band reads as eye response, keeps the
+// day close to the scene's own lighting, and lifts interiors and night
+// gently. The adaptation stage's own dials shape the scalar upstream, so
+// this consumer stays parameter-free.
 static const float ELDER_AUTO_EXPOSURE_TARGET = 0.18;
-static const float ELDER_AUTO_EXPOSURE_MAX_BRIGHTEN_EV = 1.0;
-static const float ELDER_AUTO_EXPOSURE_MAX_DARKEN_EV = 2.0;
+static const float ELDER_AUTO_EXPOSURE_RESPONSE = 0.30;
+static const float ELDER_AUTO_EXPOSURE_MAX_BRIGHTEN_EV = 0.50;
+static const float ELDER_AUTO_EXPOSURE_MAX_DARKEN_EV = 0.35;
 
 float ElderMainAutoExposureEv(float adaptation_scalar)
 {
@@ -132,7 +138,8 @@ float ElderMainAutoExposureEv(float adaptation_scalar)
     }
 
     float adapted = clamp(adaptation_scalar, 0.001, 64.0);
-    float auto_ev = log2(ELDER_AUTO_EXPOSURE_TARGET / adapted);
+    float auto_ev = ELDER_AUTO_EXPOSURE_RESPONSE
+        * log2(ELDER_AUTO_EXPOSURE_TARGET / adapted);
     return clamp(
         auto_ev,
         -ELDER_AUTO_EXPOSURE_MAX_DARKEN_EV,
