@@ -204,6 +204,7 @@ set(elder_stage_rows
   "enbeffectprepass.fx|Draw"
   "enbdepthoffield.fx|DOF"
   "enbbloom.fx|Draw"
+  "enbbloom.fx|Draw6"
   "enbadaptation.fx|Draw"
   "enblens.fx|Draw"
   "enbeffect.fx|Draw"
@@ -614,4 +615,4 @@ foreach(tier RANGE 0 4)
   endforeach()
 endforeach()
 
-message(STATUS "Elder stage matrix compiled 45 strict FXC permutations")
+message(STATUS "Elder stage matrix compiled 50 strict FXC permutations")

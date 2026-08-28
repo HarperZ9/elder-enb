@@ -314,11 +314,23 @@ elseif(elder_stage_name STREQUAL "enbunderwater.fx")
   endforeach()
 elseif(elder_stage_name STREQUAL "enbbloom.fx")
   list(LENGTH elder_texture_declarations elder_texture_count)
-  if(NOT elder_texture_count EQUAL 1
-      OR NOT "${elder_texture_declarations}" STREQUAL "Texture2D TextureDownsampled")
+  if(NOT elder_texture_count EQUAL 7)
     message(FATAL_ERROR
-      "Bloom stage must declare only the TextureDownsampled scene source supplied by ENB")
+      "Bloom stage must declare the TextureDownsampled scene source and its six chain octave targets and nothing else")
   endif()
+  foreach(required_texture IN ITEMS
+      "Texture2D TextureDownsampled"
+      "Texture2D RenderTarget512"
+      "Texture2D RenderTarget256"
+      "Texture2D RenderTarget128"
+      "Texture2D RenderTarget64"
+      "Texture2D RenderTarget32"
+      "Texture2D RenderTarget16")
+    list(FIND elder_texture_declarations "${required_texture}" texture_position)
+    if(texture_position EQUAL -1)
+      message(FATAL_ERROR "${elder_stage_name} is missing required chain texture: ${required_texture}")
+    endif()
+  endforeach()
   string(FIND "${elder_stage_contents}" "Texture2D TextureColor" elder_bloom_texture_color_position)
   if(NOT elder_bloom_texture_color_position EQUAL -1)
     message(FATAL_ERROR

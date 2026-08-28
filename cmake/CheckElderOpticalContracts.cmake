@@ -177,7 +177,9 @@ require_elder_optical_tokens(
     "ElderExtractBloomHighlight"
     "ElderNeutralBloomScratch"
     "ElderBloomContribution"
-    "for (uint tap_index = 1u; tap_index <= ElderBloomRadius; ++tap_index)")
+    "ElderBloomOctaveWeight"
+    "ElderBloomDownsampleOctave"
+    "for (uint octave_index = 1u; octave_index <= 6u; ++octave_index)")
 forbid_elder_optical_tokens(
     "${elder_source_dir}/shaders/elder/ElderBloom.fxh"
     "Elder bloom module"
@@ -232,6 +234,9 @@ require_elder_optical_tokens(
     "Elder bloom stage"
     "#include \"elder/ElderBloom.fxh\""
     "Texture2D TextureDownsampled"
+    "string RenderTarget = \"RenderTarget512\";"
+    "string RenderTarget = \"RenderTarget16\";"
+    "technique11 Draw6"
     "return ElderApplyBloom")
 forbid_elder_optical_tokens(
     "${elder_source_dir}/shaders/enbbloom.fx"

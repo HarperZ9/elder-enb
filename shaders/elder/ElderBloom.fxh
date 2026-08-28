@@ -18,10 +18,9 @@ float4 ElderNeutralBloomScratch(float source_alpha)
 float4 ElderBloomContribution(float3 radiance, float source_alpha)
 {
     // The bound matches the consumer allowance in enbeffect.fx, which caps
-    // each optical surface near 4.0 at the balanced tier. The old 1.25
-    // bound sat at the daylight sky's own radiance, and the difference add
-    // downstream lifts a pixel only where bloom exceeds the scene, so no
-    // daytime pixel could ever receive bloom.
+    // each optical surface near 4.0 at the balanced tier. The main effect
+    // adds this surface straight to the scene, so the bound is the widest
+    // lift any pixel can receive from bloom.
     float3 bounded_radiance = min(ElderFiniteOrBlack(radiance), 4.0.xxx);
     return float4(bounded_radiance, ElderBloomScratchAlpha(source_alpha));
 }
@@ -50,91 +49,146 @@ float3 ElderExtractBloomHighlight(float3 color)
     return finite_color * highlight_scale;
 }
 
-float4 ElderApplyBloom(float2 uv, float4 source)
+bool ElderBloomChainActive()
 {
-    if (!ElderStageIsActive() || ELDER_STAGE_INTENSITY <= 0.0)
+    return ElderStageIsActive()
+        && ELDER_STAGE_INTENSITY > 0.0
+        && ElderBloomRadius != 0u;
+}
+
+// Chain surfaces are consumed by later passes in this file, and the 0.504
+// host clamps chain writes to [0, 32768].
+float3 ElderBloomBoundChain(float3 color)
+{
+    return clamp(ElderFiniteOrBlack(color), 0.0.xxx, 32768.0.xxx);
+}
+
+// First chain pass: threshold the downsampled HDR scene into the finest
+// octave. Four linear taps, one scene texel out on each diagonal, cover
+// the 2x reduction footprint with a small tent so a one-texel highlight
+// cannot flicker between chain texels.
+float4 ElderExtractBloomOctave(
+    Texture2D scene_source, SamplerState chain_sampler,
+    float2 uv, float source_texel)
+{
+    if (!ElderBloomChainActive())
     {
-        return ElderNeutralBloomScratch(source.a);
+        return float4(0.0.xxx, 1.0);
     }
 
-    if (ElderBloomRadius == 0u)
-    {
-        return ElderNeutralBloomScratch(source.a);
-    }
-
-    if (!ElderFinite3(source.rgb) || !ElderFinite1(source.a)
-        || !ElderFinite3(ScreenSize.xyz))
-    {
-        return ElderNeutralBloomScratch(source.a);
-    }
-
-    // No dark-center early-out. The halo of a bright neighbor has to land
-    // on pixels whose own highlight is zero, or bloom never extends past
-    // the emitting silhouette. The stock 0.504 bloom gathers on every
-    // pixel the same way.
-    float3 center_highlight = ElderExtractBloomHighlight(source.rgb);
-
-    // Tap spacing lives on the bloom surface, not the display. ENB 0.504
-    // runs the bloom chain on fixed-size square targets and describes them
-    // through the host BloomSize uniform, packed like ScreenSize:
-    // x = width, y = 1/width, z = aspect, w = 1/aspect. Display texels
-    // here pinned the spread to a few pixels and quartered it at 4K. The
-    // vertical step scales by the display aspect so the kernel renders as
-    // a circle on screen, matching the stock blur. A zero or non-finite
-    // BloomSize falls back to the fixed 1024 chain width.
-    float bloom_texel = ElderFinite1(BloomSize.y) && BloomSize.y > 0.0
-        ? BloomSize.y
+    float texel = ElderFinite1(source_texel) && source_texel > 0.0
+        ? source_texel
         : (1.0 / 1024.0);
-    float2 texel_size =
-        float2(bloom_texel, bloom_texel * max(ScreenSize.z, 0.1));
-    float3 accumulated_highlight = center_highlight;
-    float accumulated_weight = 1.0;
+    float3 gathered = 0.0.xxx;
+    gathered += scene_source.SampleLevel(
+        chain_sampler, saturate(uv + texel * float2(-1.0, -1.0)), 0.0).rgb;
+    gathered += scene_source.SampleLevel(
+        chain_sampler, saturate(uv + texel * float2(1.0, -1.0)), 0.0).rgb;
+    gathered += scene_source.SampleLevel(
+        chain_sampler, saturate(uv + texel * float2(-1.0, 1.0)), 0.0).rgb;
+    gathered += scene_source.SampleLevel(
+        chain_sampler, saturate(uv + texel * float2(1.0, 1.0)), 0.0).rgb;
+    float3 highlight = ElderExtractBloomHighlight(gathered * 0.25);
+    return float4(ElderBloomBoundChain(highlight), 1.0);
+}
 
-    [loop]
-    for (uint tap_index = 1u; tap_index <= ElderBloomRadius; ++tap_index)
+// Downsample one octave into the next with a 3x3 tent at one octave texel
+// of spacing. Each halving doubles the kernel's screen footprint, so six
+// octaves spread a highlight across hundreds of display pixels. The C12a
+// in-game A/B measured that a single-pass gather cannot reach past a few
+// dozen: its bloom-on minus bloom-off delta stayed within ambient drift
+// even at four times the shipped gain.
+float4 ElderBloomDownsampleOctave(
+    Texture2D octave_source, SamplerState chain_sampler,
+    float2 uv, float source_texel)
+{
+    if (!ElderBloomChainActive())
     {
-        // Four bloom-surface texels of spacing per step keeps the spread a
-        // fixed fraction of the frame at every display resolution.
-        float tap_radius =
-            float(tap_index) * max(ElderBloomRadiusScale, 0.25) * 4.0;
-        float2 offset_x = texel_size * float2(tap_radius, 0.0);
-        float2 offset_y = texel_size * float2(0.0, tap_radius);
-        float2 offset_diagonal = texel_size * (tap_radius * 0.70710678).xx;
-        float2 tap_offsets[8] = {
-            offset_x,
-            -offset_x,
-            offset_y,
-            -offset_y,
-            offset_diagonal,
-            -offset_diagonal,
-            float2(offset_diagonal.x, -offset_diagonal.y),
-            float2(-offset_diagonal.x, offset_diagonal.y)
-        };
+        return float4(0.0.xxx, 1.0);
+    }
 
-        [unroll]
-        for (uint axis_index = 0u; axis_index < 8u; ++axis_index)
-        {
-            float3 tap_color = TextureDownsampled.SampleLevel(
-                Sampler1, saturate(uv + tap_offsets[axis_index]), 0.0).rgb;
-            float tap_weight = 1.0 / (1.0 + float(tap_index));
-            accumulated_highlight += ElderExtractBloomHighlight(tap_color) * tap_weight;
-            accumulated_weight += tap_weight;
-        }
+    static const float2 tent_offsets[9] = {
+        float2(-1.0, -1.0), float2(0.0, -1.0), float2(1.0, -1.0),
+        float2(-1.0,  0.0), float2(0.0,  0.0), float2(1.0,  0.0),
+        float2(-1.0,  1.0), float2(0.0,  1.0), float2(1.0,  1.0)
+    };
+    static const float tent_weights[9] = {
+        0.0625, 0.1250, 0.0625,
+        0.1250, 0.2500, 0.1250,
+        0.0625, 0.1250, 0.0625
+    };
+
+    float3 gathered = 0.0.xxx;
+    [unroll]
+    for (uint tent_index = 0u; tent_index < 9u; ++tent_index)
+    {
+        gathered += octave_source.SampleLevel(
+            chain_sampler,
+            saturate(uv + tent_offsets[tent_index] * source_texel),
+            0.0).rgb * tent_weights[tent_index];
+    }
+    return float4(ElderBloomBoundChain(gathered), 1.0);
+}
+
+// Octave weight for the composite. ElderBloomRadius is the tier's octave
+// budget: the first tier composites the two finest octaves, the reference
+// tier all six. The radius scale dial biases weight toward the coarse
+// octaves, so raising it widens the halo without adding energy, because
+// the composite normalizes the weights.
+float ElderBloomOctaveWeight(uint octave_index)
+{
+    uint octave_budget = clamp(ElderBloomRadius, 1u, 6u);
+    if (octave_index > octave_budget)
+    {
+        return 0.0;
+    }
+    float spread = clamp(ElderBloomRadiusScale, 0.25, 1.50);
+    return pow(spread, float(octave_index - 1u));
+}
+
+float4 ElderApplyBloom(
+    float4 source,
+    float3 octave_512, float3 octave_256, float3 octave_128,
+    float3 octave_64, float3 octave_32, float3 octave_16)
+{
+    if (!ElderBloomChainActive())
+    {
+        return ElderNeutralBloomScratch(source.a);
+    }
+
+    if (!ElderFinite3(source.rgb) || !ElderFinite1(source.a))
+    {
+        return ElderNeutralBloomScratch(source.a);
+    }
+
+    float3 chain_octaves[6] = {
+        octave_512, octave_256, octave_128,
+        octave_64, octave_32, octave_16
+    };
+    float3 accumulated_highlight = 0.0.xxx;
+    float accumulated_weight = 0.0;
+    [unroll]
+    for (uint octave_index = 1u; octave_index <= 6u; ++octave_index)
+    {
+        float octave_weight = ElderBloomOctaveWeight(octave_index);
+        accumulated_highlight += ElderFiniteOrBlack(
+            chain_octaves[octave_index - 1u]) * octave_weight;
+        accumulated_weight += octave_weight;
     }
 
     float3 filtered_highlight =
         accumulated_highlight / max(accumulated_weight, 0.0001);
-    // Energy model. The normalized gather dilutes a blown highlight to
-    // about half its radiance, so under the shipped 0.12 dial the noon
-    // sun's bloom peaked near 0.9 while the sky it must exceed sits near
-    // 1.0. The in-game A/B measured bloom on minus bloom off as zero at
-    // the disc. The gain of 6.0 puts an 8.0 radiance highlight at the
-    // stage bound from the shipped dial, so its halo clears the sky and
-    // the difference add in enbeffect.fx has energy to pass. Dimmer
-    // highlights scale down through the same soft knee, and a zero dial
+    // Energy model, calibrated against the C12a in-game A/B: the old
+    // single-pass gather stayed within ambient drift even at four times
+    // its shipped gain, so the failure was reach, not energy. The pyramid
+    // dilutes a blown highlight across its octaves and the main effect
+    // adds this surface straight to the scene, so the product of the
+    // shipped 0.12 dial and this gain must lift the halo clear of the 1.0
+    // daylight sky. 0.12 x 12.0 puts a 2.0 filtered highlight at 2.88
+    // added radiance, inside the 4.0 contribution bound. A zero dial
     // still disables the stage.
     float3 contribution_radiance =
-        filtered_highlight * (saturate(ElderBloomIntensity) * 6.0);
+        filtered_highlight * (saturate(ElderBloomIntensity) * 12.0);
     return ElderBloomContribution(contribution_radiance, source.a);
 }
 

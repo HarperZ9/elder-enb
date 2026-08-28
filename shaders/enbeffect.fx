@@ -85,13 +85,10 @@ float3 ElderBoundHdrDisplay(float3 color)
 
 float3 ElderBoundOpticalContribution(float3 contribution)
 {
-    // The cap must clear the daytime scene radiance or the difference add
-    // below discards every optical surface in daylight: a clear noon sky
-    // arrives near 1.0, and the old lerp(0.50, 1.50) ceiling pinned bloom
-    // at or under it, which the in-game A/B confirmed as a null at the
-    // sun. This range admits a blown highlight's halo at every tier while
-    // staying far under the 11.2 tonemap white point, so a stray hot
-    // surface cannot flood the frame.
+    // The cap bounds how much radiance one optical surface can add to any
+    // pixel. This range admits a blown highlight's halo at every tier
+    // while staying far under the 11.2 tonemap white point, so a stray
+    // hot surface cannot flood the frame.
     float optical_cap = lerp(2.0, 6.0, saturate(ElderMainEffectOpticalShape));
     return min(ElderFiniteOrBlack(contribution), optical_cap.xxx);
 }
@@ -102,12 +99,15 @@ float3 ElderResolveMainSource(float2 texcoord)
         TextureColor.Sample(Sampler0, texcoord).rgb);
     float3 bloom_add = ElderBoundOpticalContribution(TextureBloom.Sample(Sampler1, texcoord).rgb);
     float3 lens_add = ElderBoundOpticalContribution(TextureLens.Sample(Sampler1, texcoord).rgb);
-    // The stock 0.504 composite is a difference add: bloom lifts a pixel
-    // only toward the halo level, so the glow lands around a bright source
-    // without doubling the energy inside it. Lens ghosts are stray light
-    // and stay purely additive.
-    float3 bloom_lift = max(bloom_add - scene_color, 0.0.xxx);
-    float3 optical_color = ElderBoundHdrDisplay(scene_color + bloom_lift + lens_add);
+    // Elder's bloom surface arrives already thresholded: the chain in
+    // enbbloom.fx removes the scene base before the pyramid spreads the
+    // highlight, so the straight add is the correct pairing here. The
+    // stock 0.504 difference add belongs to its whole-scene bloom; paired
+    // with a thresholded surface it demanded the halo exceed full scene
+    // radiance a second time, which the in-game A/B measured as a null
+    // even at four times the shipped gain. Lens ghosts are stray light
+    // and stay additive.
+    float3 optical_color = ElderBoundHdrDisplay(scene_color + bloom_add + lens_add);
     return optical_color;
 }
 
