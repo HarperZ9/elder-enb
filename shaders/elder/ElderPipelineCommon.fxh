@@ -51,6 +51,18 @@ float ElderDepthMask(float raw_depth, float threshold, float feather)
                       raw_depth);
 }
 
+// Skyrim SE viewport depth for this host projects roughly 1..3000 units into
+// device depth with sky at one. This linearization follows the convention the
+// ENB community established for that projection (kingeric1992's depth notes,
+// carried through the reversed Elder-of-the-Elders capture): view distance
+// over the far plane, in 0..1, monotonic, exactly 1.0 at the far plane.
+static const float ELDER_DEPTH_FAR_PLANE_UNITS = 3000.0;
+
+float ElderLinearizeDepth(float device_z)
+{
+    return device_z / (device_z * -2999.0 + 3000.0);
+}
+
 float4 ElderIdentityColor(float4 value)
 {
     return value;
