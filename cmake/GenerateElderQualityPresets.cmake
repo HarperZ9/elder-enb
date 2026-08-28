@@ -32,10 +32,10 @@ set(elder_expected_ids performance balanced quality ultra cinematic)
 set(elder_expected_labels Performance Balanced Quality Ultra Cinematic)
 set(elder_expected_values
     "4,2,0,0,2,0,0"
-    "6,3,0,2,3,1,1"
-    "8,4,8,3,4,2,1"
-    "12,5,12,4,5,2,2"
-    "16,6,16,5,6,3,2")
+    "6,3,0,6,3,1,1"
+    "8,4,8,8,4,2,1"
+    "12,5,12,10,5,2,2"
+    "16,6,16,12,6,3,2")
 set(elder_stages
     enbeffectprepass.fx
     enbdepthoffield.fx
@@ -117,6 +117,7 @@ foreach(elder_index RANGE 0 4)
 
     if(elder_id STREQUAL "performance")
         set(elder_dof_enabled false)
+        set(elder_dof_autofocus true)
         set(elder_dof_intensity 0.000)
         set(elder_dof_focus_depth 0.55)
         set(elder_dof_focus_range 0.24)
@@ -157,6 +158,7 @@ foreach(elder_index RANGE 0 4)
         set(elder_underwater_density_shape 0.18)
     elseif(elder_id STREQUAL "balanced")
         set(elder_dof_enabled true)
+        set(elder_dof_autofocus true)
         set(elder_dof_intensity 0.750)
         set(elder_dof_focus_depth 0.55)
         set(elder_dof_focus_range 0.22)
@@ -197,6 +199,7 @@ foreach(elder_index RANGE 0 4)
         set(elder_underwater_density_shape 0.25)
     elseif(elder_id STREQUAL "quality")
         set(elder_dof_enabled true)
+        set(elder_dof_autofocus true)
         set(elder_dof_intensity 0.850)
         set(elder_dof_focus_depth 0.54)
         set(elder_dof_focus_range 0.20)
@@ -237,6 +240,7 @@ foreach(elder_index RANGE 0 4)
         set(elder_underwater_density_shape 0.30)
     elseif(elder_id STREQUAL "ultra")
         set(elder_dof_enabled true)
+        set(elder_dof_autofocus true)
         set(elder_dof_intensity 0.925)
         set(elder_dof_focus_depth 0.53)
         set(elder_dof_focus_range 0.18)
@@ -277,6 +281,7 @@ foreach(elder_index RANGE 0 4)
         set(elder_underwater_density_shape 0.34)
     else()
         set(elder_dof_enabled true)
+        set(elder_dof_autofocus true)
         set(elder_dof_intensity 1.000)
         set(elder_dof_focus_depth 0.52)
         set(elder_dof_focus_range 0.16)
@@ -330,6 +335,7 @@ foreach(elder_index RANGE 0 4)
                 "[${elder_stage_section}]\n"
                 "TECHNIQUE=1\n"
                 "Elder 20 | Depth of Field | Enabled=${elder_dof_enabled}\n"
+                "Elder 20 | Depth of Field | Autofocus=${elder_dof_autofocus}\n"
                 "Elder 20 | Depth of Field | Intensity=${elder_dof_intensity}\n"
                 "Elder 20 | Depth of Field | Focus Depth=${elder_dof_focus_depth}\n"
                 "Elder 20 | Depth of Field | Focus Range=${elder_dof_focus_range}\n"

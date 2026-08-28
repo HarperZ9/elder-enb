@@ -73,10 +73,10 @@ set(elder_hlsl_budget_macro_names
     ELDER_ROOM_LIGHT_REFINEMENT_VALUE)
 set(elder_hlsl_budget_values
     "4|2|0|0|2|0|0"
-    "6|3|0|2|3|1|1"
-    "8|4|8|3|4|2|1"
-    "12|5|12|4|5|2|2"
-    "16|6|16|5|6|3|2")
+    "6|3|0|6|3|1|1"
+    "8|4|8|8|4|2|1"
+    "12|5|12|10|5|2|2"
+    "16|6|16|12|6|3|2")
 foreach(elder_index RANGE 0 4)
     list(GET elder_hlsl_branch_prefixes ${elder_index} elder_branch_prefix)
     list(GET elder_hlsl_budget_values ${elder_index} elder_budget_values)
@@ -118,10 +118,10 @@ set(elder_expected_tiers performance balanced quality ultra cinematic)
 set(elder_expected_labels Performance Balanced Quality Ultra Cinematic)
 set(elder_expected_budget_values
     "4|2|0|0|2|0|0"
-    "6|3|0|2|3|1|1"
-    "8|4|8|3|4|2|1"
-    "12|5|12|4|5|2|2"
-    "16|6|16|5|6|3|2")
+    "6|3|0|6|3|1|1"
+    "8|4|8|8|4|2|1"
+    "12|5|12|10|5|2|2"
+    "16|6|16|12|6|3|2")
 set(elder_expected_ini_files
     elder-quality.ini
     enbeffectprepass.fx.ini
@@ -136,6 +136,7 @@ set(elder_expected_ini_files
 
 set(elder_dof_ui_keys
     "Elder 20 | Depth of Field | Enabled"
+    "Elder 20 | Depth of Field | Autofocus"
     "Elder 20 | Depth of Field | Intensity"
     "Elder 20 | Depth of Field | Focus Depth"
     "Elder 20 | Depth of Field | Focus Range"
@@ -336,7 +337,7 @@ function(elder_validate_optical_ini root tier ini_file)
             message(FATAL_ERROR "Duplicate optical preset key ${key}: ${tier}/${ini_file}")
         endif()
         list(APPEND seen_keys "${key}")
-        if(key MATCHES "\\| Enabled$")
+        if(key MATCHES "\\| (Enabled|Autofocus)$")
             if(NOT value MATCHES "^(true|false)$")
                 message(FATAL_ERROR "Boolean optical preset key has non-boolean value ${value}: ${key}")
             endif()

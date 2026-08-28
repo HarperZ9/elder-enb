@@ -37,6 +37,7 @@ float ElderPrepassDepthShape <string UIName = "Elder 10 | Prepass | Depth Shape"
 #define ELDER_STAGE_INTENSITY ElderPrepassIntensity
 #elif ELDER_STAGE_PARAMETER_SLOT == 1
 bool ElderDepthOfFieldEnabled <string UIName = "Elder 20 | Depth of Field | Enabled";> = true;
+bool ElderDepthOfFieldAutofocus <string UIName = "Elder 20 | Depth of Field | Autofocus";> = true;
 float ElderDepthOfFieldIntensity <string UIName = "Elder 20 | Depth of Field | Intensity"; string UIWidget = "Spinner"; float UIMin = 0.0; float UIMax = 1.00; float UIStep = 0.01;> = 0.75;
 float ElderDepthOfFieldFocusDepth <string UIName = "Elder 20 | Depth of Field | Focus Depth"; string UIWidget = "Spinner"; float UIMin = 0.01; float UIMax = 0.99; float UIStep = 0.01;> = 0.55;
 float ElderDepthOfFieldFocusRange <string UIName = "Elder 20 | Depth of Field | Focus Range"; string UIWidget = "Spinner"; float UIMin = 0.03; float UIMax = 0.60; float UIStep = 0.01;> = 0.22;

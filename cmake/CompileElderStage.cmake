@@ -259,8 +259,48 @@ elseif(elder_stage_name STREQUAL "enbeffectprepass.fx")
   if(NOT elder_prepass_history_owner_position EQUAL -1)
     message(FATAL_ERROR "HDR prepass may not own scalar adaptation history")
   endif()
-elseif(elder_stage_name STREQUAL "enbdepthoffield.fx"
-    OR elder_stage_name STREQUAL "enbunderwater.fx")
+elseif(elder_stage_name STREQUAL "enbdepthoffield.fx")
+  list(LENGTH elder_texture_declarations elder_texture_count)
+  if(NOT elder_texture_count EQUAL 8)
+    message(FATAL_ERROR
+      "Depth of field must declare its chain, focus, and scratch resources and nothing else")
+  endif()
+  foreach(required_texture IN ITEMS
+      "Texture2D TextureColor"
+      "Texture2D TextureOriginal"
+      "Texture2D TextureDepth"
+      "Texture2D TextureCurrent"
+      "Texture2D TextureFocus"
+      "Texture2D RenderTargetRGBA32"
+      "Texture2D RenderTargetR16F"
+      "Texture2D RenderTargetRGBA64F")
+    list(FIND elder_texture_declarations "${required_texture}" texture_position)
+    if(texture_position EQUAL -1)
+      message(FATAL_ERROR "${elder_stage_name} is missing required texture: ${required_texture}")
+    endif()
+  endforeach()
+  foreach(required_dof_technique IN ITEMS
+      "technique11 ReadFocus"
+      "technique11 Focus"
+      "technique11 DOF")
+    string(FIND "${elder_stage_contents}" "${required_dof_technique}"
+      elder_dof_technique_position)
+    if(elder_dof_technique_position EQUAL -1)
+      message(FATAL_ERROR
+        "${elder_stage_name} is missing fixed-name host technique: ${required_dof_technique}")
+    endif()
+  endforeach()
+  string(FIND "${elder_stage_contents}" "TexturePrevious" elder_previous_position)
+  if(NOT elder_previous_position EQUAL -1)
+    message(FATAL_ERROR "Only adaptation may declare TexturePrevious scalar history")
+  endif()
+  string(FIND "${elder_stage_contents}"
+    "#define ELDER_STAGE_OWNS_PREVIOUS_SCALAR_ADAPTATION 1"
+    elder_dof_history_owner_position)
+  if(NOT elder_dof_history_owner_position EQUAL -1)
+    message(FATAL_ERROR "Only adaptation may own scalar history")
+  endif()
+elseif(elder_stage_name STREQUAL "enbunderwater.fx")
   list(LENGTH elder_texture_declarations elder_texture_count)
   if(NOT elder_texture_count EQUAL 2)
     message(FATAL_ERROR

@@ -202,7 +202,7 @@ endif()
 
 set(elder_stage_rows
   "enbeffectprepass.fx|Draw"
-  "enbdepthoffield.fx|Draw"
+  "enbdepthoffield.fx|DOF"
   "enbbloom.fx|Draw"
   "enbadaptation.fx|Draw"
   "enblens.fx|Draw"
@@ -463,10 +463,10 @@ endif()
 set(elder_expected_tier_names performance balanced quality ultra cinematic)
 set(elder_expected_tier_budgets
   "4|2|0|0|2|0|0"
-  "6|3|0|2|3|1|1"
-  "8|4|8|3|4|2|1"
-  "12|5|12|4|5|2|2"
-  "16|6|16|5|6|3|2")
+  "6|3|0|6|3|1|1"
+  "8|4|8|8|4|2|1"
+  "12|5|12|10|5|2|2"
+  "16|6|16|12|6|3|2")
 
 set(elder_tier_budget_probe "${elder_matrix_root}/ElderTierBudgetProbe.hlsl")
 file(WRITE "${elder_tier_budget_probe}" [=[

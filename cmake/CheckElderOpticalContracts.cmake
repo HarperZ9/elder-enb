@@ -73,6 +73,7 @@ endforeach()
 
 set(elder_dof_keys
     ElderDepthOfFieldEnabled
+    ElderDepthOfFieldAutofocus
     ElderDepthOfFieldIntensity
     ElderDepthOfFieldFocusDepth
     ElderDepthOfFieldFocusRange
@@ -282,6 +283,7 @@ set(elder_expected_tier_values 0 1 2 3 4)
 set(elder_dof_ui_keys
     "TECHNIQUE"
     "Elder 20 | Depth of Field | Enabled"
+    "Elder 20 | Depth of Field | Autofocus"
     "Elder 20 | Depth of Field | Intensity"
     "Elder 20 | Depth of Field | Focus Depth"
     "Elder 20 | Depth of Field | Focus Range"
@@ -410,7 +412,7 @@ foreach(elder_tier_index RANGE 0 4)
                 message(FATAL_ERROR "Duplicate optical preset key ${elder_key}: ${elder_tier}/${elder_preset_file}")
             endif()
             list(APPEND elder_seen_keys "${elder_key}")
-            if(elder_key MATCHES "\\| Enabled$")
+            if(elder_key MATCHES "\\| (Enabled|Autofocus)$")
                 if(NOT elder_value MATCHES "^(true|false)$")
                     message(FATAL_ERROR "Boolean optical preset key has non-boolean value ${elder_value}: ${elder_key}")
                 endif()

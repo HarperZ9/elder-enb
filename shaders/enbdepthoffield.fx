@@ -21,10 +21,22 @@
 #include "elder/ElderStageParameters.fxh"
 #include "elder/ElderPipelineCommon.fxh"
 
+// ENBSeries 0.504 depth-of-field interface. The host walks the fixed-name
+// technique chain ReadFocus, Focus, DOF, then DOF1 through DOF7 in order.
+// The first two write the host's own focus surfaces by name; the annotated
+// members write the declared scratch surfaces; the rest write the main
+// chain. A single free-named technique never enters that walk, which is why
+// the previous one-technique stage produced no visible defocus on the
+// proven 0.504 binary.
 Texture2D TextureColor;
+Texture2D TextureOriginal;
 Texture2D TextureDepth;
+Texture2D TextureCurrent;
+Texture2D TextureFocus;
+Texture2D RenderTargetRGBA32;
+Texture2D RenderTargetR16F;
+Texture2D RenderTargetRGBA64F;
 float4 ScreenSize;
-float4 FocusInfo;
 
 SamplerState Sampler0
 {
@@ -33,21 +45,181 @@ SamplerState Sampler0
     AddressV = Clamp;
 };
 
+SamplerState Sampler1
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
 #include "elder/ElderDepthOfField.fxh"
 
-float4 ElderDepthOfFieldMain(ElderStageVSOutput input) : SV_Target
+// The measurement technique renders into the host's small focus surface;
+// this quad maps the stage geometry onto its top-left corner so texel zero
+// is always covered no matter which size the host allocates.
+ElderStageVSOutput ElderReadFocusVertex(
+    float3 position : POSITION, float2 texcoord : TEXCOORD0)
 {
-    float4 source = TextureColor.Sample(Sampler0, input.texcoord);
+    ElderStageVSOutput output;
+    output.position = float4(
+        position.xy * 0.0625 + float2(-0.9375, 0.9375),
+        position.z,
+        1.0);
+    output.texcoord = texcoord;
+    return output;
+}
+
+float4 ElderReadFocusPixel(ElderStageVSOutput input) : SV_Target
+{
+    float measured_distance = ElderMeasureAutofocusDistance();
+    return float4(measured_distance.xxx, 1.0);
+}
+
+float4 ElderFocusPixel(ElderStageVSOutput input) : SV_Target
+{
+    float measured_distance = TextureCurrent.Load(int3(0, 0, 0)).x;
+    float focus_distance = ElderResolveFocusDistance(measured_distance);
+    return float4(focus_distance.xxx, 1.0);
+}
+
+float4 ElderCocPixel(ElderStageVSOutput input) : SV_Target
+{
+    return ElderComputeCocTarget(input.texcoord);
+}
+
+float4 ElderNearSpreadPixel(ElderStageVSOutput input) : SV_Target
+{
+    float spread_value = ElderSpreadNearCoc(input.texcoord);
+    return float4(spread_value.xxx, 1.0);
+}
+
+float4 ElderNearMergePixel(ElderStageVSOutput input) : SV_Target
+{
+    return ElderMergeNearCoc(input.texcoord);
+}
+
+float4 ElderFarBokehPixel(ElderStageVSOutput input) : SV_Target
+{
+    return ElderGatherFarBokeh(input.texcoord);
+}
+
+float4 ElderNearBokehPixel(ElderStageVSOutput input) : SV_Target
+{
+    return ElderGatherNearBokeh(input.texcoord);
+}
+
+// The identity input pins alpha to zero so a disabled stage hands the
+// smoothing passes a zero blur amount and they leave the frame untouched.
+float4 ElderCompositePixel(ElderStageVSOutput input) : SV_Target
+{
+    float4 source = float4(
+        ElderFiniteOrBlack(
+            TextureOriginal.SampleLevel(Sampler0, input.texcoord, 0.0).rgb),
+        0.0);
     float4 selected = ElderApplyDepthOfField(input.texcoord, source);
     return ElderStageIdentity(
         source, selected, ElderStageIsActive(), ELDER_STAGE_INTENSITY);
 }
 
-technique11 Draw <string UIName = "Elder [20] Depth of Field";>
+float4 ElderSmoothHorizontalPixel(ElderStageVSOutput input) : SV_Target
+{
+    return ElderSmoothBokeh(input.texcoord, float2(1.0, 0.0), false);
+}
+
+float4 ElderSmoothVerticalPixel(ElderStageVSOutput input) : SV_Target
+{
+    return ElderSmoothBokeh(input.texcoord, float2(0.0, 1.0), true);
+}
+
+technique11 ReadFocus
+{
+    pass p0
+    {
+        SetVertexShader(CompileShader(vs_5_0, ElderReadFocusVertex()));
+        SetPixelShader(CompileShader(ps_5_0, ElderReadFocusPixel()));
+    }
+}
+
+technique11 Focus
 {
     pass p0
     {
         SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
-        SetPixelShader(CompileShader(ps_5_0, ElderDepthOfFieldMain()));
+        SetPixelShader(CompileShader(ps_5_0, ElderFocusPixel()));
+    }
+}
+
+// The one UIName-bearing member: the GUI dropdown lists it at index one and
+// the shipped TECHNIQUE=1 preset key selects it. Helper members carry no
+// UIName so they never shift that arithmetic.
+technique11 DOF <string UIName = "Elder [20] Depth of Field"; string RenderTarget = "RenderTargetRGBA32";>
+{
+    pass p0
+    {
+        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
+        SetPixelShader(CompileShader(ps_5_0, ElderCocPixel()));
+    }
+}
+
+technique11 DOF1 <string RenderTarget = "RenderTargetR16F";>
+{
+    pass p0
+    {
+        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
+        SetPixelShader(CompileShader(ps_5_0, ElderNearSpreadPixel()));
+    }
+}
+
+technique11 DOF2 <string RenderTarget = "RenderTargetRGBA32";>
+{
+    pass p0
+    {
+        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
+        SetPixelShader(CompileShader(ps_5_0, ElderNearMergePixel()));
+    }
+}
+
+technique11 DOF3 <string RenderTarget = "RenderTargetRGBA64F";>
+{
+    pass p0
+    {
+        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
+        SetPixelShader(CompileShader(ps_5_0, ElderFarBokehPixel()));
+    }
+}
+
+technique11 DOF4
+{
+    pass p0
+    {
+        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
+        SetPixelShader(CompileShader(ps_5_0, ElderNearBokehPixel()));
+    }
+}
+
+technique11 DOF5
+{
+    pass p0
+    {
+        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
+        SetPixelShader(CompileShader(ps_5_0, ElderCompositePixel()));
+    }
+}
+
+technique11 DOF6
+{
+    pass p0
+    {
+        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
+        SetPixelShader(CompileShader(ps_5_0, ElderSmoothHorizontalPixel()));
+    }
+}
+
+technique11 DOF7
+{
+    pass p0
+    {
+        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
+        SetPixelShader(CompileShader(ps_5_0, ElderSmoothVerticalPixel()));
     }
 }
