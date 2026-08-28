@@ -93,8 +93,9 @@ instead of leaving stale values visible to shaders.
 
 Treat all runtime-payload shipping and gameplay claims as conditional until the
 public archive proves the runtime is integrated and live ENB 0.504 acceptance is
-recorded. If the runtime is not present, shaders must select the documented
-fallback or identity path.
+recorded. The pulse gates only runtime-composed behavior such as the room-light
+lift. Without it the prepass still runs its bounded spatial fallback, and any
+stage that lacks an accepted route returns identity.
 
 ## Source areas
 

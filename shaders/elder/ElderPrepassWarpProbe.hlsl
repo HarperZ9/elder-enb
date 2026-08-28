@@ -125,8 +125,10 @@ void ElderPrepassWarpProbeMain(uint3 dispatch_thread_id : SV_DispatchThreadID)
             // route-selection-prefers-native-then-bridge-then-spatial
             float native_route = float(ElderSelectPrepassRoute(true, true, true, true, true));
             float bridge_route = float(ElderSelectPrepassRoute(true, true, false, true, true));
-            float spatial_route = float(ElderSelectPrepassRoute(true, true, false, false, true));
-            float identity_route = float(ElderSelectPrepassRoute(true, false, true, true, true));
+            // Spatial must stand without the runtime pulse; the pulse gates
+            // only the room-light routes above it.
+            float spatial_route = float(ElderSelectPrepassRoute(true, false, false, false, true));
+            float identity_route = float(ElderSelectPrepassRoute(true, false, true, true, false));
             ElderPrepassResults[index] = float4(native_route, bridge_route, spatial_route, identity_route);
         }
         else

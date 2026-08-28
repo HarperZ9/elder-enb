@@ -31,6 +31,15 @@ SamplerState Sampler0
     AddressV = Clamp;
 };
 
+// Linear filtering for the spread taps. The bloom surface is a fixed
+// 1024x1024 target, so linear taps smooth the kernel between texel centers.
+SamplerState Sampler1
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
 #include "elder/ElderBloom.fxh"
 
 float4 ElderBloomMain(ElderStageVSOutput input) : SV_Target

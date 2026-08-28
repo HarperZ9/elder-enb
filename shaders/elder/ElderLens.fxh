@@ -81,8 +81,13 @@ float4 ElderApplyLens(float2 uv, float4 bloom_source)
         filtered_lens * max(ElderLensGhostStrength, 0.0)
         + halo_color * max(ElderLensHaloStrength, 0.0)
             * saturate(1.0 - center_distance * 1.35);
+    // The stage intensity is a master dial around a reference of 0.07. At the
+    // default it multiplies by one, so the ghost and halo dials read at face
+    // value instead of compounding into a sub-percent contribution. The
+    // energy cap still bounds the absolute radiance this stage may add.
+    float master_gain = saturate(ElderLensIntensity) * (1.0 / 0.07);
     float3 capped_lens = min(
-        lens_add * saturate(ElderLensIntensity),
+        lens_add * master_gain,
         max(ElderLensEnergyCap, 0.0).xxx);
     return ElderLensContribution(capped_lens, bloom_source.a);
 }

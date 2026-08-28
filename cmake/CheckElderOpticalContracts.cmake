@@ -280,6 +280,7 @@ endif()
 set(elder_expected_tiers performance balanced quality ultra cinematic)
 set(elder_expected_tier_values 0 1 2 3 4)
 set(elder_dof_ui_keys
+    "TECHNIQUE"
     "[Elder 20] Depth of Field | Enabled"
     "[Elder 20] Depth of Field | Intensity"
     "[Elder 20] Depth of Field | Focus Depth"
@@ -288,12 +289,14 @@ set(elder_dof_ui_keys
     "[Elder 20] Depth of Field | Background Strength"
     "[Elder 20] Depth of Field | Max Blur")
 set(elder_bloom_ui_keys
+    "TECHNIQUE"
     "[Elder 30] Bloom | Enabled"
     "[Elder 30] Bloom | Intensity"
     "[Elder 30] Bloom | Highlight Threshold"
     "[Elder 30] Bloom | Soft Knee"
     "[Elder 30] Bloom | Radius Scale")
 set(elder_adaptation_ui_keys
+    "TECHNIQUE"
     "[Elder 40] Adaptation | Enabled"
     "[Elder 40] Adaptation | Intensity"
     "[Elder 40] Adaptation | Brighten Rate"
@@ -301,6 +304,7 @@ set(elder_adaptation_ui_keys
     "[Elder 40] Adaptation | Min Luminance"
     "[Elder 40] Adaptation | Max Luminance")
 set(elder_lens_ui_keys
+    "TECHNIQUE"
     "[Elder 50] Lens | Enabled"
     "[Elder 50] Lens | Intensity"
     "[Elder 50] Lens | Ghost Strength"

@@ -23,7 +23,7 @@ float3 ElderApplyLdrVignette(float2 uv, float3 display_color)
 
 float3 ElderApplyFineGrain(float2 uv, float3 display_color)
 {
-    float2 pixel = floor(uv * max(ScreenSize.xy, 1.0.xx));
+    float2 pixel = floor(uv * max(ElderScreenResolution(ScreenSize), 1.0.xx));
     float grain = (ElderFinishHash(pixel + float2(71.0, 71.0)) - 0.5)
         * (saturate(ElderPostpassGrainShape) / 255.0);
     return saturate(display_color + grain.xxx);
@@ -31,7 +31,7 @@ float3 ElderApplyFineGrain(float2 uv, float3 display_color)
 
 float3 ElderApplyTerminalTriangularDither(float2 uv, float3 display_color)
 {
-    float2 pixel = floor(uv * max(ScreenSize.xy, 1.0.xx));
+    float2 pixel = floor(uv * max(ElderScreenResolution(ScreenSize), 1.0.xx));
     float triangular = ElderFinishHash(pixel)
         - ElderFinishHash(pixel + float2(17.0, 53.0));
     return saturate(display_color + (triangular / 255.0).xxx);

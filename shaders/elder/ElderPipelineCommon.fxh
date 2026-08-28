@@ -28,6 +28,21 @@ float3 ElderFiniteOrBlack(float3 value)
         : 0.0.xxx;
 }
 
+// ENB 0.504 ScreenSize convention: x = width, y = 1/width,
+// z = width/height, w = height/width. A one-texel step is therefore
+// (1/width, 1/height) = (y, y * z); full resolution is (x, x * w).
+// Treating ScreenSize.xy as (width, height) is the historic misread this
+// pair of helpers exists to end.
+float2 ElderScreenTexel(float4 screen_size)
+{
+    return float2(screen_size.y, screen_size.y * screen_size.z);
+}
+
+float2 ElderScreenResolution(float4 screen_size)
+{
+    return float2(screen_size.x, screen_size.x * screen_size.w);
+}
+
 float ElderDepthMask(float raw_depth, float threshold, float feather)
 {
     float edge = clamp(feather, 0.00001, 0.005);

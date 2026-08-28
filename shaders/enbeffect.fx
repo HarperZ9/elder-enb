@@ -108,6 +108,30 @@ float3 ElderResolveMainCapability(float3 color, float adaptation_scalar)
         0.0).rgb;
 }
 
+// Adaptation consumption. The adaptation stage publishes a smoothed scene
+// luminance through TextureAdaptation; this turns it into a bounded exposure
+// steer toward mid-gray. The bounds keep it reading as eye response rather
+// than auto-brightness, and the adaptation stage's own dials shape the scalar
+// upstream, so this consumer stays parameter-free.
+static const float ELDER_AUTO_EXPOSURE_TARGET = 0.18;
+static const float ELDER_AUTO_EXPOSURE_MAX_BRIGHTEN_EV = 1.0;
+static const float ELDER_AUTO_EXPOSURE_MAX_DARKEN_EV = 2.0;
+
+float ElderMainAutoExposureEv(float adaptation_scalar)
+{
+    if (!ElderFinite1(adaptation_scalar) || adaptation_scalar <= 0.0)
+    {
+        return 0.0;
+    }
+
+    float adapted = clamp(adaptation_scalar, 0.001, 64.0);
+    float auto_ev = log2(ELDER_AUTO_EXPOSURE_TARGET / adapted);
+    return clamp(
+        auto_ev,
+        -ELDER_AUTO_EXPOSURE_MAX_DARKEN_EV,
+        ELDER_AUTO_EXPOSURE_MAX_BRIGHTEN_EV);
+}
+
 float4 ElderMainEffectPixel(ElderStageVSOutput input) : SV_Target
 {
     float adaptation_scalar =
@@ -124,9 +148,10 @@ float4 ElderMainEffectPixel(ElderStageVSOutput input) : SV_Target
         return float4(ElderBoundHdrDisplay(linear_color), 1.0);
     }
 
-    float3 evaluated = ElderEvaluateColorCore(
-        linear_color,
-        ElderBuildNativeColorCoreParameters());
+    ElderColorCoreParameters core_parameters =
+        ElderBuildNativeColorCoreParameters();
+    core_parameters.exposure_ev += ElderMainAutoExposureEv(adaptation_scalar);
+    float3 evaluated = ElderEvaluateColorCore(linear_color, core_parameters);
     float3 mixed = lerp(
         linear_color,
         evaluated,

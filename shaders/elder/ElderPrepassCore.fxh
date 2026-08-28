@@ -58,14 +58,16 @@ uint ElderSelectPrepassRoute(
     bool bridge_available,
     bool spatial_available)
 {
-    if (!stage_active || !runtime_valid)
+    if (!stage_active)
     {
         return ELDER_CAPABILITY_IDENTITY;
     }
 
+    // The runtime pulse is required only by the routes that compose runtime
+    // payloads. The spatial fallback stands on current-frame data alone.
 #if ELDER_STAGE_CAPABILITY >= ELDER_CAPABILITY_NATIVE
 #if ELDER_STAGE_NATIVE_CAPABILITY_AVAILABLE
-    if (native_available)
+    if (runtime_valid && native_available)
     {
         return ELDER_CAPABILITY_NATIVE;
     }
@@ -73,7 +75,7 @@ uint ElderSelectPrepassRoute(
 #endif
 #if ELDER_STAGE_CAPABILITY >= ELDER_CAPABILITY_BRIDGE
 #if ELDER_STAGE_BRIDGE_CAPABILITY_AVAILABLE
-    if (bridge_available)
+    if (runtime_valid && bridge_available)
     {
         return ELDER_CAPABILITY_BRIDGE;
     }

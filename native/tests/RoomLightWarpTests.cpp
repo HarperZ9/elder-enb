@@ -364,8 +364,8 @@ void run_prepass_integration(const wchar_t* probe_path)
     const std::string tag(kPrepassCaseNames[6U]);
     expect(near_value(g.x, 3.0F), tag + " native route");
     expect(near_value(g.y, 2.0F), tag + " bridge route");
-    expect(near_value(g.z, 1.0F), tag + " spatial route");
-    expect(near_value(g.w, 0.0F), tag + " identity route on invalid runtime");
+    expect(near_value(g.z, 1.0F), tag + " spatial route without runtime pulse");
+    expect(near_value(g.w, 0.0F), tag + " identity route when no capability fits");
   }
 
   {

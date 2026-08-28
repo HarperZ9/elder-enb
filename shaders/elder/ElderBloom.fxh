@@ -70,28 +70,37 @@ float4 ElderApplyBloom(float2 uv, float4 source)
         return ElderNeutralBloomScratch(source.a);
     }
 
-    float2 texel_size = 1.0 / max(ScreenSize.xy, float2(1.0, 1.0));
+    float2 texel_size = ElderScreenTexel(ScreenSize);
     float3 accumulated_highlight = center_highlight;
     float accumulated_weight = 1.0;
 
     [loop]
     for (uint tap_index = 1u; tap_index <= ElderBloomRadius; ++tap_index)
     {
-        float tap_radius = float(tap_index) * max(ElderBloomRadiusScale, 0.25);
+        // Four texels of spacing per step. The old spacing kept the whole
+        // kernel inside roughly one texel, which reduced the stage to a
+        // dimmed copy of its own highlight mask.
+        float tap_radius =
+            float(tap_index) * max(ElderBloomRadiusScale, 0.25) * 4.0;
         float2 offset_x = texel_size * float2(tap_radius, 0.0);
         float2 offset_y = texel_size * float2(0.0, tap_radius);
-        float2 tap_offsets[4] = {
+        float2 offset_diagonal = texel_size * (tap_radius * 0.70710678).xx;
+        float2 tap_offsets[8] = {
             offset_x,
             -offset_x,
             offset_y,
-            -offset_y
+            -offset_y,
+            offset_diagonal,
+            -offset_diagonal,
+            float2(offset_diagonal.x, -offset_diagonal.y),
+            float2(-offset_diagonal.x, offset_diagonal.y)
         };
 
         [unroll]
-        for (uint axis_index = 0u; axis_index < 4u; ++axis_index)
+        for (uint axis_index = 0u; axis_index < 8u; ++axis_index)
         {
             float3 tap_color = TextureColor.SampleLevel(
-                Sampler0, saturate(uv + tap_offsets[axis_index]), 0.0).rgb;
+                Sampler1, saturate(uv + tap_offsets[axis_index]), 0.0).rgb;
             float tap_weight = 1.0 / (1.0 + float(tap_index));
             accumulated_highlight += ElderExtractBloomHighlight(tap_color) * tap_weight;
             accumulated_weight += tap_weight;
@@ -100,9 +109,10 @@ float4 ElderApplyBloom(float2 uv, float4 source)
 
     float3 filtered_highlight =
         accumulated_highlight / max(accumulated_weight, 0.0001);
-    float3 contribution_radiance = filtered_highlight
-        * saturate(ElderBloomIntensity)
-        * 0.55;
+    // The intensity dial is the only attenuation. A second fixed multiplier
+    // sat here before and pushed the whole stage under the visibility floor.
+    float3 contribution_radiance =
+        filtered_highlight * saturate(ElderBloomIntensity);
     return ElderBloomContribution(contribution_radiance, source.a);
 }
 

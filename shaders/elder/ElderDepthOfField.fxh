@@ -39,7 +39,9 @@ float ElderDepthOfFieldBlurAmount(float raw_depth)
         ? ElderDepthOfFieldForegroundStrength
         : ElderDepthOfFieldBackgroundStrength;
     float blur_shape = saturate(abs(focus_delta) / focus_range - 0.25);
-    return saturate(blur_shape * max(side_strength, 0.0) * ElderDepthOfFieldMaxBlur);
+    // Normalized circle of confusion in 0..1. ElderDepthOfFieldMaxBlur is a
+    // radius, not a strength; it scales the tap offsets, never the CoC.
+    return saturate(blur_shape * max(side_strength, 0.0) * 2.5);
 }
 
 float4 ElderApplyDepthOfField(float2 uv, float4 source)
@@ -71,7 +73,7 @@ float4 ElderApplyDepthOfField(float2 uv, float4 source)
         return source;
     }
 
-    float2 texel_size = 1.0 / max(ScreenSize.xy, float2(1.0, 1.0));
+    float2 texel_size = ElderScreenTexel(ScreenSize);
     float focus_range = max(ElderDepthOfFieldFocusRange, 0.001);
     float3 accumulated_color = ElderFiniteOrBlack(source.rgb);
     float accumulated_weight = 1.0;
@@ -79,10 +81,13 @@ float4 ElderApplyDepthOfField(float2 uv, float4 source)
     [loop]
     for (uint ring_index = 0u; ring_index < ElderDOFRings; ++ring_index)
     {
+        // Eight texels per ring at MaxBlur 1.0 and a fully defocused pixel.
+        // The old form multiplied MaxBlur in twice (once inside blur_amount),
+        // which kept every tap under one texel and made the stage a no-op.
         float ring_radius = (float(ring_index) + 1.0)
             * blur_amount
-            * 2.0
-            * max(ElderDepthOfFieldMaxBlur, 0.0);
+            * max(ElderDepthOfFieldMaxBlur, 0.0)
+            * 8.0;
         float2 offset_x = texel_size * float2(ring_radius, 0.0);
         float2 offset_y = texel_size * float2(0.0, ring_radius);
         float2 tap_offsets[4] = {

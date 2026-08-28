@@ -99,8 +99,7 @@ ElderScreenSpaceNeighborhood ElderReadPrepassNeighborhood(
     float3 normal_value,
     float mask_value)
 {
-    float2 safe_size = max(ScreenSize.xy, float2(1.0, 1.0));
-    float2 texel = 1.0 / safe_size;
+    float2 texel = ElderScreenTexel(ScreenSize);
     ElderScreenSpaceSample center = ElderMakeScreenSpaceSample(
         selected_center, raw_depth, normal_value, mask_value);
     return ElderGatherScreenNeighborhood(
@@ -139,12 +138,10 @@ float4 ElderPrepassMain(ElderStageVSOutput input) : SV_Target
     float raw_depth = TextureDepth.SampleLevel(Sampler0, input.texcoord, 0.0).x;
     float3 finite_source = ElderPrepassFiniteSceneOrBlack(source.rgb);
 
+    // The runtime pulse gates only the room-light composition. Bounded spatial
+    // work needs no runtime, so an absent pulse must not silence the stage.
     bool runtime_available =
         ElderPrepassRuntimeAvailable(ElderRuntimeRoomLight, ElderRuntimeStatus);
-    if (!runtime_available)
-    {
-        return float4(finite_source, source.a);
-    }
 
     float4 selected = float4(finite_source, source.a);
     float3 normal_value =
@@ -154,7 +151,7 @@ float4 ElderPrepassMain(ElderStageVSOutput input) : SV_Target
         && ElderFinite3(normal_value)
         && ElderFinite1(mask_value) ? 1.0 : 0.0;
 
-    if (ElderPrepassNativeAvailable())
+    if (ElderPrepassNativeAvailable() && runtime_available)
     {
         ElderScreenSpaceNeighborhood neighborhood = ElderReadPrepassNeighborhood(
             input.texcoord, finite_source, raw_depth, normal_value, mask_value);
@@ -165,7 +162,7 @@ float4 ElderPrepassMain(ElderStageVSOutput input) : SV_Target
             ElderRuntimeStatus,
             neighborhood);
     }
-    else if (ElderPrepassBridgeAvailable())
+    else if (ElderPrepassBridgeAvailable() && runtime_available)
     {
         float3 bridge_source = finite_source + SB_Retain(input.texcoord);
         ElderScreenSpaceNeighborhood neighborhood = ElderReadPrepassNeighborhood(
