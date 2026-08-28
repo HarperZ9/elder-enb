@@ -63,23 +63,33 @@ float4 ElderApplyBloom(float2 uv, float4 source)
         return ElderNeutralBloomScratch(source.a);
     }
 
+    // No dark-center early-out. The halo of a bright neighbor has to land
+    // on pixels whose own highlight is zero, or bloom never extends past
+    // the emitting silhouette. The stock 0.504 bloom gathers on every
+    // pixel the same way.
     float3 center_highlight = ElderExtractBloomHighlight(source.rgb);
-    float center_luma = ElderBloomLuminance(center_highlight);
-    if (center_luma <= 0.0)
-    {
-        return ElderNeutralBloomScratch(source.a);
-    }
 
-    float2 texel_size = ElderScreenTexel(ScreenSize);
+    // Tap spacing lives on the bloom surface, not the display. ENB 0.504
+    // runs the bloom chain on fixed-size square targets and describes them
+    // through the host BloomSize uniform, packed like ScreenSize:
+    // x = width, y = 1/width, z = aspect, w = 1/aspect. Display texels
+    // here pinned the spread to a few pixels and quartered it at 4K. The
+    // vertical step scales by the display aspect so the kernel renders as
+    // a circle on screen, matching the stock blur. A zero or non-finite
+    // BloomSize falls back to the fixed 1024 chain width.
+    float bloom_texel = ElderFinite1(BloomSize.y) && BloomSize.y > 0.0
+        ? BloomSize.y
+        : (1.0 / 1024.0);
+    float2 texel_size =
+        float2(bloom_texel, bloom_texel * max(ScreenSize.z, 0.1));
     float3 accumulated_highlight = center_highlight;
     float accumulated_weight = 1.0;
 
     [loop]
     for (uint tap_index = 1u; tap_index <= ElderBloomRadius; ++tap_index)
     {
-        // Four texels of spacing per step. The old spacing kept the whole
-        // kernel inside roughly one texel, which reduced the stage to a
-        // dimmed copy of its own highlight mask.
+        // Four bloom-surface texels of spacing per step keeps the spread a
+        // fixed fraction of the frame at every display resolution.
         float tap_radius =
             float(tap_index) * max(ElderBloomRadiusScale, 0.25) * 4.0;
         float2 offset_x = texel_size * float2(tap_radius, 0.0);

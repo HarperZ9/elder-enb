@@ -23,6 +23,11 @@
 
 Texture2D TextureColor;
 float4 ScreenSize;
+// Host-owned size of the bloom render chain, packed like ScreenSize:
+// x = width, y = 1/width, z = aspect, w = 1/aspect. The 0.504 chain runs
+// on square 1024x1024 targets, so kernel spacing derives from this uniform
+// rather than the display size.
+float4 BloomSize;
 
 SamplerState Sampler0
 {

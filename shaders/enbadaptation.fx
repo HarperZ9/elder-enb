@@ -36,16 +36,42 @@ SamplerState Sampler0
 
 float4 ElderAdaptationMain(ElderStageVSOutput input) : SV_Target
 {
-    float4 source = TextureCurrent.Sample(Sampler0, input.texcoord);
     float previous_scalar =
         TexturePrevious.SampleLevel(Sampler0, float2(0.5, 0.5), 0.0).x;
-    float measured_luminance = ElderAdaptationMeasuredLuminance(source.rgb);
+
+    // Grid metering. A single center texel made the exposure loop a spot
+    // meter: one torch or window at screen center swung the whole frame.
+    // A 16x16 stratified average over the host-downscaled scene matches
+    // the stock 0.504 metering footprint and runs once per frame on the
+    // 1x1 output.
+    float3 metered_color = 0.0.xxx;
+    [loop]
+    for (uint grid_y = 0u; grid_y < 16u; ++grid_y)
+    {
+        [loop]
+        for (uint grid_x = 0u; grid_x < 16u; ++grid_x)
+        {
+            float2 grid_uv = (float2(grid_x, grid_y) + 0.5.xx) / 16.0;
+            metered_color += ElderFiniteOrBlack(
+                TextureCurrent.SampleLevel(Sampler0, grid_uv, 0.0).rgb);
+        }
+    }
+    metered_color /= 256.0;
+
+    float measured_luminance = ElderAdaptationMeasuredLuminance(metered_color);
     float delta_seconds = ElderAdaptationDeltaSeconds(Timer);
     float adapted_luminance = ElderUpdateAdaptedLuminance(
         measured_luminance, previous_scalar, delta_seconds);
-    float stable_alpha = ElderFinite1(source.a) ? source.a : 1.0;
-    float4 scalar_output = float4(adapted_luminance.xxx, stable_alpha);
-    return ElderStageIsActive() ? scalar_output : source;
+
+    // The published scalar is one side of a fixed contract with
+    // enbeffect.fx, which reads this target as smoothed scene luminance.
+    // The contract holds with the dial off too: publish the raw 0.18
+    // mid-gray anchor so the consumer's exposure steer resolves to exactly
+    // zero. Passing scene color through here fed unsmoothed red-channel
+    // radiance into the exposure math, and the dial-clamped neutral would
+    // leak a nonzero steer whenever the luminance range excludes 0.18.
+    float published_scalar = ElderStageIsActive() ? adapted_luminance : 0.18;
+    return float4(published_scalar.xxx, 1.0);
 }
 
 technique11 Draw <string UIName = "Elder [40] Adaptation";>

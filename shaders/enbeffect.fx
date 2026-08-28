@@ -109,10 +109,12 @@ float3 ElderResolveMainCapability(float3 color, float adaptation_scalar)
 }
 
 // Adaptation consumption. The adaptation stage publishes a smoothed scene
-// luminance through TextureAdaptation; this turns it into a bounded exposure
-// steer toward mid-gray. The bounds keep it reading as eye response rather
-// than auto-brightness, and the adaptation stage's own dials shape the scalar
-// upstream, so this consumer stays parameter-free.
+// luminance through TextureAdaptation, and publishes the raw 0.18 mid-gray
+// anchor when its dial is off, which resolves this steer to exactly zero.
+// This turns the scalar into a bounded exposure steer toward mid-gray. The
+// bounds keep it reading as eye response rather than auto-brightness, and
+// the adaptation stage's own dials shape the scalar upstream, so this
+// consumer stays parameter-free.
 static const float ELDER_AUTO_EXPOSURE_TARGET = 0.18;
 static const float ELDER_AUTO_EXPOSURE_MAX_BRIGHTEN_EV = 1.0;
 static const float ELDER_AUTO_EXPOSURE_MAX_DARKEN_EV = 2.0;
