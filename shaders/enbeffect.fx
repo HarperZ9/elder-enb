@@ -161,36 +161,17 @@ float4 ElderMainEffectPixel(ElderStageVSOutput input) : SV_Target
     return float4(ElderBoundHdrDisplay(mixed), 1.0);
 }
 
-float4 ElderMainEffectFallbackPixel(ElderStageVSOutput input) : SV_Target
-{
-    return float4(
-        ElderBoundHdrDisplay(TextureColor.Sample(Sampler0, input.texcoord).rgb),
-        1.0);
-}
-
+// Exactly one selectable technique. ENB's TECHNIQUE=<n> preset key indexes the
+// GUI dropdown, and the proven Elder ENB preset on this same 0.504 binary ships
+// a single UIName technique per stage with TECHNIQUE=1 and renders. Extra
+// UIName-bearing techniques shift that arithmetic, which is how a preset lands
+// on a passthrough instead of the real chain. The suite's own safe path is the
+// early-out inside ElderMainEffectPixel, not a second technique.
 technique11 Draw <string UIName = "Elder ENB";>
 {
     pass p0
     {
         SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
         SetPixelShader(CompileShader(ps_5_0, ElderMainEffectPixel()));
-    }
-}
-
-technique11 ELDERPASSTHROUGH <string UIName = "Elder: Safe passthrough";>
-{
-    pass p0
-    {
-        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
-        SetPixelShader(CompileShader(ps_5_0, ElderMainEffectFallbackPixel()));
-    }
-}
-
-technique11 ORIGINALPOSTPROCESS <string UIName = "Vanilla";> // do not modify this technique
-{
-    pass p0
-    {
-        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
-        SetPixelShader(CompileShader(ps_5_0, ElderMainEffectFallbackPixel()));
     }
 }
