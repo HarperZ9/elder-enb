@@ -145,16 +145,16 @@ require_elder_contract_tokens("${elder_capabilities}" "Elder host capabilities"
   "Current-frame scratch cannot be treated as persistent history"
   "Cross-effect alpha packing requires an explicit round-trip contract")
 require_elder_contract_tokens("${elder_parameters}" "Elder stage parameters"
-  "[Elder 00]"
-  "[Elder 10]"
-  "[Elder 20]"
-  "[Elder 30]"
-  "[Elder 40]"
-  "[Elder 50]"
-  "[Elder 60]"
-  "[Elder 70]"
-  "[Elder 80]"
-  "[Elder 90]"
+  "Elder 00 |"
+  "Elder 10 |"
+  "Elder 20 |"
+  "Elder 30 |"
+  "Elder 40 |"
+  "Elder 50 |"
+  "Elder 60 |"
+  "Elder 70 |"
+  "Elder 80 |"
+  "Elder 90 |"
   "Balanced"
   "= true;"
   "= 1.0;")
@@ -167,6 +167,29 @@ foreach(forbidden_main_parameter IN ITEMS
   if(NOT forbidden_main_parameter_position EQUAL -1)
     message(FATAL_ERROR
       "Stage parameters must not redefine native ABI control: ${forbidden_main_parameter}")
+  endif()
+endforeach()
+
+# ENB persists every annotated knob to the stage .fx.ini keyed by its UIName.
+# A label that opens with '[' reads back as a section header and an embedded
+# '=' or ';' splits or comments the saved line, so such a value can never
+# round-trip through ENB's own save format.
+string(REGEX MATCHALL "UIName = \"[^\"]*\"" elder_stage_ui_annotations
+  "${elder_stage_parameter_source}")
+list(LENGTH elder_stage_ui_annotations elder_stage_ui_annotation_count)
+if(elder_stage_ui_annotation_count EQUAL 0)
+  message(FATAL_ERROR "Stage parameters declare no UIName annotations")
+endif()
+foreach(elder_stage_ui_annotation IN LISTS elder_stage_ui_annotations)
+  string(REGEX REPLACE "^UIName = \"(.*)\"$" "\\1" elder_stage_ui_label
+    "${elder_stage_ui_annotation}")
+  if(NOT elder_stage_ui_label MATCHES "^[A-Za-z0-9]")
+    message(FATAL_ERROR
+      "UIName must open with an alphanumeric character to survive as an INI key: ${elder_stage_ui_label}")
+  endif()
+  if(elder_stage_ui_label MATCHES "(\\[|\\]|=|;)")
+    message(FATAL_ERROR
+      "UIName cannot round-trip as an INI key with '[', ']', '=', or ';': ${elder_stage_ui_label}")
   endif()
 endforeach()
 
@@ -196,7 +219,7 @@ file(WRITE "${elder_generated_native_root}/ElderNativeParameters.fxh" [=[
 
 bool ElderMasterEnabled
 <
-    string UIName = "[Elder 00] Master | Enabled";
+    string UIName = "Master | Enabled";
 > = true;
 float ElderExposureCompensationEv = 0.0;
 float ElderColorWarmCool = 0.0;

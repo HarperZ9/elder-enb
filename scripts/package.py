@@ -65,15 +65,15 @@ PRESET_METADATA_FILE = "elder-quality.ini"
 TIER_OVERRIDE_PATH = PurePosixPath("enbseries/elder/ElderTier.fxh")
 
 STAGE_UI_PREFIXES = {
-    "enbeffectprepass.fx": "[Elder 10] Prepass |",
-    "enbdepthoffield.fx": "[Elder 20] Depth of Field |",
-    "enbbloom.fx": "[Elder 30] Bloom |",
-    "enbadaptation.fx": "[Elder 40] Adaptation |",
-    "enblens.fx": "[Elder 50] Lens |",
-    "enbeffect.fx": "[Elder 60] Main Effect |",
-    "enbeffectpostpass.fx": "[Elder 70] Postpass |",
-    "enbsunsprite.fx": "[Elder 80] Sun Sprite |",
-    "enbunderwater.fx": "[Elder 90] Underwater |",
+    "enbeffectprepass.fx": "Elder 10 | Prepass |",
+    "enbdepthoffield.fx": "Elder 20 | Depth of Field |",
+    "enbbloom.fx": "Elder 30 | Bloom |",
+    "enbadaptation.fx": "Elder 40 | Adaptation |",
+    "enblens.fx": "Elder 50 | Lens |",
+    "enbeffect.fx": "Elder 60 | Main Effect |",
+    "enbeffectpostpass.fx": "Elder 70 | Postpass |",
+    "enbsunsprite.fx": "Elder 80 | Sun Sprite |",
+    "enbunderwater.fx": "Elder 90 | Underwater |",
 }
 
 DOCUMENT_FILES = (
@@ -332,9 +332,9 @@ def _expected_raw_preset_paths() -> set[str]:
 
 def _parse_ini(path: Path, expected_section: str) -> dict[str, str]:
     lines = path.read_text(encoding="utf-8").splitlines()
-    section_lines = [
-        line for line in lines if line.startswith("[") and line.endswith("]")
-    ]
+    # Windows INI readers treat any line whose first character is '[' as a
+    # section header, whether or not it carries an '=' further along.
+    section_lines = [line for line in lines if line.startswith("[")]
     if section_lines != [expected_section]:
         raise PackageError(
             f"preset {path} must contain exactly section {expected_section}; "
@@ -343,11 +343,7 @@ def _parse_ini(path: Path, expected_section: str) -> dict[str, str]:
 
     parsed: dict[str, str] = {}
     for line in lines:
-        if (
-            not line
-            or line.startswith(";")
-            or (line.startswith("[") and line.endswith("]"))
-        ):
+        if not line or line.startswith(";") or line.startswith("["):
             continue
         if "=" not in line:
             raise PackageError(f"malformed preset line in {path}: {line}")
@@ -381,9 +377,19 @@ def validate_generated_presets(source_root: Path, generated_root: Path) -> None:
         Path("shaders/elder/ElderStageParameters.fxh"),
         "Elder stage UI contract",
     ).decode("utf-8")
-    ui_names = set(
-        re.findall(r'UIName\s*=\s*"(\[Elder \d{2}\][^"]+)"', parameter_source)
-    )
+    all_ui_names = re.findall(r'UIName\s*=\s*"([^"]*)"', parameter_source)
+    if not all_ui_names:
+        raise PackageError("Elder stage UI contract declares no UIName controls")
+    for ui_name in all_ui_names:
+        # ENB persists each knob to the stage .fx.ini keyed by its UIName. A
+        # label that opens with '[' reads back as a section header, and an
+        # embedded '=' or ';' splits or comments the saved line, so the value
+        # can never round-trip.
+        if not re.fullmatch(r"[A-Za-z0-9][^\[\]=;]*", ui_name):
+            raise PackageError(f"UIName cannot round-trip as an INI key: {ui_name!r}")
+    ui_names = {
+        ui_name for ui_name in all_ui_names if re.match(r"Elder \d{2} \| ", ui_name)
+    }
 
     for tier_index, (tier, tier_label) in enumerate(zip(TIER_NAMES, TIER_LABELS)):
         tier_root = generated_root / tier

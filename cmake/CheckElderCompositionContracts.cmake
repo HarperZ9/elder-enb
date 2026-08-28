@@ -259,12 +259,12 @@ elder_forbid_token("${elder_adaptation_module_source}" "timer_value.x"
 
 file(READ "${elder_parameters}" elder_parameter_source)
 foreach(required_parameter_token IN ITEMS
-    "[Elder 60] Main Effect | Color-Core Intensity"
-    "[Elder 60] Main Effect | Optical Shape"
-    "[Elder 70] Postpass | Vignette Strength"
-    "[Elder 70] Postpass | Grain Shape"
-    "[Elder 80] Sun Sprite | Disc Shape"
-    "[Elder 90] Underwater | Density Shape")
+    "Elder 60 | Main Effect | Color-Core Intensity"
+    "Elder 60 | Main Effect | Optical Shape"
+    "Elder 70 | Postpass | Vignette Strength"
+    "Elder 70 | Postpass | Grain Shape"
+    "Elder 80 | Sun Sprite | Disc Shape"
+    "Elder 90 | Underwater | Density Shape")
   elder_require_token("${elder_parameter_source}" "${required_parameter_token}"
     "Stage parameter UIName contract")
 endforeach()
@@ -279,11 +279,11 @@ foreach(forbidden_generator_token IN ITEMS
     "Quality preset generator")
 endforeach()
 foreach(required_generator_token IN ITEMS
-    "[Elder 10] Prepass | Enabled="
-    "[Elder 60] Main Effect | Optical Shape="
-    "[Elder 70] Postpass | Vignette Strength="
-    "[Elder 80] Sun Sprite | Disc Shape="
-    "[Elder 90] Underwater | Density Shape=")
+    "Elder 10 | Prepass | Enabled="
+    "Elder 60 | Main Effect | Optical Shape="
+    "Elder 70 | Postpass | Vignette Strength="
+    "Elder 80 | Sun Sprite | Disc Shape="
+    "Elder 90 | Underwater | Density Shape=")
   elder_require_token("${elder_generator_source}" "${required_generator_token}"
     "Quality preset generator")
 endforeach()

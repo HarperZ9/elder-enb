@@ -281,35 +281,35 @@ set(elder_expected_tiers performance balanced quality ultra cinematic)
 set(elder_expected_tier_values 0 1 2 3 4)
 set(elder_dof_ui_keys
     "TECHNIQUE"
-    "[Elder 20] Depth of Field | Enabled"
-    "[Elder 20] Depth of Field | Intensity"
-    "[Elder 20] Depth of Field | Focus Depth"
-    "[Elder 20] Depth of Field | Focus Range"
-    "[Elder 20] Depth of Field | Foreground Strength"
-    "[Elder 20] Depth of Field | Background Strength"
-    "[Elder 20] Depth of Field | Max Blur")
+    "Elder 20 | Depth of Field | Enabled"
+    "Elder 20 | Depth of Field | Intensity"
+    "Elder 20 | Depth of Field | Focus Depth"
+    "Elder 20 | Depth of Field | Focus Range"
+    "Elder 20 | Depth of Field | Foreground Strength"
+    "Elder 20 | Depth of Field | Background Strength"
+    "Elder 20 | Depth of Field | Max Blur")
 set(elder_bloom_ui_keys
     "TECHNIQUE"
-    "[Elder 30] Bloom | Enabled"
-    "[Elder 30] Bloom | Intensity"
-    "[Elder 30] Bloom | Highlight Threshold"
-    "[Elder 30] Bloom | Soft Knee"
-    "[Elder 30] Bloom | Radius Scale")
+    "Elder 30 | Bloom | Enabled"
+    "Elder 30 | Bloom | Intensity"
+    "Elder 30 | Bloom | Highlight Threshold"
+    "Elder 30 | Bloom | Soft Knee"
+    "Elder 30 | Bloom | Radius Scale")
 set(elder_adaptation_ui_keys
     "TECHNIQUE"
-    "[Elder 40] Adaptation | Enabled"
-    "[Elder 40] Adaptation | Intensity"
-    "[Elder 40] Adaptation | Brighten Rate"
-    "[Elder 40] Adaptation | Darken Rate"
-    "[Elder 40] Adaptation | Min Luminance"
-    "[Elder 40] Adaptation | Max Luminance")
+    "Elder 40 | Adaptation | Enabled"
+    "Elder 40 | Adaptation | Intensity"
+    "Elder 40 | Adaptation | Brighten Rate"
+    "Elder 40 | Adaptation | Darken Rate"
+    "Elder 40 | Adaptation | Min Luminance"
+    "Elder 40 | Adaptation | Max Luminance")
 set(elder_lens_ui_keys
     "TECHNIQUE"
-    "[Elder 50] Lens | Enabled"
-    "[Elder 50] Lens | Intensity"
-    "[Elder 50] Lens | Ghost Strength"
-    "[Elder 50] Lens | Halo Strength"
-    "[Elder 50] Lens | Energy Cap")
+    "Elder 50 | Lens | Enabled"
+    "Elder 50 | Lens | Intensity"
+    "Elder 50 | Lens | Ghost Strength"
+    "Elder 50 | Lens | Halo Strength"
+    "Elder 50 | Lens | Energy Cap")
 set(elder_optical_preset_files
     enbdepthoffield.fx.ini
     enbbloom.fx.ini
@@ -382,7 +382,15 @@ foreach(elder_tier_index RANGE 0 4)
         file(STRINGS "${elder_preset_path}" elder_preset_lines)
         set(elder_seen_keys "")
         foreach(elder_line IN LISTS elder_preset_lines)
-            if(elder_line STREQUAL "" OR elder_line MATCHES "^;" OR elder_line MATCHES "^\\[[A-Z0-9.]+\\]$")
+            if(elder_line STREQUAL "" OR elder_line MATCHES "^;")
+                continue()
+            endif()
+            # INI readers classify any line opening with '[' as a section
+            # header, so only the expected stage section may start with one.
+            if(elder_line MATCHES "^[ \t]*\\[")
+                if(NOT elder_line STREQUAL "${elder_expected_section}")
+                    message(FATAL_ERROR "Line would read back as an INI section header: ${elder_tier}/${elder_preset_file}: ${elder_line}")
+                endif()
                 continue()
             endif()
             if(NOT elder_line MATCHES "^(.+)=([^;]+)$")

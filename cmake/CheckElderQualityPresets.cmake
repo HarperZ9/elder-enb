@@ -135,58 +135,58 @@ set(elder_expected_ini_files
     enbunderwater.fx.ini)
 
 set(elder_dof_ui_keys
-    "[Elder 20] Depth of Field | Enabled"
-    "[Elder 20] Depth of Field | Intensity"
-    "[Elder 20] Depth of Field | Focus Depth"
-    "[Elder 20] Depth of Field | Focus Range"
-    "[Elder 20] Depth of Field | Foreground Strength"
-    "[Elder 20] Depth of Field | Background Strength"
-    "[Elder 20] Depth of Field | Max Blur")
+    "Elder 20 | Depth of Field | Enabled"
+    "Elder 20 | Depth of Field | Intensity"
+    "Elder 20 | Depth of Field | Focus Depth"
+    "Elder 20 | Depth of Field | Focus Range"
+    "Elder 20 | Depth of Field | Foreground Strength"
+    "Elder 20 | Depth of Field | Background Strength"
+    "Elder 20 | Depth of Field | Max Blur")
 set(elder_bloom_ui_keys
-    "[Elder 30] Bloom | Enabled"
-    "[Elder 30] Bloom | Intensity"
-    "[Elder 30] Bloom | Highlight Threshold"
-    "[Elder 30] Bloom | Soft Knee"
-    "[Elder 30] Bloom | Radius Scale")
+    "Elder 30 | Bloom | Enabled"
+    "Elder 30 | Bloom | Intensity"
+    "Elder 30 | Bloom | Highlight Threshold"
+    "Elder 30 | Bloom | Soft Knee"
+    "Elder 30 | Bloom | Radius Scale")
 set(elder_adaptation_ui_keys
-    "[Elder 40] Adaptation | Enabled"
-    "[Elder 40] Adaptation | Intensity"
-    "[Elder 40] Adaptation | Brighten Rate"
-    "[Elder 40] Adaptation | Darken Rate"
-    "[Elder 40] Adaptation | Min Luminance"
-    "[Elder 40] Adaptation | Max Luminance")
+    "Elder 40 | Adaptation | Enabled"
+    "Elder 40 | Adaptation | Intensity"
+    "Elder 40 | Adaptation | Brighten Rate"
+    "Elder 40 | Adaptation | Darken Rate"
+    "Elder 40 | Adaptation | Min Luminance"
+    "Elder 40 | Adaptation | Max Luminance")
 set(elder_lens_ui_keys
-    "[Elder 50] Lens | Enabled"
-    "[Elder 50] Lens | Intensity"
-    "[Elder 50] Lens | Ghost Strength"
-    "[Elder 50] Lens | Halo Strength"
-    "[Elder 50] Lens | Energy Cap")
+    "Elder 50 | Lens | Enabled"
+    "Elder 50 | Lens | Intensity"
+    "Elder 50 | Lens | Ghost Strength"
+    "Elder 50 | Lens | Halo Strength"
+    "Elder 50 | Lens | Energy Cap")
 set(elder_optical_ini_files
     enbdepthoffield.fx.ini
     enbbloom.fx.ini
     enbadaptation.fx.ini
     enblens.fx.ini)
 set(elder_prepass_ui_keys
-    "[Elder 10] Prepass | Enabled"
-    "[Elder 10] Prepass | Intensity"
-    "[Elder 10] Prepass | Depth Shape")
+    "Elder 10 | Prepass | Enabled"
+    "Elder 10 | Prepass | Intensity"
+    "Elder 10 | Prepass | Depth Shape")
 set(elder_main_ui_keys
-    "[Elder 60] Main Effect | Enabled"
-    "[Elder 60] Main Effect | Color-Core Intensity"
-    "[Elder 60] Main Effect | Optical Shape")
+    "Elder 60 | Main Effect | Enabled"
+    "Elder 60 | Main Effect | Color-Core Intensity"
+    "Elder 60 | Main Effect | Optical Shape")
 set(elder_postpass_ui_keys
-    "[Elder 70] Postpass | Enabled"
-    "[Elder 70] Postpass | Intensity"
-    "[Elder 70] Postpass | Vignette Strength"
-    "[Elder 70] Postpass | Grain Shape")
+    "Elder 70 | Postpass | Enabled"
+    "Elder 70 | Postpass | Intensity"
+    "Elder 70 | Postpass | Vignette Strength"
+    "Elder 70 | Postpass | Grain Shape")
 set(elder_sunsprite_ui_keys
-    "[Elder 80] Sun Sprite | Enabled"
-    "[Elder 80] Sun Sprite | Intensity"
-    "[Elder 80] Sun Sprite | Disc Shape")
+    "Elder 80 | Sun Sprite | Enabled"
+    "Elder 80 | Sun Sprite | Intensity"
+    "Elder 80 | Sun Sprite | Disc Shape")
 set(elder_underwater_ui_keys
-    "[Elder 90] Underwater | Enabled"
-    "[Elder 90] Underwater | Intensity"
-    "[Elder 90] Underwater | Density Shape")
+    "Elder 90 | Underwater | Enabled"
+    "Elder 90 | Underwater | Intensity"
+    "Elder 90 | Underwater | Density Shape")
 set(elder_non_optical_ini_files
     enbeffectprepass.fx.ini
     enbeffect.fx.ini
@@ -215,61 +215,61 @@ function(elder_expected_optical_keys ini_file out_keys out_section)
 endfunction()
 
 function(elder_optical_numeric_range key out_min out_max)
-    if(key STREQUAL "[Elder 20] Depth of Field | Intensity")
+    if(key STREQUAL "Elder 20 | Depth of Field | Intensity")
         set(minimum 0.0)
         set(maximum 0.45)
-    elseif(key STREQUAL "[Elder 20] Depth of Field | Focus Depth")
+    elseif(key STREQUAL "Elder 20 | Depth of Field | Focus Depth")
         set(minimum 0.01)
         set(maximum 0.99)
-    elseif(key STREQUAL "[Elder 20] Depth of Field | Focus Range")
+    elseif(key STREQUAL "Elder 20 | Depth of Field | Focus Range")
         set(minimum 0.03)
         set(maximum 0.60)
-    elseif(key STREQUAL "[Elder 20] Depth of Field | Foreground Strength")
+    elseif(key STREQUAL "Elder 20 | Depth of Field | Foreground Strength")
         set(minimum 0.0)
         set(maximum 0.60)
-    elseif(key STREQUAL "[Elder 20] Depth of Field | Background Strength")
+    elseif(key STREQUAL "Elder 20 | Depth of Field | Background Strength")
         set(minimum 0.0)
         set(maximum 0.80)
-    elseif(key STREQUAL "[Elder 20] Depth of Field | Max Blur")
+    elseif(key STREQUAL "Elder 20 | Depth of Field | Max Blur")
         set(minimum 0.0)
         set(maximum 1.00)
-    elseif(key STREQUAL "[Elder 30] Bloom | Intensity")
+    elseif(key STREQUAL "Elder 30 | Bloom | Intensity")
         set(minimum 0.0)
         set(maximum 0.45)
-    elseif(key STREQUAL "[Elder 30] Bloom | Highlight Threshold")
+    elseif(key STREQUAL "Elder 30 | Bloom | Highlight Threshold")
         set(minimum 0.70)
         set(maximum 4.00)
-    elseif(key STREQUAL "[Elder 30] Bloom | Soft Knee")
+    elseif(key STREQUAL "Elder 30 | Bloom | Soft Knee")
         set(minimum 0.01)
         set(maximum 1.00)
-    elseif(key STREQUAL "[Elder 30] Bloom | Radius Scale")
+    elseif(key STREQUAL "Elder 30 | Bloom | Radius Scale")
         set(minimum 0.25)
         set(maximum 1.50)
-    elseif(key STREQUAL "[Elder 40] Adaptation | Intensity")
+    elseif(key STREQUAL "Elder 40 | Adaptation | Intensity")
         set(minimum 0.0)
         set(maximum 1.0)
-    elseif(key STREQUAL "[Elder 40] Adaptation | Brighten Rate")
+    elseif(key STREQUAL "Elder 40 | Adaptation | Brighten Rate")
         set(minimum 0.05)
         set(maximum 4.00)
-    elseif(key STREQUAL "[Elder 40] Adaptation | Darken Rate")
+    elseif(key STREQUAL "Elder 40 | Adaptation | Darken Rate")
         set(minimum 0.05)
         set(maximum 4.00)
-    elseif(key STREQUAL "[Elder 40] Adaptation | Min Luminance")
+    elseif(key STREQUAL "Elder 40 | Adaptation | Min Luminance")
         set(minimum 0.001)
         set(maximum 1.00)
-    elseif(key STREQUAL "[Elder 40] Adaptation | Max Luminance")
+    elseif(key STREQUAL "Elder 40 | Adaptation | Max Luminance")
         set(minimum 1.00)
         set(maximum 32.00)
-    elseif(key STREQUAL "[Elder 50] Lens | Intensity")
+    elseif(key STREQUAL "Elder 50 | Lens | Intensity")
         set(minimum 0.0)
         set(maximum 0.30)
-    elseif(key STREQUAL "[Elder 50] Lens | Ghost Strength")
+    elseif(key STREQUAL "Elder 50 | Lens | Ghost Strength")
         set(minimum 0.0)
         set(maximum 0.35)
-    elseif(key STREQUAL "[Elder 50] Lens | Halo Strength")
+    elseif(key STREQUAL "Elder 50 | Lens | Halo Strength")
         set(minimum 0.0)
         set(maximum 0.30)
-    elseif(key STREQUAL "[Elder 50] Lens | Energy Cap")
+    elseif(key STREQUAL "Elder 50 | Lens | Energy Cap")
         set(minimum 0.0)
         set(maximum 0.50)
     else()
@@ -298,7 +298,15 @@ function(elder_validate_optical_ini root tier ini_file)
     set(seen_keys "")
     set(seen_technique FALSE)
     foreach(line IN LISTS lines)
-        if(line STREQUAL "" OR line MATCHES "^;" OR line MATCHES "^\\[[A-Z0-9.]+\\]$")
+        if(line STREQUAL "" OR line MATCHES "^;")
+            continue()
+        endif()
+        # INI readers classify any line opening with '[' as a section header,
+        # so only the expected stage section may ever start with a bracket.
+        if(line MATCHES "^[ \t]*\\[")
+            if(NOT line STREQUAL "${expected_section}")
+                message(FATAL_ERROR "Line would read back as an INI section header: ${tier}/${ini_file}: ${line}")
+            endif()
             continue()
         endif()
         if(line MATCHES "^TECHNIQUE=")
@@ -374,37 +382,37 @@ function(elder_expected_non_optical_keys ini_file out_keys out_section)
 endfunction()
 
 function(elder_non_optical_numeric_range key out_min out_max)
-    if(key STREQUAL "[Elder 10] Prepass | Intensity")
+    if(key STREQUAL "Elder 10 | Prepass | Intensity")
         set(minimum 0.0)
         set(maximum 1.0)
-    elseif(key STREQUAL "[Elder 10] Prepass | Depth Shape")
+    elseif(key STREQUAL "Elder 10 | Prepass | Depth Shape")
         set(minimum 0.0)
         set(maximum 1.0)
-    elseif(key STREQUAL "[Elder 60] Main Effect | Color-Core Intensity")
+    elseif(key STREQUAL "Elder 60 | Main Effect | Color-Core Intensity")
         set(minimum 0.0)
         set(maximum 1.0)
-    elseif(key STREQUAL "[Elder 60] Main Effect | Optical Shape")
+    elseif(key STREQUAL "Elder 60 | Main Effect | Optical Shape")
         set(minimum 0.0)
         set(maximum 1.0)
-    elseif(key STREQUAL "[Elder 70] Postpass | Intensity")
+    elseif(key STREQUAL "Elder 70 | Postpass | Intensity")
         set(minimum 0.0)
         set(maximum 1.0)
-    elseif(key STREQUAL "[Elder 70] Postpass | Vignette Strength")
+    elseif(key STREQUAL "Elder 70 | Postpass | Vignette Strength")
         set(minimum 0.0)
         set(maximum 0.35)
-    elseif(key STREQUAL "[Elder 70] Postpass | Grain Shape")
+    elseif(key STREQUAL "Elder 70 | Postpass | Grain Shape")
         set(minimum 0.0)
         set(maximum 1.0)
-    elseif(key STREQUAL "[Elder 80] Sun Sprite | Intensity")
+    elseif(key STREQUAL "Elder 80 | Sun Sprite | Intensity")
         set(minimum 0.0)
         set(maximum 1.0)
-    elseif(key STREQUAL "[Elder 80] Sun Sprite | Disc Shape")
+    elseif(key STREQUAL "Elder 80 | Sun Sprite | Disc Shape")
         set(minimum 0.0)
         set(maximum 1.0)
-    elseif(key STREQUAL "[Elder 90] Underwater | Intensity")
+    elseif(key STREQUAL "Elder 90 | Underwater | Intensity")
         set(minimum 0.0)
         set(maximum 1.0)
-    elseif(key STREQUAL "[Elder 90] Underwater | Density Shape")
+    elseif(key STREQUAL "Elder 90 | Underwater | Density Shape")
         set(minimum 0.0)
         set(maximum 1.0)
     else()
@@ -433,7 +441,15 @@ function(elder_validate_non_optical_ini root tier ini_file)
     set(seen_keys "")
     set(seen_technique FALSE)
     foreach(line IN LISTS lines)
-        if(line STREQUAL "" OR line MATCHES "^;" OR line MATCHES "^\\[[A-Z0-9.]+\\]$")
+        if(line STREQUAL "" OR line MATCHES "^;")
+            continue()
+        endif()
+        # INI readers classify any line opening with '[' as a section header,
+        # so only the expected stage section may ever start with a bracket.
+        if(line MATCHES "^[ \t]*\\[")
+            if(NOT line STREQUAL "${expected_section}")
+                message(FATAL_ERROR "Line would read back as an INI section header: ${tier}/${ini_file}: ${line}")
+            endif()
             continue()
         endif()
         if(line MATCHES "^TECHNIQUE=")

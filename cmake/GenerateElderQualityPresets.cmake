@@ -329,93 +329,93 @@ foreach(elder_index RANGE 0 4)
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
                 "TECHNIQUE=1\n"
-                "[Elder 20] Depth of Field | Enabled=${elder_dof_enabled}\n"
-                "[Elder 20] Depth of Field | Intensity=${elder_dof_intensity}\n"
-                "[Elder 20] Depth of Field | Focus Depth=${elder_dof_focus_depth}\n"
-                "[Elder 20] Depth of Field | Focus Range=${elder_dof_focus_range}\n"
-                "[Elder 20] Depth of Field | Foreground Strength=${elder_dof_foreground_strength}\n"
-                "[Elder 20] Depth of Field | Background Strength=${elder_dof_background_strength}\n"
-                "[Elder 20] Depth of Field | Max Blur=${elder_dof_max_blur}\n")
+                "Elder 20 | Depth of Field | Enabled=${elder_dof_enabled}\n"
+                "Elder 20 | Depth of Field | Intensity=${elder_dof_intensity}\n"
+                "Elder 20 | Depth of Field | Focus Depth=${elder_dof_focus_depth}\n"
+                "Elder 20 | Depth of Field | Focus Range=${elder_dof_focus_range}\n"
+                "Elder 20 | Depth of Field | Foreground Strength=${elder_dof_foreground_strength}\n"
+                "Elder 20 | Depth of Field | Background Strength=${elder_dof_background_strength}\n"
+                "Elder 20 | Depth of Field | Max Blur=${elder_dof_max_blur}\n")
         elseif(elder_stage STREQUAL "enbbloom.fx")
             string(CONCAT elder_stage_content
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
                 "TECHNIQUE=1\n"
-                "[Elder 30] Bloom | Enabled=${elder_bloom_enabled}\n"
-                "[Elder 30] Bloom | Intensity=${elder_bloom_intensity}\n"
-                "[Elder 30] Bloom | Highlight Threshold=${elder_bloom_threshold}\n"
-                "[Elder 30] Bloom | Soft Knee=${elder_bloom_soft_knee}\n"
-                "[Elder 30] Bloom | Radius Scale=${elder_bloom_radius_scale}\n")
+                "Elder 30 | Bloom | Enabled=${elder_bloom_enabled}\n"
+                "Elder 30 | Bloom | Intensity=${elder_bloom_intensity}\n"
+                "Elder 30 | Bloom | Highlight Threshold=${elder_bloom_threshold}\n"
+                "Elder 30 | Bloom | Soft Knee=${elder_bloom_soft_knee}\n"
+                "Elder 30 | Bloom | Radius Scale=${elder_bloom_radius_scale}\n")
         elseif(elder_stage STREQUAL "enbadaptation.fx")
             string(CONCAT elder_stage_content
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
                 "TECHNIQUE=1\n"
-                "[Elder 40] Adaptation | Enabled=${elder_adaptation_enabled}\n"
-                "[Elder 40] Adaptation | Intensity=${elder_adaptation_intensity}\n"
-                "[Elder 40] Adaptation | Brighten Rate=${elder_adaptation_brighten_rate}\n"
-                "[Elder 40] Adaptation | Darken Rate=${elder_adaptation_darken_rate}\n"
-                "[Elder 40] Adaptation | Min Luminance=${elder_adaptation_min_luminance}\n"
-                "[Elder 40] Adaptation | Max Luminance=${elder_adaptation_max_luminance}\n")
+                "Elder 40 | Adaptation | Enabled=${elder_adaptation_enabled}\n"
+                "Elder 40 | Adaptation | Intensity=${elder_adaptation_intensity}\n"
+                "Elder 40 | Adaptation | Brighten Rate=${elder_adaptation_brighten_rate}\n"
+                "Elder 40 | Adaptation | Darken Rate=${elder_adaptation_darken_rate}\n"
+                "Elder 40 | Adaptation | Min Luminance=${elder_adaptation_min_luminance}\n"
+                "Elder 40 | Adaptation | Max Luminance=${elder_adaptation_max_luminance}\n")
         elseif(elder_stage STREQUAL "enblens.fx")
             string(CONCAT elder_stage_content
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
                 "TECHNIQUE=1\n"
-                "[Elder 50] Lens | Enabled=${elder_lens_enabled}\n"
-                "[Elder 50] Lens | Intensity=${elder_lens_intensity}\n"
-                "[Elder 50] Lens | Ghost Strength=${elder_lens_ghost_strength}\n"
-                "[Elder 50] Lens | Halo Strength=${elder_lens_halo_strength}\n"
-                "[Elder 50] Lens | Energy Cap=${elder_lens_energy_cap}\n")
+                "Elder 50 | Lens | Enabled=${elder_lens_enabled}\n"
+                "Elder 50 | Lens | Intensity=${elder_lens_intensity}\n"
+                "Elder 50 | Lens | Ghost Strength=${elder_lens_ghost_strength}\n"
+                "Elder 50 | Lens | Halo Strength=${elder_lens_halo_strength}\n"
+                "Elder 50 | Lens | Energy Cap=${elder_lens_energy_cap}\n")
         elseif(elder_stage STREQUAL "enbeffectprepass.fx")
             string(CONCAT elder_stage_content
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
                 "TECHNIQUE=1\n"
-                "[Elder 10] Prepass | Enabled=${elder_prepass_enabled}\n"
-                "[Elder 10] Prepass | Intensity=${elder_prepass_intensity}\n"
-                "[Elder 10] Prepass | Depth Shape=${elder_prepass_depth_shape}\n")
+                "Elder 10 | Prepass | Enabled=${elder_prepass_enabled}\n"
+                "Elder 10 | Prepass | Intensity=${elder_prepass_intensity}\n"
+                "Elder 10 | Prepass | Depth Shape=${elder_prepass_depth_shape}\n")
         elseif(elder_stage STREQUAL "enbeffect.fx")
             string(CONCAT elder_stage_content
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
                 "TECHNIQUE=1\n"
-                "[Elder 60] Main Effect | Enabled=${elder_main_enabled}\n"
-                "[Elder 60] Main Effect | Color-Core Intensity=${elder_main_intensity}\n"
-                "[Elder 60] Main Effect | Optical Shape=${elder_main_optical_shape}\n")
+                "Elder 60 | Main Effect | Enabled=${elder_main_enabled}\n"
+                "Elder 60 | Main Effect | Color-Core Intensity=${elder_main_intensity}\n"
+                "Elder 60 | Main Effect | Optical Shape=${elder_main_optical_shape}\n")
         elseif(elder_stage STREQUAL "enbeffectpostpass.fx")
             string(CONCAT elder_stage_content
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
                 "TECHNIQUE=1\n"
-                "[Elder 70] Postpass | Enabled=${elder_postpass_enabled}\n"
-                "[Elder 70] Postpass | Intensity=${elder_postpass_intensity}\n"
-                "[Elder 70] Postpass | Vignette Strength=${elder_postpass_vignette_strength}\n"
-                "[Elder 70] Postpass | Grain Shape=${elder_postpass_grain_shape}\n")
+                "Elder 70 | Postpass | Enabled=${elder_postpass_enabled}\n"
+                "Elder 70 | Postpass | Intensity=${elder_postpass_intensity}\n"
+                "Elder 70 | Postpass | Vignette Strength=${elder_postpass_vignette_strength}\n"
+                "Elder 70 | Postpass | Grain Shape=${elder_postpass_grain_shape}\n")
         elseif(elder_stage STREQUAL "enbsunsprite.fx")
             string(CONCAT elder_stage_content
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
                 "TECHNIQUE=1\n"
-                "[Elder 80] Sun Sprite | Enabled=${elder_sunsprite_enabled}\n"
-                "[Elder 80] Sun Sprite | Intensity=${elder_sunsprite_intensity}\n"
-                "[Elder 80] Sun Sprite | Disc Shape=${elder_sunsprite_disc_shape}\n")
+                "Elder 80 | Sun Sprite | Enabled=${elder_sunsprite_enabled}\n"
+                "Elder 80 | Sun Sprite | Intensity=${elder_sunsprite_intensity}\n"
+                "Elder 80 | Sun Sprite | Disc Shape=${elder_sunsprite_disc_shape}\n")
         elseif(elder_stage STREQUAL "enbunderwater.fx")
             string(CONCAT elder_stage_content
                 "; Elder ENB quality preset\n"
                 "; Tier: ${elder_label} (${elder_tier})\n"
                 "[${elder_stage_section}]\n"
                 "TECHNIQUE=1\n"
-                "[Elder 90] Underwater | Enabled=${elder_underwater_enabled}\n"
-                "[Elder 90] Underwater | Intensity=${elder_underwater_intensity}\n"
-                "[Elder 90] Underwater | Density Shape=${elder_underwater_density_shape}\n")
+                "Elder 90 | Underwater | Enabled=${elder_underwater_enabled}\n"
+                "Elder 90 | Underwater | Intensity=${elder_underwater_intensity}\n"
+                "Elder 90 | Underwater | Density Shape=${elder_underwater_density_shape}\n")
         else()
             message(FATAL_ERROR "Unhandled Elder stage preset: ${elder_stage}")
         endif()
