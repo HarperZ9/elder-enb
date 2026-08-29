@@ -1,7 +1,7 @@
 #define ELDER_STAGE_CAPABILITY ELDER_CAPABILITY_NATIVE
 #define ELDER_STAGE_OWNS_COLOR 1
 #define ELDER_STAGE_OWNS_DEPTH 1
-#define ELDER_STAGE_OWNS_NORMAL 1
+#define ELDER_STAGE_OWNS_NORMAL 0
 #define ELDER_STAGE_OWNS_MASK 1
 #define ELDER_STAGE_OWNS_NATIVE_CELESTIAL_VIEW 1
 #define ELDER_STAGE_OWNS_PREVIOUS_SCALAR_ADAPTATION 0
@@ -76,7 +76,6 @@ float3 SB_Retain(float2 uv)
 
 Texture2D TextureColor;
 Texture2D TextureDepth;
-Texture2D TextureNormal;
 Texture2D TextureMask;
 
 SamplerState Sampler0
@@ -91,8 +90,8 @@ ElderScreenSpaceSample ElderReadPrepassSample(float2 uv)
     return ElderMakeScreenSpaceSample(
         TextureColor.SampleLevel(Sampler0, uv, 0.0).rgb,
         TextureDepth.SampleLevel(Sampler0, uv, 0.0).x,
-        TextureNormal.SampleLevel(Sampler0, uv, 0.0).xyz,
-        TextureMask.SampleLevel(Sampler0, uv, 0.0).x);
+        float3(0.5, 0.5, 1.0),
+        TextureMask.SampleLevel(Sampler0, uv, 0.0).a);
 }
 
 ElderScreenSpaceNeighborhood ElderReadPrepassNeighborhood(
@@ -147,11 +146,14 @@ float4 ElderPrepassMain(ElderStageVSOutput input) : SV_Target
         ElderPrepassRuntimeAvailable(ElderRuntimeRoomLight, ElderRuntimeStatus);
 
     float4 selected = float4(finite_source, source.a);
-    float3 normal_value =
-        TextureNormal.SampleLevel(Sampler0, input.texcoord, 0.0).xyz;
-    float mask_value = TextureMask.SampleLevel(Sampler0, input.texcoord, 0.0).x;
+    // The 0.504 host publishes no normal surface; the neutral encoded
+    // normal keeps the neighborhood shape and the normal edge term at
+    // its true zero.
+    float3 normal_value = float3(0.5, 0.5, 1.0);
+    // The 0.504 prepass mask carries the skinned-object and sss payload
+    // in alpha; red is undocumented.
+    float mask_value = TextureMask.SampleLevel(Sampler0, input.texcoord, 0.0).a;
     float spatial_available = ElderFinite1(raw_depth)
-        && ElderFinite3(normal_value)
         && ElderFinite1(mask_value) ? 1.0 : 0.0;
 
     if (ElderPrepassNativeAvailable() && runtime_available)
@@ -168,11 +170,17 @@ float4 ElderPrepassMain(ElderStageVSOutput input) : SV_Target
     else if (ElderPrepassBridgeAvailable() && runtime_available)
     {
         float3 bridge_source = finite_source + SB_Retain(input.texcoord);
+        // The bridge route runs when a native lane is unavailable. When
+        // the unavailable lane is EInteriorFactor itself, the bridge
+        // interior flag carries the interior state instead.
+        float bridge_interior = ElderFinite1(EInteriorFactor)
+            ? EInteriorFactor
+            : saturate(SB_Interior_Flags.x);
         ElderScreenSpaceNeighborhood neighborhood = ElderReadPrepassNeighborhood(
             input.texcoord, bridge_source, raw_depth, normal_value, mask_value);
         selected.rgb = ElderComposePrepassWithRuntimeAndNeighborhood(
             bridge_source,
-            EInteriorFactor,
+            bridge_interior,
             ElderRuntimeRoomLight,
             ElderRuntimeStatus,
             neighborhood);

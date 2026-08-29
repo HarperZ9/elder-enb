@@ -235,14 +235,13 @@ if(elder_stage_name STREQUAL "enbadaptation.fx")
   endif()
 elseif(elder_stage_name STREQUAL "enbeffectprepass.fx")
   list(LENGTH elder_texture_declarations elder_texture_count)
-  if(NOT elder_texture_count EQUAL 4)
+  if(NOT elder_texture_count EQUAL 3)
     message(FATAL_ERROR
-      "HDR prepass must declare only its current-frame color, depth, normal, and mask inputs")
+      "HDR prepass must declare only its current-frame color, depth, and mask inputs")
   endif()
   foreach(required_texture IN ITEMS
       "Texture2D TextureColor"
       "Texture2D TextureDepth"
-      "Texture2D TextureNormal"
       "Texture2D TextureMask")
     list(FIND elder_texture_declarations "${required_texture}" texture_position)
     if(texture_position EQUAL -1)
