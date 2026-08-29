@@ -55,6 +55,24 @@ float3 ElderLensHighlightOnly(float3 tap_color)
     return finite_color * highlight_scale;
 }
 
+// ScreenSize.z is width over height. A vector measured in 0..1 UV space
+// spans more pixels across than down, so a lens ring built from a UV length
+// draws as a horizontal ellipse. Scaling x by ScreenSize.z moves the vector
+// into a height-normalized space where equal length means equal pixel
+// distance, so a ring built here is a true circle on screen.
+float2 ElderLensAspectVector(float2 uv_vector)
+{
+    return float2(uv_vector.x * ScreenSize.z, uv_vector.y);
+}
+
+// The inverse: a unit direction in that height-normalized space becomes a UV
+// sampling offset by dividing x back out, so a fixed step draws one pixel
+// radius all the way around the ring.
+float2 ElderLensAspectDirectionToUv(float2 aspect_direction)
+{
+    return float2(aspect_direction.x / max(ScreenSize.z, 0.0001), aspect_direction.y);
+}
+
 void ElderAccumulateLensGhost(
     inout float3 accumulated_lens,
     inout float accumulated_weight,
@@ -76,7 +94,8 @@ void ElderAccumulateLensGhost(
         TextureDownsampled.SampleLevel(Sampler0, uv_green, 0.0).g,
         TextureDownsampled.SampleLevel(Sampler0, uv_blue, 0.0).b
             * ElderLensBorderFade(uv_blue));
-    float center_falloff = 1.0 - saturate(length(uv_green - 0.5.xx) * 1.6);
+    float center_falloff = 1.0
+        - saturate(length(ElderLensAspectVector(uv_green - 0.5.xx)) * 1.6);
     float ghost_weight = (1.0 / (ghost_order + 1.0))
         * ElderLensBorderFade(uv_green)
         * center_falloff * center_falloff;
@@ -116,10 +135,14 @@ float4 ElderApplyLens(float2 uv, float4 bloom_source)
     ElderAccumulateLensGhost(accumulated_lens, accumulated_weight, center_vector, 3.0);
 #endif
 
-    float center_distance = length(center_vector);
-    float2 safe_direction = center_distance > 0.0001
-        ? center_vector / center_distance
+    float2 aspect_vector = ElderLensAspectVector(center_vector);
+    float center_distance = length(aspect_vector);
+    float2 aspect_direction = center_distance > 0.0001
+        ? aspect_vector / center_distance
         : float2(0.0, 1.0);
+    // The halo samples at UV offsets, so carry the isotropic direction back
+    // to UV; the ring then sits at one pixel radius all the way around.
+    float2 safe_direction = ElderLensAspectDirectionToUv(aspect_direction);
     // The halo is a ring at a fixed radius from the frame center: every
     // pixel samples the downsampled scene texel displaced toward center by
     // the ring width, and the window lights only the pixels sitting near
