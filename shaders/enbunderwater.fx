@@ -2,7 +2,7 @@
 #define ELDER_STAGE_OWNS_COLOR 1
 #define ELDER_STAGE_OWNS_DEPTH 1
 #define ELDER_STAGE_OWNS_NORMAL 0
-#define ELDER_STAGE_OWNS_MASK 0
+#define ELDER_STAGE_OWNS_MASK 1
 #define ELDER_STAGE_OWNS_NATIVE_CELESTIAL_VIEW 0
 #define ELDER_STAGE_OWNS_PREVIOUS_SCALAR_ADAPTATION 0
 #define ELDER_STAGE_OWNS_BRIDGE_VALUE 0
@@ -23,6 +23,9 @@
 
 Texture2D TextureColor;
 Texture2D TextureDepth;
+// ENB 0.504 underwater interface: TextureMask marks the underwater area of
+// the screen, one at submerged pixels and zero above the surface line.
+Texture2D TextureMask;
 
 SamplerState Sampler0
 {
@@ -41,10 +44,13 @@ float4 ElderUnderwaterMain(ElderStageVSOutput input) : SV_Target
         return float4(ElderFiniteOrBlack(source.rgb), source.a);
     }
     float raw_depth = TextureDepth.SampleLevel(Sampler0, input.texcoord, 0.0).x;
+    float mask_value = TextureMask.SampleLevel(Sampler0, input.texcoord, 0.0).x;
+    float underwater_area = ElderFinite1(mask_value) ? saturate(mask_value) : 0.0;
+    float3 identity = ElderFiniteOrBlack(source.rgb);
     float3 medium = ElderFinite1(raw_depth)
         ? ElderEvaluateUnderwater(input.texcoord, source.rgb, raw_depth)
-        : ElderFiniteOrBlack(source.rgb);
-    return float4(medium, source.a);
+        : identity;
+    return float4(lerp(identity, medium, underwater_area), source.a);
 }
 
 technique11 Draw <string UIName = "Elder [90] Underwater";>

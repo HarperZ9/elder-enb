@@ -301,11 +301,14 @@ elseif(elder_stage_name STREQUAL "enbdepthoffield.fx")
   endif()
 elseif(elder_stage_name STREQUAL "enbunderwater.fx")
   list(LENGTH elder_texture_declarations elder_texture_count)
-  if(NOT elder_texture_count EQUAL 2)
+  if(NOT elder_texture_count EQUAL 3)
     message(FATAL_ERROR
-      "${elder_stage_name} must declare only current-frame color and depth")
+      "${elder_stage_name} must declare only current-frame color, depth, and the underwater area mask")
   endif()
-  foreach(required_texture IN ITEMS "Texture2D TextureColor" "Texture2D TextureDepth")
+  foreach(required_texture IN ITEMS
+      "Texture2D TextureColor"
+      "Texture2D TextureDepth"
+      "Texture2D TextureMask")
     list(FIND elder_texture_declarations "${required_texture}" texture_position)
     if(texture_position EQUAL -1)
       message(FATAL_ERROR "${elder_stage_name} is missing required texture: ${required_texture}")

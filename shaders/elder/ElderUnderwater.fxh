@@ -22,7 +22,6 @@ float3 ElderEvaluateUnderwater(
         return scene;
     }
 
-    float uv_witness = ElderFinite1(uv.x + uv.y) ? 0.0 : 0.0;
     // The linearized depth ramp spans about 3000 world units and a Skyrim
     // meter is about 70 units, so the ramp converts to meters of water
     // between the camera and the surface it sees. The density dial spans
@@ -35,8 +34,7 @@ float3 ElderEvaluateUnderwater(
     float3 transmittance = ElderUnderwaterTransmittance(distance_through_water);
     float3 water_radiance = float3(0.015, 0.075, 0.095);
     float3 medium = scene * transmittance
-        + water_radiance * (1.0.xxx - transmittance)
-        + uv_witness.xxx;
+        + water_radiance * (1.0.xxx - transmittance);
     return ElderFiniteOrBlack(
         lerp(scene, medium, saturate(ElderUnderwaterIntensity)));
 }
