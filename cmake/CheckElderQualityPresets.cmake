@@ -423,6 +423,80 @@ function(elder_non_optical_numeric_range key out_min out_max)
     set(${out_max} "${maximum}" PARENT_SCOPE)
 endfunction()
 
+# The two numeric-range tables above are hand-maintained twins of the
+# UIMin/UIMax annotations in ElderStageParameters.fxh. Parse the header and
+# hold both tables to it in both directions, so a dial retuned in one place
+# cannot drift from the other. Stage dial declarations are single-line by
+# contract; the multi-line Elder 00 shared controls carry no preset key and
+# stay outside this scan.
+set(elder_stage_parameters "${elder_source_dir}/shaders/elder/ElderStageParameters.fxh")
+if(NOT EXISTS "${elder_stage_parameters}")
+    message(FATAL_ERROR "Stage parameter header is absent: ${elder_stage_parameters}")
+endif()
+file(STRINGS "${elder_stage_parameters}" elder_parameter_lines)
+set(elder_parsed_range_keys "")
+foreach(elder_parameter_line IN LISTS elder_parameter_lines)
+    if(elder_parameter_line MATCHES "UIName = \"(Elder [0-9][0-9] \\| [^\"]+)\".*UIMin = (-?[0-9.]+);.*UIMax = (-?[0-9.]+);")
+        set(elder_parsed_key "${CMAKE_MATCH_1}")
+        set(elder_parsed_min "${CMAKE_MATCH_2}")
+        set(elder_parsed_max "${CMAKE_MATCH_3}")
+        list(APPEND elder_parsed_range_keys "${elder_parsed_key}")
+        string(MAKE_C_IDENTIFIER "${elder_parsed_key}" elder_parsed_key_id)
+        set("elder_parsed_min_${elder_parsed_key_id}" "${elder_parsed_min}")
+        set("elder_parsed_max_${elder_parsed_key_id}" "${elder_parsed_max}")
+    endif()
+endforeach()
+set(elder_all_preset_ui_keys
+    ${elder_dof_ui_keys} ${elder_bloom_ui_keys} ${elder_adaptation_ui_keys}
+    ${elder_lens_ui_keys} ${elder_prepass_ui_keys} ${elder_main_ui_keys}
+    ${elder_postpass_ui_keys} ${elder_sunsprite_ui_keys}
+    ${elder_underwater_ui_keys})
+foreach(elder_range_key IN LISTS elder_all_preset_ui_keys)
+    if(elder_range_key MATCHES "\\| (Enabled|Autofocus)$")
+        continue()
+    endif()
+    if(elder_range_key MATCHES "^Elder (2|3|4|5)0 \\| ")
+        elder_optical_numeric_range("${elder_range_key}" elder_table_min elder_table_max)
+    else()
+        elder_non_optical_numeric_range("${elder_range_key}" elder_table_min elder_table_max)
+    endif()
+    list(FIND elder_parsed_range_keys "${elder_range_key}" elder_parsed_position)
+    if(elder_parsed_position EQUAL -1)
+        message(FATAL_ERROR
+            "Range table covers a dial the parameter header does not declare with UIMin/UIMax: ${elder_range_key}")
+    endif()
+    string(MAKE_C_IDENTIFIER "${elder_range_key}" elder_range_key_id)
+    set(elder_parsed_min "${elder_parsed_min_${elder_range_key_id}}")
+    set(elder_parsed_max "${elder_parsed_max_${elder_range_key_id}}")
+    if(NOT elder_parsed_min EQUAL elder_table_min OR NOT elder_parsed_max EQUAL elder_table_max)
+        message(FATAL_ERROR
+            "Numeric range drifts from the header UIMin/UIMax for ${elder_range_key}: table ${elder_table_min}..${elder_table_max}, header ${elder_parsed_min}..${elder_parsed_max}")
+    endif()
+endforeach()
+foreach(elder_parsed_key IN LISTS elder_parsed_range_keys)
+    list(FIND elder_all_preset_ui_keys "${elder_parsed_key}" elder_contract_position)
+    if(elder_contract_position EQUAL -1)
+        message(FATAL_ERROR
+            "Parameter header declares a ranged dial the preset key contract does not cover: ${elder_parsed_key}")
+    endif()
+endforeach()
+
+function(elder_read_preset_value root tier ini_file key out_value)
+    file(STRINGS "${root}/${tier}/${ini_file}" preset_lines)
+    set(found_value "")
+    foreach(preset_line IN LISTS preset_lines)
+        if(preset_line MATCHES "^(.+)=([^;]+)$")
+            if(CMAKE_MATCH_1 STREQUAL "${key}")
+                set(found_value "${CMAKE_MATCH_2}")
+            endif()
+        endif()
+    endforeach()
+    if(found_value STREQUAL "")
+        message(FATAL_ERROR "Ladder key ${key} is absent from ${tier}/${ini_file}")
+    endif()
+    set(${out_value} "${found_value}" PARENT_SCOPE)
+endfunction()
+
 function(elder_validate_non_optical_ini root tier ini_file)
     elder_expected_non_optical_keys("${ini_file}" expected_keys expected_section)
     set(candidate "${root}/${tier}/${ini_file}")
@@ -616,6 +690,43 @@ foreach(elder_root IN ITEMS "${elder_first_root}" "${elder_second_root}")
         foreach(elder_non_optical_file IN LISTS elder_non_optical_ini_files)
             elder_validate_non_optical_ini(
                 "${elder_root}" "${elder_tier}" "${elder_non_optical_file}")
+        endforeach()
+    endforeach()
+endforeach()
+
+# Quality ladder direction: a higher tier must never render less effect.
+# The budget macros are pinned to exact per-tier values above; these dial
+# ladders get a one-way guarantee instead of exact pins so a retune cannot
+# invert the ladder unnoticed. Bloom threshold descends because a lower
+# threshold extracts more highlight. The '@' separator keeps the '|' the
+# UIName keys themselves carry out of CMake list parsing.
+set(elder_ladder_contracts
+    "enbdepthoffield.fx.ini@Elder 20 | Depth of Field | Intensity@ascending"
+    "enblens.fx.ini@Elder 50 | Lens | Energy Cap@ascending"
+    "enbbloom.fx.ini@Elder 30 | Bloom | Highlight Threshold@descending")
+foreach(elder_root IN ITEMS "${elder_first_root}" "${elder_second_root}")
+    foreach(elder_ladder_contract IN LISTS elder_ladder_contracts)
+        string(REPLACE "@" ";" elder_ladder_fields "${elder_ladder_contract}")
+        list(GET elder_ladder_fields 0 elder_ladder_file)
+        list(GET elder_ladder_fields 1 elder_ladder_key)
+        list(GET elder_ladder_fields 2 elder_ladder_direction)
+        set(elder_previous_value "")
+        foreach(elder_tier IN LISTS elder_expected_tiers)
+            elder_read_preset_value("${elder_root}" "${elder_tier}"
+                "${elder_ladder_file}" "${elder_ladder_key}" elder_ladder_value)
+            if(NOT elder_previous_value STREQUAL "")
+                if(elder_ladder_direction STREQUAL "ascending"
+                        AND elder_ladder_value LESS elder_previous_value)
+                    message(FATAL_ERROR
+                        "Quality ladder inverts: ${elder_ladder_key} falls from ${elder_previous_value} to ${elder_ladder_value} at ${elder_tier}")
+                endif()
+                if(elder_ladder_direction STREQUAL "descending"
+                        AND elder_ladder_value GREATER elder_previous_value)
+                    message(FATAL_ERROR
+                        "Quality ladder inverts: ${elder_ladder_key} rises from ${elder_previous_value} to ${elder_ladder_value} at ${elder_tier}")
+                endif()
+            endif()
+            set(elder_previous_value "${elder_ladder_value}")
         endforeach()
     endforeach()
 endforeach()

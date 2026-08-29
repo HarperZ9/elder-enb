@@ -149,6 +149,35 @@ technique11 Focus
     }
 }
 
+// Tier 0 budgets zero rings, and every gather in ElderDepthOfField.fxh
+// compiles to a copy there, so the eight full-resolution members below
+// would spend their passes reproducing the input frame. This guard keeps
+// the walk to one main-chain passthrough at that tier. The fixed name DOF
+// and its UIName survive, so the GUI dropdown and the shipped TECHNIQUE=1
+// key hold across tiers; the RenderTarget annotation goes away because
+// the single member must write the main chain.
+#if ELDER_DOF_RINGS_VALUE == 0
+
+float4 ElderTierZeroPassthroughPixel(ElderStageVSOutput input) : SV_Target
+{
+    return float4(
+        ElderFiniteOrBlack(
+            TextureOriginal.SampleLevel(Sampler0, input.texcoord, 0.0).rgb),
+        1.0);
+}
+
+technique11 DOF <string UIName = "Elder [20] Depth of Field";>
+{
+    pass p0
+    {
+        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
+        SetPixelShader(
+            CompileShader(ps_5_0, ElderTierZeroPassthroughPixel()));
+    }
+}
+
+#else
+
 // The one UIName-bearing member: the GUI dropdown lists it at index one and
 // the shipped TECHNIQUE=1 preset key selects it. Helper members carry no
 // UIName so they never shift that arithmetic.
@@ -223,3 +252,5 @@ technique11 DOF7
         SetPixelShader(CompileShader(ps_5_0, ElderSmoothVerticalPixel()));
     }
 }
+
+#endif  // ELDER_DOF_RINGS_VALUE == 0

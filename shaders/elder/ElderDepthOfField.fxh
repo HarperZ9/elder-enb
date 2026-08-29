@@ -126,6 +126,19 @@ float ElderDepthOfFieldRadiusPixels(float coc)
         * ELDER_DOF_RADIUS_SCALE_PIXELS;
 }
 
+// Ring budget for one gather, scaled to the pixel radius in flight. Rings
+// sit two pixels apart out to the tier bound, which keeps tap density
+// near the bilinear footprint: a six-pixel radius gathers three rings at
+// any tier, and only a radius past twice the tier budget saturates it.
+// The tier cap remains the quality contract; this scaling removes the
+// radius-independent worst case, which at the cinematic tier cost about
+// nine hundred fetches per pixel for every radius above half a pixel.
+uint ElderActiveDofRings(float radius_pixels)
+{
+    uint radius_rings = (uint)ceil(max(radius_pixels, 0.0) * 0.5);
+    return clamp(radius_rings, 1u, ElderDOFRings);
+}
+
 // A tap direction walks the hexagon edge between two adjacent blade
 // vertices, so rings read as bokeh polygons instead of the perfect disc no
 // mechanical iris produces.
@@ -172,7 +185,12 @@ float4 ElderComputeCocTarget(float2 uv)
 // foreground blur ends in a hard edge exactly at the geometry. Seven wide
 // taps take a falloff-weighted maximum along x; the vertical half runs in
 // the merge pass, which cannot read the surface it writes and therefore
-// needs this dedicated scratch lane.
+// needs this dedicated scratch lane. Known reach limit, held for the next
+// playtest: six texels per axis against a gather radius that scales to 48
+// pixels, so a strong foreground blur still meets a coverage edge past
+// the spread. Widening wants quadratically spaced taps at this same tap
+// count, and a reach change moves silhouette appearance, so it ships with
+// an in-game A/B rather than blind.
 float ElderSpreadNearCoc(float2 uv)
 {
 #if ELDER_DOF_RINGS_VALUE == 0
@@ -275,11 +293,12 @@ float4 ElderGatherFarBokeh(float2 uv)
         / (max(max(center_color.r, center_color.g), center_color.b) + 1.0);
     float3 accumulated_color = center_color * center_weight;
     float accumulated_weight = center_weight;
+    uint active_rings = ElderActiveDofRings(radius_pixels);
 
     [loop]
-    for (uint ring_index = 0u; ring_index < ElderDOFRings; ++ring_index)
+    for (uint ring_index = 0u; ring_index < active_rings; ++ring_index)
     {
-        float ring_scale = (float(ring_index) + 1.0) / float(ElderDOFRings);
+        float ring_scale = (float(ring_index) + 1.0) / float(active_rings);
         uint tap_count = (ring_index + 1u) * 6u;
 
         [loop]
@@ -337,11 +356,12 @@ float4 ElderGatherNearBokeh(float2 uv)
     float accumulated_weight = 1.0;
     float accumulated_coverage = saturate(center_near);
     float coverage_count = 1.0;
+    uint active_rings = ElderActiveDofRings(radius_pixels);
 
     [loop]
-    for (uint ring_index = 0u; ring_index < ElderDOFRings; ++ring_index)
+    for (uint ring_index = 0u; ring_index < active_rings; ++ring_index)
     {
-        float ring_scale = (float(ring_index) + 1.0) / float(ElderDOFRings);
+        float ring_scale = (float(ring_index) + 1.0) / float(active_rings);
         uint tap_count = (ring_index + 1u) * 6u;
 
         [loop]

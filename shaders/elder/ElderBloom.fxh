@@ -34,9 +34,12 @@ float ElderBloomLuminance(float3 color)
 // in-game luma contour of the chain input at noon-clear, the brightest
 // scene the host produces, measured the sun disc at 1.2 to 1.45, its
 // fringe at 1.0 to 1.2, near-sun sky at 0.8 to 1.0, and no pixel above
-// 1.45 anywhere in frame. A threshold above the disc range extracts
-// nothing in any scene and the whole chain runs black. The tier presets
-// span 0.75 to 1.00 around that measured range.
+// 1.45 anywhere in frame. That contour predates this branch's sun-sprite
+// energy raise, whose additive disc is bounded at 8.0, so sprite-lit
+// pixels near the sun can now exceed it; the next playtest re-contours
+// this input with the sprite live. A threshold above the rendered range
+// extracts nothing in any scene and the whole chain runs black. The tier
+// presets span 0.75 to 1.00 around the measured range.
 float3 ElderExtractBloomHighlight(float3 color)
 {
     float3 finite_color = ElderFiniteOrBlack(color);
@@ -138,8 +141,8 @@ float4 ElderBloomDownsampleOctave(
 }
 
 // Octave weight for the composite. ElderBloomRadius is the tier's octave
-// budget: the first tier composites the two finest octaves, the reference
-// tier all six. The radius scale dial biases weight toward the coarse
+// budget: the performance tier composites the two finest octaves, the
+// cinematic tier all six. The radius scale dial biases weight toward the coarse
 // octaves, so raising it widens the halo without adding energy, because
 // the composite normalizes the weights.
 float ElderBloomOctaveWeight(uint octave_index)
@@ -192,9 +195,12 @@ float4 ElderApplyBloom(
     // against a plus or minus 2 drift floor. The pyramid dilutes the
     // extracted disc across its octaves and the main effect adds this
     // surface straight to the scene; the 12.0 gain keeps that halo
-    // visible over the daylight sky while the sun disc itself, measured
-    // at 1.45 peak luma, stays far inside the 4.0 contribution bound.
-    // A zero dial still disables the stage.
+    // visible over the daylight sky. The 1.45 disc peak in that receipt
+    // predates the sun-sprite energy raise; with the sprite's additive
+    // disc bounded at 8.0, pixels near the sun can reach the 4.0
+    // contribution cap, which flattens the innermost halo instead of
+    // clipping the frame. The bloom and sprite energy re-tune sits on
+    // the next playtest list. A zero dial still disables the stage.
     float3 contribution_radiance =
         filtered_highlight * (saturate(ElderBloomIntensity) * 12.0);
     return ElderBloomContribution(contribution_radiance, source.a);

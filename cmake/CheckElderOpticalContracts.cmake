@@ -166,7 +166,9 @@ require_elder_optical_tokens(
     "ElderDepthOfFieldMaxBlur"
     "ElderFiniteOrBlack"
     "ElderStageOpticalIdentityWhenDisabled"
-    "for (uint ring_index = 0u; ring_index < ElderDOFRings; ++ring_index)")
+    "ElderActiveDofRings"
+    "clamp(radius_rings, 1u, ElderDOFRings)"
+    "for (uint ring_index = 0u; ring_index < active_rings; ++ring_index)")
 require_elder_optical_tokens(
     "${elder_source_dir}/shaders/elder/ElderBloom.fxh"
     "Elder bloom module"

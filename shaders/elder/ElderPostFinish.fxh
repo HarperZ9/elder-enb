@@ -24,10 +24,12 @@ float3 ElderApplyLdrVignette(float2 uv, float3 display_color)
 float3 ElderApplyFineGrain(float2 uv, float3 display_color)
 {
     float2 pixel = floor(uv * max(ElderScreenResolution(ScreenSize), 1.0.xx));
-    // Peak amplitude is six 8-bit steps. The old peak was a single step,
-    // which no display separates from the terminal dither, so the dial had
-    // no visible effect anywhere in its range. Six steps at full dial reads
-    // as fine photographic grain and zero stays exactly off.
+    // The grain span is six 8-bit steps peak to peak: the hash is
+    // centered, so each pixel moves at most three steps either way at
+    // full dial. The old span was a single step, which no display
+    // separates from the terminal dither, so the dial had no visible
+    // effect anywhere in its range. Six steps at full dial reads as fine
+    // photographic grain and zero stays exactly off.
     float grain = (ElderFinishHash(pixel + float2(71.0, 71.0)) - 0.5)
         * (saturate(ElderPostpassGrainShape) * 6.0 / 255.0);
     return saturate(display_color + grain.xxx);

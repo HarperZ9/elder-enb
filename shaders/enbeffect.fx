@@ -83,6 +83,30 @@ float3 ElderBoundHdrDisplay(float3 color)
     return min(ElderFiniteOrBlack(color), ELDER_HDR_DISPLAY_MAX.xxx);
 }
 
+// Display fallback for frames the Color-Core does not shape: the disabled
+// early-out and the sub-one intensity blend. Extended Reinhard over
+// luminance, anchored on the same 11.2 white point the Color-Core uses,
+// so a disabled suite still hands the display a tonemapped image and a
+// GUI toggle compares grade against grade. The playtest receipt for the
+// prior raw path measured a +72.1 mean-luma wash at Color-Core intensity
+// zero; that wash was untonemapped scene radiance reaching the display.
+static const float ELDER_NEUTRAL_WHITE_POINT = 11.2;
+
+float3 ElderNeutralDisplayTransform(float3 linear_color)
+{
+    float3 bounded = ElderBoundHdrDisplay(linear_color);
+    float luminance =
+        dot(max(bounded, 0.0.xxx), float3(0.2126, 0.7152, 0.0722));
+    if (luminance <= 0.0001)
+    {
+        return saturate(bounded);
+    }
+    float white_sq = ELDER_NEUTRAL_WHITE_POINT * ELDER_NEUTRAL_WHITE_POINT;
+    float mapped =
+        (luminance * (1.0 + luminance / white_sq)) / (1.0 + luminance);
+    return saturate(bounded * (mapped / luminance));
+}
+
 float3 ElderBoundOpticalContribution(float3 contribution)
 {
     // The cap bounds how much radiance one optical surface can add to any
@@ -166,17 +190,25 @@ float4 ElderMainEffectPixel(ElderStageVSOutput input) : SV_Target
         || !ElderNativeActive_ElderMasterEnabled()
         || !ElderNativeSanitize_ElderMasterEnabled())
     {
-        return float4(ElderBoundHdrDisplay(linear_color), 1.0);
+        return float4(ElderNeutralDisplayTransform(linear_color), 1.0);
     }
 
     ElderColorCoreParameters core_parameters =
         ElderBuildNativeColorCoreParameters();
     core_parameters.exposure_ev += ElderMainAutoExposureEv(adaptation_scalar);
     float3 evaluated = ElderEvaluateColorCore(linear_color, core_parameters);
-    float3 mixed = lerp(
-        linear_color,
-        evaluated,
-        saturate(ElderMainEffectIntensity));
+    // Both ends of this blend are display-referred. The scene end passes
+    // through the neutral transform because raw radiance reaches 64 here
+    // and a partial dial blends its end straight into the display image.
+    // At a dial of exactly one the branch returns the Color-Core result
+    // unmodified, which keeps the shipped path receipt-identical.
+    float blend = saturate(ElderMainEffectIntensity);
+    float3 mixed = blend >= 1.0
+        ? evaluated
+        : lerp(
+            ElderNeutralDisplayTransform(linear_color),
+            evaluated,
+            blend);
     return float4(ElderBoundHdrDisplay(mixed), 1.0);
 }
 
@@ -185,7 +217,8 @@ float4 ElderMainEffectPixel(ElderStageVSOutput input) : SV_Target
 // a single UIName technique per stage with TECHNIQUE=1 and renders. Extra
 // UIName-bearing techniques shift that arithmetic, which is how a preset lands
 // on a passthrough instead of the real chain. The suite's own safe path is the
-// early-out inside ElderMainEffectPixel, not a second technique.
+// early-out inside ElderMainEffectPixel, which returns the neutral display
+// transform, not a second technique.
 technique11 Draw <string UIName = "Elder ENB";>
 {
     pass p0

@@ -358,6 +358,29 @@ def _parse_ini(path: Path, expected_section: str) -> dict[str, str]:
     return parsed
 
 
+def _check_knob_ui_names_ini_safe(source_root: Path) -> None:
+    # ENB persists each annotated knob to the stage .fx.ini keyed by its
+    # UIName. A label that opens with '[' reads back as a section header,
+    # and an embedded '=' or ';' splits or comments the saved line, so the
+    # value can never round-trip. Technique-level UINames are exempt: the
+    # host persists technique selection as TECHNIQUE=<index>, never by
+    # label, and every technique annotation sits on its own technique11
+    # line, so stripping those lines leaves exactly the knob annotations.
+    scan_paths = [Path("shaders/elder") / name for name in SUPPORT_INCLUDE_FILES]
+    scan_paths.extend(Path("shaders") / name for name in STAGE_FILES)
+    for scan_path in scan_paths:
+        scan_source = read_public_source(
+            source_root, scan_path, "Elder knob UI scan"
+        ).decode("utf-8")
+        knob_source = re.sub(r"technique11[^\n]*", "", scan_source)
+        for ui_name in re.findall(r'UIName\s*=\s*"([^"]*)"', knob_source):
+            if not re.fullmatch(r"[A-Za-z0-9][^\[\]=;]*", ui_name):
+                raise PackageError(
+                    "UIName cannot round-trip as an INI key in "
+                    f"{scan_path.as_posix()}: {ui_name!r}"
+                )
+
+
 def validate_generated_presets(source_root: Path, generated_root: Path) -> None:
     actual_paths = {
         path.relative_to(generated_root).as_posix()
@@ -372,6 +395,7 @@ def validate_generated_presets(source_root: Path, generated_root: Path) -> None:
             f"unexpected={sorted(actual_paths - expected_paths)}"
         )
 
+    _check_knob_ui_names_ini_safe(source_root)
     parameter_source = read_public_source(
         source_root,
         Path("shaders/elder/ElderStageParameters.fxh"),
@@ -380,13 +404,6 @@ def validate_generated_presets(source_root: Path, generated_root: Path) -> None:
     all_ui_names = re.findall(r'UIName\s*=\s*"([^"]*)"', parameter_source)
     if not all_ui_names:
         raise PackageError("Elder stage UI contract declares no UIName controls")
-    for ui_name in all_ui_names:
-        # ENB persists each knob to the stage .fx.ini keyed by its UIName. A
-        # label that opens with '[' reads back as a section header, and an
-        # embedded '=' or ';' splits or comments the saved line, so the value
-        # can never round-trip.
-        if not re.fullmatch(r"[A-Za-z0-9][^\[\]=;]*", ui_name):
-            raise PackageError(f"UIName cannot round-trip as an INI key: {ui_name!r}")
     ui_names = {
         ui_name for ui_name in all_ui_names if re.match(r"Elder \d{2} \| ", ui_name)
     }

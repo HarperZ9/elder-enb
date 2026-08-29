@@ -173,24 +173,45 @@ endforeach()
 # ENB persists every annotated knob to the stage .fx.ini keyed by its UIName.
 # A label that opens with '[' reads back as a section header and an embedded
 # '=' or ';' splits or comments the saved line, so such a value can never
-# round-trip through ENB's own save format.
-string(REGEX MATCHALL "UIName = \"[^\"]*\"" elder_stage_ui_annotations
-  "${elder_stage_parameter_source}")
-list(LENGTH elder_stage_ui_annotations elder_stage_ui_annotation_count)
-if(elder_stage_ui_annotation_count EQUAL 0)
-  message(FATAL_ERROR "Stage parameters declare no UIName annotations")
-endif()
-foreach(elder_stage_ui_annotation IN LISTS elder_stage_ui_annotations)
-  string(REGEX REPLACE "^UIName = \"(.*)\"$" "\\1" elder_stage_ui_label
-    "${elder_stage_ui_annotation}")
-  if(NOT elder_stage_ui_label MATCHES "^[A-Za-z0-9]")
-    message(FATAL_ERROR
-      "UIName must open with an alphanumeric character to survive as an INI key: ${elder_stage_ui_label}")
+# round-trip through ENB's own save format. Technique-level UINames are
+# exempt: the host persists technique selection as TECHNIQUE=<index>, never
+# by label, so a bracketed dropdown name never reaches an ini. Every
+# technique annotation sits on its own single technique11 line, so stripping
+# those lines leaves exactly the knob annotations. The scan covers every
+# stage source and shader header, not only the parameter contract, because
+# debug knobs in stage files persist through the same save format.
+set(elder_ui_scan_sources
+  shaders/elder/ElderStageParameters.fxh
+  shaders/elder/ElderRuntimeParameters.fxh
+  ${elder_stage_sources})
+foreach(elder_ui_scan_source IN LISTS elder_ui_scan_sources)
+  set(elder_ui_scan_path "${elder_source_dir}/${elder_ui_scan_source}")
+  if(NOT EXISTS "${elder_ui_scan_path}")
+    message(FATAL_ERROR "UIName scan source is absent: ${elder_ui_scan_source}")
   endif()
-  if(elder_stage_ui_label MATCHES "(\\[|\\]|=|;)")
-    message(FATAL_ERROR
-      "UIName cannot round-trip as an INI key with '[', ']', '=', or ';': ${elder_stage_ui_label}")
+  file(READ "${elder_ui_scan_path}" elder_ui_scan_content)
+  string(REGEX REPLACE "technique11 [^\n]*" "" elder_ui_scan_content
+    "${elder_ui_scan_content}")
+  string(REGEX MATCHALL "UIName = \"[^\"]*\"" elder_ui_scan_annotations
+    "${elder_ui_scan_content}")
+  if(elder_ui_scan_source STREQUAL "shaders/elder/ElderStageParameters.fxh")
+    list(LENGTH elder_ui_scan_annotations elder_ui_scan_annotation_count)
+    if(elder_ui_scan_annotation_count EQUAL 0)
+      message(FATAL_ERROR "Stage parameters declare no UIName annotations")
+    endif()
   endif()
+  foreach(elder_ui_scan_annotation IN LISTS elder_ui_scan_annotations)
+    string(REGEX REPLACE "^UIName = \"(.*)\"$" "\\1" elder_ui_scan_label
+      "${elder_ui_scan_annotation}")
+    if(NOT elder_ui_scan_label MATCHES "^[A-Za-z0-9]")
+      message(FATAL_ERROR
+        "UIName must open with an alphanumeric character to survive as an INI key: ${elder_ui_scan_source}: ${elder_ui_scan_label}")
+    endif()
+    if(elder_ui_scan_label MATCHES "(\\[|\\]|=|;)")
+      message(FATAL_ERROR
+        "UIName cannot round-trip as an INI key with '[', ']', '=', or ';': ${elder_ui_scan_source}: ${elder_ui_scan_label}")
+    endif()
+  endforeach()
 endforeach()
 
 file(READ "${elder_compile_script}" elder_compile_script_source)
