@@ -117,7 +117,11 @@ float ElderScreenGeometryConfidence(float raw_depth)
     {
         return 0.0;
     }
-    return 1.0 - ElderDepthMask(raw_depth, 0.995, 0.002);
+    // Linearized view distance from the shared convention, so confidence
+    // fades only at true sky range. The previous raw-device-depth window
+    // put the fade a few meters from the camera and silenced contact
+    // occlusion on nearly the whole frame.
+    return 1.0 - smoothstep(0.95, 0.99, ElderLinearizeDepth(raw_depth));
 }
 
 float ElderNeighborhoodContactSignal(ElderScreenSpaceNeighborhood neighborhood)
@@ -159,6 +163,14 @@ float3 ElderApplyDepthNormalContactOcclusion(
         return scene;
     }
 
+    // Honest null from the 2026-08-28 offline review: with the shipped
+    // tier tables (four to sixteen directions, two to six steps) both
+    // min() terms saturate and this expression folds to exactly 1.0, so
+    // contact occlusion renders identically at every tier and the
+    // zero-budget early-out above cannot fire. Whether the tier axis
+    // should scale this budget or be retired is a rendering decision that
+    // needs an in-game receipt, so the code stays bit-identical here and
+    // the decision sits on the next-playtest list.
     float tier_budget = saturate(
         min(float(ElderAODirections), 4.0) * 0.25
         * min(float(ElderAOSteps), 2.0) * 0.5);
@@ -195,11 +207,17 @@ float3 ElderApplyWeatherAtmosphere(
     }
 
     // A bounded single-step optical-depth approximation inspired by
-    // Rayleigh/Mie/ozone decomposition. This is intentionally not a nested
-    // view/light march and only affects confident exterior sky/far-depth pixels.
+    // Rayleigh/Mie/ozone decomposition. Intentionally not a nested
+    // view/light march. Both gates run in linearized view distance from
+    // the shared convention rather than raw device depth: the aerial ramp
+    // rises across roughly 450 to 2700 units and the sky band sits
+    // against the far plane, so near geometry stays untouched and the
+    // full tint lands only on sky and true distance.
     float exterior = 1.0 - saturate(interior_factor);
-    float sky = ElderDepthMask(raw_depth, 0.995, 0.002);
-    float far_geometry = saturate((raw_depth - 0.92) * 12.5) * (1.0 - sky);
+    float linear_distance = ElderLinearizeDepth(raw_depth);
+    float sky = smoothstep(0.95, 0.99, linear_distance);
+    float far_geometry =
+        smoothstep(0.15, 0.90, linear_distance) * (1.0 - sky);
     float optical_depth = exterior * saturate(sky + far_geometry * 0.35);
     if (optical_depth <= 0.0)
     {

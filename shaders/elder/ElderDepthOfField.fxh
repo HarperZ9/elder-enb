@@ -67,17 +67,21 @@ float ElderMeasureAutofocusDistance()
 #endif
 }
 
-// Resolves the working focus distance in linear far-plane units. A value
-// below zero is the sentinel the measurement pass publishes when nothing
-// usable was in view. Manual focus squares the dial so its travel
-// concentrates in the near field where Skyrim subjects actually stand.
+// Resolves the working focus distance in linear far-plane units. The
+// measurement pass publishes a negative sentinel when nothing usable was
+// in view, and its rejection floor keeps every real measurement at or
+// above 0.001, so a readback of exactly zero can only be an unwritten or
+// cleared focus surface. Anything at or below zero falls through to
+// manual focus, the same boundary ElderResolvedFocusFromTarget uses.
+// Manual focus squares the dial so its travel concentrates in the near
+// field where Skyrim subjects actually stand.
 float ElderResolveFocusDistance(float measured_distance)
 {
     float manual_focus =
         ElderDepthOfFieldFocusDepth * ElderDepthOfFieldFocusDepth;
     if (!ElderDepthOfFieldAutofocus
         || !ElderFinite1(measured_distance)
-        || measured_distance < 0.0)
+        || measured_distance <= 0.0)
     {
         return clamp(manual_focus, 0.0001, 1.0);
     }

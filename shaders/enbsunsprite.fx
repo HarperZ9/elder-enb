@@ -55,8 +55,12 @@ SamplerState Sampler0
 
 #include "elder/ElderSunSprite.fxh"
 
-// Bridge data enriches the native sprite; it never gates it. SB_Sun_NDC
-// carries .xy = NDC, .z = on-screen flag, .w = sun elevation in radians.
+// Bridge absence never gates the sprite: with no bridge data the native
+// path draws from LightParameters alone. A live bridge tints the sprite
+// by elevation and fades it across -0.05..0.02 radians, reaching zero at
+// or below -0.05, so bridge elevation can suppress a sprite the native
+// path would draw. SB_Sun_NDC carries .xy = NDC, .z = on-screen flag,
+// .w = sun elevation in radians.
 bool ElderSunSpriteBridgeAvailable()
 {
     return ElderFinite1(ElderBridgeRenderFrame.x)

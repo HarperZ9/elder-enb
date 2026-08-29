@@ -54,21 +54,14 @@ SamplerState Sampler1
 
 #include "elder/ElderDepthOfField.fxh"
 
-// The measurement technique renders into the host's small focus surface;
-// this quad maps the stage geometry onto its top-left corner so texel zero
-// is always covered no matter which size the host allocates.
-ElderStageVSOutput ElderReadFocusVertex(
-    float3 position : POSITION, float2 texcoord : TEXCOORD0)
-{
-    ElderStageVSOutput output;
-    output.position = float4(
-        position.xy * 0.0625 + float2(-0.9375, 0.9375),
-        position.z,
-        1.0);
-    output.texcoord = texcoord;
-    return output;
-}
-
+// The measurement technique renders through the host's vertex stream at
+// full quad coverage, so every texel of the small focus surface is
+// written at any allocation size, and each covered pixel samples the same
+// fixed measurement points, so texel zero always holds the measured
+// value. A corner quad scaled to one sixteenth was tried here first: its
+// right and bottom edges land exactly on the first pixel center for
+// eight-texel and smaller targets, and the top-left rasterization rule
+// then covers nothing, leaving texel zero at the clear value.
 float4 ElderReadFocusPixel(ElderStageVSOutput input) : SV_Target
 {
     float measured_distance = ElderMeasureAutofocusDistance();
@@ -135,7 +128,7 @@ technique11 ReadFocus
 {
     pass p0
     {
-        SetVertexShader(CompileShader(vs_5_0, ElderReadFocusVertex()));
+        SetVertexShader(CompileShader(vs_5_0, ElderFullscreenVertex()));
         SetPixelShader(CompileShader(ps_5_0, ElderReadFocusPixel()));
     }
 }

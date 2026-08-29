@@ -35,8 +35,10 @@ Texture2D RenderTarget64;
 Texture2D RenderTarget32;
 Texture2D RenderTarget16;
 float4 ScreenSize;
-// Host-owned size of the bloom render chain, packed like ScreenSize:
-// x = width, y = 1/width, z = aspect, w = 1/aspect.
+// Dimensions of TextureDownsampled, the scene feed the chain thresholds,
+// packed like ScreenSize: x = width, y = 1/width, z = aspect, w = 1/aspect.
+// The numbered chain targets are fixed at their literal sizes and never
+// read this value.
 float4 BloomSize;
 
 SamplerState Sampler0

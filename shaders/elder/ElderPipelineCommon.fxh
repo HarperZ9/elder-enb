@@ -46,9 +46,15 @@ float2 ElderScreenResolution(float4 screen_size)
 float ElderDepthMask(float raw_depth, float threshold, float feather)
 {
     float edge = clamp(feather, 0.00001, 0.005);
-    return smoothstep(clamp(threshold, 0.99, 1.0),
-                      min(clamp(threshold, 0.99, 1.0) + edge, 1.0),
-                      raw_depth);
+    float edge0 = clamp(threshold, 0.99, 1.0);
+    float edge1 = min(edge0 + edge, 1.0);
+    // The interval collapses only when the threshold clamps to 1.0, where
+    // smoothstep would divide by zero and flush the mask to zero at the
+    // very depth it should pass. The step branch keeps the zero-width
+    // limit: one at far-plane depth, zero below it.
+    return edge1 > edge0
+        ? smoothstep(edge0, edge1, raw_depth)
+        : step(edge0, raw_depth);
 }
 
 // Skyrim SE viewport depth for this host projects roughly 1..3000 units into

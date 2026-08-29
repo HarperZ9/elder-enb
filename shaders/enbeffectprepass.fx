@@ -68,7 +68,10 @@ float3 SB_Retain(float2 uv)
     float4 sink =
         SB_Render_Frame + SB_Interior_Flags + SB_Interior_Ambient + SB_Interior_DirColor;
     float retain_scale = Timer.x < -1.0e15 ? 0.0001 : 0.0;
-    return sink.rgb * uv.x * retain_scale;
+    // Host-fed lanes can carry non-finite values; the finite guard keeps
+    // the sink exactly zero even then, so the retention term never taints
+    // the frame.
+    return ElderFiniteOrBlack(sink.rgb) * uv.x * retain_scale;
 }
 
 Texture2D TextureColor;
