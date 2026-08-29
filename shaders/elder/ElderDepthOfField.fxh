@@ -186,15 +186,17 @@ float4 ElderComputeCocTarget(float2 uv)
 }
 
 // Near-field CoC must spread outward past the subject silhouette or the
-// foreground blur ends in a hard edge exactly at the geometry. Seven wide
-// taps take a falloff-weighted maximum along x; the vertical half runs in
-// the merge pass, which cannot read the surface it writes and therefore
-// needs this dedicated scratch lane. Known reach limit, held for the next
-// playtest: six texels per axis against a gather radius that scales to 48
-// pixels, so a strong foreground blur still meets a coverage edge past
-// the spread. Widening wants quadratically spaced taps at this same tap
-// count, and a reach change moves silhouette appearance, so it ships with
-// an in-game A/B rather than blind.
+// foreground blur ends in a hard edge exactly at the geometry. Each axis
+// takes a cone-weighted maximum over dense one-texel taps: a tap's near
+// CoC votes with full weight at its own pixel and falls linearly to zero
+// at its own blur radius, the exact separable form of the reach a
+// silhouette needs. The vertical half runs in the merge pass, which
+// cannot read the surface it writes and therefore needs this dedicated
+// scratch lane. Two honest limits, held for the next playtest: reach
+// caps at twelve texels per axis against a blur radius that scales to
+// 48 pixels, so an extreme foreground blur still meets a coverage edge
+// past the spread; and the border clamp resamples the edge texel, which
+// under-spreads silhouettes touching the frame edge.
 float ElderSpreadNearCoc(float2 uv)
 {
 #if ELDER_DOF_RINGS_VALUE == 0
@@ -208,16 +210,18 @@ float ElderSpreadNearCoc(float2 uv)
     float spread_value = 0.0;
 
     [loop]
-    for (int tap_index = -3; tap_index <= 3; ++tap_index)
+    for (int tap_index = -12; tap_index <= 12; ++tap_index)
     {
         float2 tap_uv = saturate(
-            uv + float2(float(tap_index) * 2.0 * texel_size.x, 0.0));
-        float tap_near =
+            uv + float2(float(tap_index) * texel_size.x, 0.0));
+        float tap_raw =
             RenderTargetRGBA32.SampleLevel(Sampler0, tap_uv, 0.0).y;
-        float tap_falloff = exp(-abs(float(tap_index)) * 0.5);
-        spread_value = max(
-            spread_value,
-            ElderFinite1(tap_near) ? tap_near * tap_falloff : 0.0);
+        float tap_near = ElderFinite1(tap_raw) ? tap_raw : 0.0;
+        float tap_reach = ElderDepthOfFieldRadiusPixels(tap_near);
+        float tap_weight = saturate(
+            1.0 - abs(float(tap_index))
+                / max(tap_reach, ELDER_DOF_MIN_RADIUS_PIXELS));
+        spread_value = max(spread_value, tap_near * tap_weight);
     }
     return spread_value;
 #endif
@@ -247,16 +251,18 @@ float4 ElderMergeNearCoc(float2 uv)
     float spread_value = 0.0;
 
     [loop]
-    for (int tap_index = -3; tap_index <= 3; ++tap_index)
+    for (int tap_index = -12; tap_index <= 12; ++tap_index)
     {
         float2 tap_uv = saturate(
-            uv + float2(0.0, float(tap_index) * 2.0 * texel_size.y));
-        float tap_near =
+            uv + float2(0.0, float(tap_index) * texel_size.y));
+        float tap_raw =
             RenderTargetR16F.SampleLevel(Sampler0, tap_uv, 0.0).x;
-        float tap_falloff = exp(-abs(float(tap_index)) * 0.5);
-        spread_value = max(
-            spread_value,
-            ElderFinite1(tap_near) ? tap_near * tap_falloff : 0.0);
+        float tap_near = ElderFinite1(tap_raw) ? tap_raw : 0.0;
+        float tap_reach = ElderDepthOfFieldRadiusPixels(tap_near);
+        float tap_weight = saturate(
+            1.0 - abs(float(tap_index))
+                / max(tap_reach, ELDER_DOF_MIN_RADIUS_PIXELS));
+        spread_value = max(spread_value, tap_near * tap_weight);
     }
 
     float merged_near = max(spread_value, coc.y);
