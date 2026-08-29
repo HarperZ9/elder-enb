@@ -1,3 +1,6 @@
+#ifndef ELDER_QUALITY_FXH
+#define ELDER_QUALITY_FXH
+
 #include "elder/ElderTier.fxh"
 
 #if ELDER_QUALITY_TIER < 0 || ELDER_QUALITY_TIER > 4
@@ -48,6 +51,11 @@ static const uint ElderQualityTier = ELDER_QUALITY_TIER;
 #define ELDER_ROOM_LIGHT_REFINEMENT_VALUE 2
 #endif
 
+// Reserved budget axes. No shader consumes ElderSSRSteps or
+// ElderRoomLightRefinement in this release. Reflections stay identity and
+// the room light lift in ElderPrepassCore.fxh uses fixed coefficients at
+// every tier. The values stay pinned so the ini metadata, the manifest,
+// and the tier probe remain one ladder when an implementation lands.
 static const uint ElderAODirections = ELDER_AO_DIRECTIONS_VALUE;
 static const uint ElderAOSteps = ELDER_AO_STEPS_VALUE;
 static const uint ElderSSRSteps = ELDER_SSR_STEPS_VALUE;
@@ -55,3 +63,5 @@ static const uint ElderDOFRings = ELDER_DOF_RINGS_VALUE;
 static const uint ElderBloomRadius = ELDER_BLOOM_RADIUS_VALUE;
 static const uint ElderLensGhosts = ELDER_LENS_GHOSTS_VALUE;
 static const uint ElderRoomLightRefinement = ELDER_ROOM_LIGHT_REFINEMENT_VALUE;
+
+#endif  // ELDER_QUALITY_FXH

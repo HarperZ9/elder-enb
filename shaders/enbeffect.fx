@@ -85,8 +85,9 @@ float3 ElderBoundHdrDisplay(float3 color)
 
 // Display fallback for frames the Color-Core does not shape: the disabled
 // early-out and the sub-one intensity blend. Extended Reinhard over
-// luminance, anchored on the same 11.2 white point the Color-Core uses,
-// so a disabled suite still hands the display a tonemapped image and a
+// luminance, anchored on 11.2, the shipped default of the Color-Core
+// white point dial, so a disabled suite still hands the display a
+// tonemapped image and a
 // GUI toggle compares grade against grade. The playtest receipt for the
 // prior raw path measured a +72.1 mean-luma wash at Color-Core intensity
 // zero; that wash was untonemapped scene radiance reaching the display.

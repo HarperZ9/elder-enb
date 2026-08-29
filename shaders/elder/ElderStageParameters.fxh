@@ -5,6 +5,9 @@
 #error Elder stage must select ELDER_STAGE_PARAMETER_SLOT before including ElderStageParameters.fxh
 #endif
 
+// ENB stores annotated parameters per effect file. Every stage compiles its
+// own copy of this toggle into its own ini section, so a full suite
+// shutdown requires setting it false in each of the nine stage files.
 bool ElderSuiteEnabled
 <
     string UIName = "Elder 00 | Master | Suite Enabled";

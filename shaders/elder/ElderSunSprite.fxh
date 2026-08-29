@@ -9,7 +9,7 @@
 // visibility come from the caller; this function only shapes the disc and
 // halo. uv and sun_uv are screen UV with y down; aspect (width/height)
 // corrects the x axis so the disc stays circular on any resolution. The
-// result is HDR scene light added on top of the frame, bounded below 8.0.
+// result is HDR scene light added on top of the frame, clamped to at most 8.0.
 float3 ElderEvaluateSunSprite(
     float2 uv,
     float2 sun_uv,

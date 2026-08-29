@@ -98,7 +98,8 @@ foreach(elder_index RANGE 0 4)
         "DOFRings=${elder_dof_rings}\n"
         "BloomRadius=${elder_bloom_radius}\n"
         "LensGhosts=${elder_lens_ghosts}\n"
-        "RoomLightRefinement=${elder_room_light_refinement}\n")
+        "RoomLightRefinement=${elder_room_light_refinement}\n"
+        "; SSRSteps and RoomLightRefinement are reserved budgets, not consumed by shaders in this release\n")
     file(WRITE "${elder_tier_dir}/elder-quality.ini" "${elder_quality_content}")
 
     set(elder_tier_include_dir "${elder_tier_dir}/enbseries/elder")
