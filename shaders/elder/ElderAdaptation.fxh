@@ -61,6 +61,17 @@ float ElderUpdateAdaptedLuminance(
     float target = ElderFinite1(measured_luminance) && measured_luminance > 0.0
         ? clamp(measured_luminance, min_luminance, max_luminance)
         : ElderAdaptationNeutralLuminance();
+    // Intensity scales the distance in stops between the neutral anchor
+    // and the adaptation target, so the dial weakens the published steer
+    // at steady state. A value of one leaves the measured target at its
+    // clamped value up to exp2 and log2 intrinsic precision. The old form
+    // multiplied the response rate by Intensity, but lerp toward a fixed
+    // target converges to that target for any positive response, so the
+    // dial had no steady-state effect at all.
+    float neutral = ElderAdaptationNeutralLuminance();
+    float strength = saturate(ElderAdaptationIntensity);
+    target = clamp(neutral * exp2(strength * log2(target / neutral)),
+        min_luminance, max_luminance);
     float history = ElderSeedAdaptationHistory(measured_luminance, previous_luminance);
     float delta = ElderFinite1(delta_seconds)
         ? clamp(delta_seconds, 0.0, 0.25)
@@ -68,8 +79,7 @@ float ElderUpdateAdaptedLuminance(
     float rate = target > history
         ? max(ElderAdaptationBrightenRate, 0.0)
         : max(ElderAdaptationDarkenRate, 0.0);
-    float response = saturate(1.0 - exp2(-rate * delta))
-        * saturate(ElderAdaptationIntensity);
+    float response = saturate(1.0 - exp2(-rate * delta));
     float adapted = lerp(history, target, response);
     return ElderFinite1(adapted) ? clamp(adapted, min_luminance, max_luminance) : history;
 }
