@@ -210,7 +210,7 @@ require_elder_optical_tokens(
     "Elder lens module"
     "ElderApplyLens"
     "ElderLensGhosts"
-    "TextureBloom"
+    "TextureDownsampled"
     "ElderLensEnergyCap"
     "ElderNeutralLensScratch"
     "ElderLensContribution"
@@ -261,7 +261,7 @@ require_elder_optical_tokens(
     "${elder_source_dir}/shaders/enblens.fx"
     "Elder lens stage"
     "#include \"elder/ElderLens.fxh\""
-    "Texture2D TextureBloom"
+    "Texture2D TextureDownsampled"
     "return ElderApplyLens")
 forbid_elder_optical_tokens(
     "${elder_source_dir}/shaders/enblens.fx"
@@ -271,7 +271,7 @@ forbid_elder_optical_tokens(
 file(READ "${elder_source_dir}/shaders/enblens.fx" elder_lens_stage_source)
 string(FIND "${elder_lens_stage_source}" "Texture2D TextureColor" elder_lens_raw_scene_position)
 if(NOT elder_lens_raw_scene_position EQUAL -1)
-    message(FATAL_ERROR "Lens stage must consume TextureBloom rather than raw TextureColor")
+    message(FATAL_ERROR "Lens stage must consume TextureDownsampled rather than raw TextureColor")
 endif()
 
 set(elder_generator "${elder_source_dir}/cmake/GenerateElderQualityPresets.cmake")

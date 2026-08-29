@@ -21,12 +21,18 @@
 #include "elder/ElderStageParameters.fxh"
 #include "elder/ElderPipelineCommon.fxh"
 
-Texture2D TextureBloom;
+// ENB 0.504 lens interface: the host binds TextureDownsampled here, the
+// same square downsampled HDR scene feed the bloom chain thresholds. It
+// does not bind TextureBloom at this stage, and an unbound ps_5_0 view
+// reads zero, so a lens stage declaring one renders black on every path.
+Texture2D TextureDownsampled;
 float4 ScreenSize;
 
+// Linear filtering: every ghost and halo tap lands between texels of the
+// square scene feed at display resolution.
 SamplerState Sampler0
 {
-    Filter = MIN_MAG_MIP_POINT;
+    Filter = MIN_MAG_MIP_LINEAR;
     AddressU = Clamp;
     AddressV = Clamp;
 };
@@ -35,7 +41,7 @@ SamplerState Sampler0
 
 float4 ElderLensMain(ElderStageVSOutput input) : SV_Target
 {
-    float4 source = TextureBloom.Sample(Sampler0, input.texcoord);
+    float4 source = TextureDownsampled.Sample(Sampler0, input.texcoord);
     return ElderApplyLens(input.texcoord, source);
 }
 

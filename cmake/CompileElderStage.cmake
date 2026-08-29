@@ -349,9 +349,9 @@ elseif(elder_stage_name STREQUAL "enbbloom.fx")
 elseif(elder_stage_name STREQUAL "enblens.fx")
   list(LENGTH elder_texture_declarations elder_texture_count)
   if(NOT elder_texture_count EQUAL 1
-      OR NOT "${elder_texture_declarations}" STREQUAL "Texture2D TextureBloom")
+      OR NOT "${elder_texture_declarations}" STREQUAL "Texture2D TextureDownsampled")
     message(FATAL_ERROR
-      "Lens stage must declare only the TextureBloom source supplied by ENB")
+      "Lens stage must declare only the TextureDownsampled source supplied by ENB")
   endif()
   string(FIND "${elder_stage_contents}" "Texture2D TextureColor" elder_lens_texture_color_position)
   if(NOT elder_lens_texture_color_position EQUAL -1)

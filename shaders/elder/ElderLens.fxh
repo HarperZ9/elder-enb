@@ -30,6 +30,31 @@ float ElderLensBorderFade(float2 tap_uv)
     return interior.x * interior.y;
 }
 
+// The lens source is the raw downsampled HDR scene, not a thresholded
+// bloom surface, so ghosting it directly would veil the frame with an
+// inverted copy of ordinary scene content. This extraction is the same
+// soft-knee family as ElderExtractBloomHighlight, anchored on the same
+// receipted noon contour of this feed: the sun disc metered 1.2 to 1.45
+// and near-sun sky stayed under 1.0, so the fixed 1.0 threshold passes
+// the disc and fringe while ordinary scene contributes exactly zero. The
+// sun-sprite raise can push sprite-lit pixels past that contour, and
+// those are intended ghost sources.
+float3 ElderLensHighlightOnly(float3 tap_color)
+{
+    float3 finite_color = ElderFiniteOrBlack(tap_color);
+    float luma = dot(max(finite_color, 0.0.xxx), float3(0.2126, 0.7152, 0.0722));
+    float above_threshold = max(luma - 1.0, 0.0);
+    if (above_threshold <= 0.0)
+    {
+        return 0.0.xxx;
+    }
+    float soft_knee = above_threshold * above_threshold
+        / max(above_threshold + 0.25, 0.001);
+    float highlight_scale = saturate((above_threshold + soft_knee)
+        / max(luma, 0.001));
+    return finite_color * highlight_scale;
+}
+
 void ElderAccumulateLensGhost(
     inout float3 accumulated_lens,
     inout float accumulated_weight,
@@ -43,15 +68,19 @@ void ElderAccumulateLensGhost(
     float2 uv_red = 0.5.xx - center_vector * (ghost_scale * (1.0 - dispersion));
     float2 uv_green = 0.5.xx - center_vector * ghost_scale;
     float2 uv_blue = 0.5.xx - center_vector * (ghost_scale * (1.0 + dispersion));
+    // Each chromatic tap fades on its own exit so a border texel cannot
+    // smear through the two taps still inside the frame.
     float3 ghost_color = float3(
-        TextureBloom.SampleLevel(Sampler0, uv_red, 0.0).r,
-        TextureBloom.SampleLevel(Sampler0, uv_green, 0.0).g,
-        TextureBloom.SampleLevel(Sampler0, uv_blue, 0.0).b);
+        TextureDownsampled.SampleLevel(Sampler0, uv_red, 0.0).r
+            * ElderLensBorderFade(uv_red),
+        TextureDownsampled.SampleLevel(Sampler0, uv_green, 0.0).g,
+        TextureDownsampled.SampleLevel(Sampler0, uv_blue, 0.0).b
+            * ElderLensBorderFade(uv_blue));
     float center_falloff = 1.0 - saturate(length(uv_green - 0.5.xx) * 1.6);
     float ghost_weight = (1.0 / (ghost_order + 1.0))
         * ElderLensBorderFade(uv_green)
         * center_falloff * center_falloff;
-    accumulated_lens += ElderFiniteOrBlack(ghost_color) * ghost_weight;
+    accumulated_lens += ElderLensHighlightOnly(ghost_color) * ghost_weight;
     accumulated_weight += 1.0 / (ghost_order + 1.0);
 }
 
@@ -92,19 +121,20 @@ float4 ElderApplyLens(float2 uv, float4 bloom_source)
         ? center_vector / center_distance
         : float2(0.0, 1.0);
     // The halo is a ring at a fixed radius from the frame center: every
-    // pixel samples the bloom texel displaced toward center by the ring
-    // width, and the window lights only the pixels sitting near that
-    // radius, so bright sources smear into a circle instead of a smudge.
+    // pixel samples the downsampled scene texel displaced toward center by
+    // the ring width, and the window lights only the pixels sitting near
+    // that radius, so bright sources smear into a circle instead of a
+    // smudge.
     float halo_width = 0.22;
     float2 halo_uv = uv - safe_direction * halo_width;
     float3 halo_color = float3(
-        TextureBloom.SampleLevel(
+        TextureDownsampled.SampleLevel(
             Sampler0, uv - safe_direction * (halo_width * 0.985), 0.0).r,
-        TextureBloom.SampleLevel(Sampler0, halo_uv, 0.0).g,
-        TextureBloom.SampleLevel(
+        TextureDownsampled.SampleLevel(Sampler0, halo_uv, 0.0).g,
+        TextureDownsampled.SampleLevel(
             Sampler0, uv - safe_direction * (halo_width * 1.015), 0.0).b);
     float ring_window = 1.0 - saturate(abs(center_distance - halo_width) * 4.0);
-    float3 windowed_halo = ElderFiniteOrBlack(halo_color)
+    float3 windowed_halo = ElderLensHighlightOnly(halo_color)
         * ring_window * ring_window * ElderLensBorderFade(halo_uv);
 
     float3 filtered_lens = accumulated_lens / max(accumulated_weight, 0.0001);
