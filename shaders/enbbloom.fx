@@ -106,12 +106,17 @@ float4 ElderBloomMain(ElderStageVSOutput input) : SV_Target
         RenderTarget256.SampleLevel(Sampler1, input.texcoord, 0.0).rgb;
     float3 octave_128 =
         RenderTarget128.SampleLevel(Sampler1, input.texcoord, 0.0).rgb;
-    float3 octave_64 =
-        RenderTarget64.SampleLevel(Sampler1, input.texcoord, 0.0).rgb;
-    float3 octave_32 =
-        RenderTarget32.SampleLevel(Sampler1, input.texcoord, 0.0).rgb;
-    float3 octave_16 =
-        RenderTarget16.SampleLevel(Sampler1, input.texcoord, 0.0).rgb;
+    // The three fine octaves keep one bilinear tap each: at composite
+    // resolution their reconstruction is already smooth, and tenting
+    // them would only soften the receipted bloom core. The three coarse
+    // octaves route through the tent to attenuate the diamond star their
+    // large magnification would otherwise print around strong highlights.
+    float3 octave_64 = ElderBloomTentSampleOctave(
+        RenderTarget64, Sampler1, input.texcoord, 1.0 / 64.0);
+    float3 octave_32 = ElderBloomTentSampleOctave(
+        RenderTarget32, Sampler1, input.texcoord, 1.0 / 32.0);
+    float3 octave_16 = ElderBloomTentSampleOctave(
+        RenderTarget16, Sampler1, input.texcoord, 1.0 / 16.0);
     return ElderApplyBloom(source, octave_512, octave_256, octave_128,
         octave_64, octave_32, octave_16);
 }

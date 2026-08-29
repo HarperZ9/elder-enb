@@ -140,6 +140,44 @@ float4 ElderBloomDownsampleOctave(
     return float4(ElderBloomBoundChain(gathered), 1.0);
 }
 
+// Composite-side resample for the coarse octaves. One bilinear tap
+// magnifies the 16 to 64 targets by 16x to 64x at composite resolution,
+// and pure bilinear reconstruction of so few texels prints a diamond
+// star around any strong highlight. A 3x3 tent at one octave texel of
+// spacing equals the same bilinear upsample of the octave presmoothed by
+// a 1-2-1 binomial per axis: it attenuates the first-order diamond
+// gradient about four times per axis and widens support to four octave
+// texels; it does not remove the artifact class. The weights sum to
+// exactly one, so octave energy entering the receipted composite model
+// is unchanged, and every input is already chain-bounded, so the convex
+// combination needs no fresh clamp.
+float3 ElderBloomTentSampleOctave(
+    Texture2D octave_source, SamplerState chain_sampler,
+    float2 uv, float octave_texel)
+{
+    static const float2 tent_offsets[9] = {
+        float2(-1.0, -1.0), float2(0.0, -1.0), float2(1.0, -1.0),
+        float2(-1.0,  0.0), float2(0.0,  0.0), float2(1.0,  0.0),
+        float2(-1.0,  1.0), float2(0.0,  1.0), float2(1.0,  1.0)
+    };
+    static const float tent_weights[9] = {
+        0.0625, 0.1250, 0.0625,
+        0.1250, 0.2500, 0.1250,
+        0.0625, 0.1250, 0.0625
+    };
+
+    float3 gathered = 0.0.xxx;
+    [unroll]
+    for (uint tent_index = 0u; tent_index < 9u; ++tent_index)
+    {
+        gathered += octave_source.SampleLevel(
+            chain_sampler,
+            saturate(uv + tent_offsets[tent_index] * octave_texel),
+            0.0).rgb * tent_weights[tent_index];
+    }
+    return gathered;
+}
+
 // Octave weight for the composite. ElderBloomRadius is the tier's octave
 // budget: the performance tier composites the two finest octaves, the
 // cinematic tier all six. The radius scale dial biases weight toward the coarse
@@ -199,7 +237,9 @@ float4 ElderApplyBloom(
     // predates the sun-sprite energy raise; with the sprite's additive
     // disc bounded at 8.0, pixels near the sun can reach the 4.0
     // contribution cap, which flattens the innermost halo instead of
-    // clipping the frame. The bloom and sprite energy re-tune sits on
+    // clipping the frame. The coarse-octave tent resample also postdates
+    // that receipt and smooths the halo contour at the coarse end. The
+    // bloom and sprite energy re-tune plus the tent re-contour sit on
     // the next playtest list. A zero dial still disables the stage.
     float3 contribution_radiance =
         filtered_highlight * (saturate(ElderBloomIntensity) * 12.0);
