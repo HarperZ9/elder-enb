@@ -1,5 +1,7 @@
 # Elder ENB
 
+<img src="docs/art/elder-enb-header.svg" alt="Elder ENB, an ENBSeries 0.504 shader suite for Skyrim, with its release harness. Declare every input, or the stage does not compile.">
+
 Elder ENB is an independently authored ENBSeries 0.504 shader-suite and
 release-harness project for Skyrim Special Edition / Anniversary Edition. The
 public release target is a restrained, professional, cinematic baseline: one
@@ -12,6 +14,8 @@ final public archive and checksum are produced, inspected, and recorded; live
 ENB 0.504 acceptance is recorded at minimum for Performance, Balanced, and
 Cinematic; selected no-runtime / missing-runtime checks are recorded; and any
 media or visual claims are backed by labeled real in-game captures.
+
+<img src="docs/art/suite-table.svg" alt="A table of thirteen rows: what the suite declares, how many of it there are, and where each number is read from. There are five quality tiers and seven knobs resolve per tier. Each tier generates eleven installed files. The compile matrix is nine stages by five tiers, so forty-five compilations, and eight negative fixtures have to fail alongside them. A stage must make seventeen contract declarations before it compiles at all. The capability ladder has four rungs. The native parameter schema carries sixteen rows, the runtime publishes three hidden float4 keys, and the publication machine has eleven phases. Packaging refuses the payload on any of fifty-two rules. Forty CTest targets are declared across three CMake files. No live ENBSeries 0.504 acceptance is recorded anywhere in the tree, so nothing here is evidence about how the suite looks in the game.">
 
 ## Public release architecture
 
@@ -36,6 +40,8 @@ the ordered nine-stage shader contract above, with the current implementation
 kept identity-preserving where a later visual payload has not yet been accepted.
 
 ## Quality tiers
+
+<img src="docs/art/tier-to-archive.svg" alt="Eight stages taking a quality tier to an installed preset: tier row, generator, stage ini, tier header, compile, refusals, package, archive. The canonical manifest is a five-row table with ten fields per row, and the generator raises a fatal error rather than guessing when a row is short, misordered or non-canonical. Each tier produces eleven files: one quality ini, one tier include that carries the budgets, and nine per-stage ini files. Every stage ini writes TECHNIQUE=1 directly under its stage section, because without that key ENB falls back to its own internal default shader and none of the Elder passes render at all. Seven knobs resolve per tier: ambient occlusion directions and steps, screen-space reflection steps, depth of field rings, bloom radius, lens ghosts and room light refinement. The same seven are declared twice, once as columns in the manifest and once as preprocessor arms in the shader header, and a change to one alone is caught as disagreement. Nine ENB stage effects are then compiled once per tier for forty-five builds: prepass, depth of field, bloom, adaptation, lens, main effect, postpass, sun sprite and underwater. Eight negative fixtures edit a stage source and each has to be rejected, covering full-frame history, object motion, foreign scratch reads, scratch treated as history, cross-effect alpha packing, non-adaptation previous-texture reads, a false resource declaration and a synthesized vertex stage. Packaging validates the source payload against fifty-two refusal rules spanning forbidden path components, name markers, binary suffixes, ENB binary names and secret patterns. Three outcomes: every stage compiles at every tier, a compiled shader is not an accepted one, and a tier outside zero through four is refused.">
 
 `config/quality-tiers.csv` defines five quality tiers, and
 `shaders/elder/ElderQuality.fxh` defaults `ELDER_QUALITY_TIER` to `1`
@@ -64,6 +70,8 @@ identity/unshipped until an implementation is integrated, accepted, and recorded
 in the final archive evidence.
 
 ## Capability ladder and fail-closed behavior
+
+<img src="docs/art/capability-ladder.svg" alt="Eight stages resolving one shader input: stage header, capability level, ownership, scratch, native, bridge, spatial, identity. Every Elder stage must define seventeen contract macros before it includes the shared header, and a missing one raises a compile error naming the declaration that is absent. The capability level is one of four rungs, ordered identity, spatial, bridge, native, and a stage that declares an input above its own level is refused. Ownership is declared per surface: colour, depth, normal, mask, the native celestial and view inputs, the previous scalar adaptation, and the bridge value. Current-frame scratch has ten named surfaces, and a stage may read only the one it owns. Resolution then descends the ladder. The native route is taken first when the stage declares a native input and that input reports availability. The bridge route is a versioned SkyrimBridge-compatible value, one rung down. The spatial route is a bounded reconstruction from what is already drawn. When no route has confidence, the stage returns the exact Elder-authored identity pixel. Full-frame history, object motion, scratch treated as history and cross-effect alpha packing are each refused outright in this release. Three outcomes: a declared input answered on the native or bridge route, a bounded spatial fallback that is named as a fallback, and the authored pixel unchanged.">
 
 Every modern technique follows the same route:
 

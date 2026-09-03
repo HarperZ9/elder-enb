@@ -178,6 +178,24 @@ add_custom_target(
 
 if(BUILD_TESTING)
     add_test(
+        NAME elder_repo_facts
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tools/check_repo_facts.py"
+    )
+    add_test(
+        NAME elder_repo_art
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tools/check_repo_art.py"
+    )
+    set_tests_properties(
+        elder_repo_facts
+        elder_repo_art
+        PROPERTIES
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+            LABELS "documentation;artwork"
+    )
+
+    add_test(
         NAME elder_public_release_package
         COMMAND "${CMAKE_COMMAND}"
             "-DELDER_PYTHON=${Python3_EXECUTABLE}"
