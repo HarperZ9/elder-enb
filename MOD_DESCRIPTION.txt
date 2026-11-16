@@ -193,7 +193,7 @@ Nostalgia crystallized. Named for Skyrim's release date, this preset asks: [i]"W
 [size=3][b][color=#6DB3F2]The Natural Spectrum[/color][/b][/size]
 
 [b][color=#C4A35A]Arrival of Autumn[/color][/b]
-The philosopher's season. Harvest, change, and the beauty of impermanence. Strong warm shift toward orange-amber - the palette of maple leaves, wheat fields, and setting suns.
+The philosopher's season. collect, change, and the beauty of impermanence. Strong warm shift toward orange-amber - the palette of maple leaves, wheat fields, and setting suns.
 
 [b][color=#C4A35A]Jotunheimar[/color][/b]
 The realm of giants. Named from Norse mythology - cold, vast, indifferent to human scale. Strong cool shift, reduced saturation. You are small. The world does not care. Survive anyway.
@@ -355,7 +355,7 @@ Control the intensity and character of light bloom effects.
 [*][b]Night Enhanced[/b] - Amplified for low-light
 [*][b]Interior Mood[/b] - Tailored for indoor scenes
 [*][b]HDR Punch[/b] - Strong, modern bloom
-[*][b]Crisp Minimal[/b] - Nearly invisible refinement
+[*][b]Crisp Minimal[/b] - Nearly low-observable refinement
 [*][b]Sunset Blaze[/b] - Orange-golden hour bloom
 [*][b]Foggy Atmosphere[/b] - Volumetric, misty diffusion
 [*][b]Neon Nights[/b] - Cyberpunk-style light bleed
